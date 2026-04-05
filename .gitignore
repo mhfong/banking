@@ -3,6 +3,8 @@ dist/
 .env
 .env.local
 sync_ibkr.mjs
+.env
+.env.local
 
 # Sensitive data - do not commit
 bank_statement/
