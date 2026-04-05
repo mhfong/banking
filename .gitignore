@@ -1,0 +1,18 @@
+node_modules/
+dist/
+.env
+.env.local
+sync_ibkr.mjs
+
+# Sensitive data - do not commit
+bank_statement/
+ibkr_report/
+expense.csv
+parsed_transactions.json
+final_transactions.json
+summary_report.json
+parse_statements.mjs
+parse_ibkr.mjs
+merge.mjs
+import_transactions.mjs
+extract_sample.mjs

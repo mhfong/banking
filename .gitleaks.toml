@@ -1,0 +1,11 @@
+[extend]
+# Use the default ruleset as a base
+useDefault = true
+
+# Firebase client-side config values are public by design and safe to commit.
+# They are scoped by Firebase Security Rules, not by secrecy.
+[[allowlists]]
+description = "Allow Firebase client-side config"
+paths = [
+  "src/firebase.js"
+]
