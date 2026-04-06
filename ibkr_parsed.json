@@ -1,6 +1,17 @@
 {
   "trades": [
     {
+      "date": "2026-03-30",
+      "symbol": "USD.HKD",
+      "type": "Buy",
+      "quantity": 0,
+      "price": 7.83419,
+      "currency": "HKD",
+      "grossHKD": 15.666,
+      "commission": -15.666,
+      "netHKD": 0
+    },
+    {
       "date": "2026-03-27",
       "symbol": "GDX",
       "type": "Buy",
@@ -78,6 +89,17 @@
       "netHKD": 83112.09810835001
     },
     {
+      "date": "2026-03-02",
+      "symbol": "USD.HKD",
+      "type": "Buy",
+      "quantity": 0,
+      "price": 7.82442,
+      "currency": "HKD",
+      "grossHKD": 15.6452,
+      "commission": -15.6452,
+      "netHKD": 0
+    },
+    {
       "date": "2026-02-05",
       "symbol": "GDX",
       "type": "Buy",
@@ -98,6 +120,61 @@
       "grossHKD": 7595.4996,
       "commission": -7.829537885,
       "netHKD": 7587.670062115
+    },
+    {
+      "date": "2026-01-28",
+      "symbol": "USD.HKD",
+      "type": "Buy",
+      "quantity": 0,
+      "price": 7.80154,
+      "currency": "HKD",
+      "grossHKD": 15.5952,
+      "commission": -15.5952,
+      "netHKD": 0
+    },
+    {
+      "date": "2026-01-19",
+      "symbol": "USD.HKD",
+      "type": "Sell",
+      "quantity": 0,
+      "price": 7.7972,
+      "currency": "HKD",
+      "grossHKD": 15.593,
+      "commission": -15.593,
+      "netHKD": 0
+    },
+    {
+      "date": "2026-01-19",
+      "symbol": "USD.HKD",
+      "type": "Sell",
+      "quantity": 0,
+      "price": 7.7965,
+      "currency": "HKD",
+      "grossHKD": 15.593,
+      "commission": -15.593,
+      "netHKD": 0
+    },
+    {
+      "date": "2026-01-19",
+      "symbol": "USD.HKD",
+      "type": "Sell",
+      "quantity": 0,
+      "price": 7.7947,
+      "currency": "HKD",
+      "grossHKD": 0,
+      "commission": 0,
+      "netHKD": 0
+    },
+    {
+      "date": "2026-01-19",
+      "symbol": "USD.HKD",
+      "type": "Sell",
+      "quantity": 0,
+      "price": 7.79490667,
+      "currency": "HKD",
+      "grossHKD": 0,
+      "commission": 0,
+      "netHKD": 0
     },
     {
       "date": "2026-01-13",
@@ -2839,6 +2916,17 @@
       "netHKD": 9270.1932868408
     },
     {
+      "date": "2025-12-10",
+      "symbol": "USD.HKD",
+      "type": "Sell",
+      "quantity": 0,
+      "price": 7.77902325,
+      "currency": "HKD",
+      "grossHKD": 0,
+      "commission": 0,
+      "netHKD": 0
+    },
+    {
       "date": "2025-12-08",
       "symbol": "NFLX",
       "type": "Buy",
@@ -3026,6 +3114,17 @@
       "netHKD": -344.7505417
     },
     {
+      "date": "2025-12-03",
+      "symbol": "USD.HKD",
+      "type": "Sell",
+      "quantity": 0,
+      "price": 7.78289433,
+      "currency": "HKD",
+      "grossHKD": 0,
+      "commission": 0,
+      "netHKD": 0
+    },
+    {
       "date": "2025-12-02",
       "symbol": "IAUM",
       "type": "Buy",
@@ -3048,6 +3147,72 @@
       "netHKD": -133.03258632
     },
     {
+      "date": "2025-12-02",
+      "symbol": "USD.HKD",
+      "type": "Buy",
+      "quantity": 0,
+      "price": 7.78676,
+      "currency": "HKD",
+      "grossHKD": 0,
+      "commission": 0,
+      "netHKD": 0
+    },
+    {
+      "date": "2025-12-02",
+      "symbol": "USD.HKD",
+      "type": "Buy",
+      "quantity": 0,
+      "price": 7.78762,
+      "currency": "HKD",
+      "grossHKD": 0,
+      "commission": 0,
+      "netHKD": 0
+    },
+    {
+      "date": "2025-12-02",
+      "symbol": "USD.HKD",
+      "type": "Sell",
+      "quantity": 0,
+      "price": 7.78137,
+      "currency": "HKD",
+      "grossHKD": 0,
+      "commission": 0,
+      "netHKD": 0
+    },
+    {
+      "date": "2025-12-02",
+      "symbol": "USD.HKD",
+      "type": "Buy",
+      "quantity": 0,
+      "price": 7.7872,
+      "currency": "HKD",
+      "grossHKD": 0,
+      "commission": 0,
+      "netHKD": 0
+    },
+    {
+      "date": "2025-12-02",
+      "symbol": "USD.HKD",
+      "type": "Sell",
+      "quantity": 0,
+      "price": 7.78187,
+      "currency": "HKD",
+      "grossHKD": 0,
+      "commission": 0,
+      "netHKD": 0
+    },
+    {
+      "date": "2025-12-02",
+      "symbol": "USD.HKD",
+      "type": "Buy",
+      "quantity": 0,
+      "price": 7.78776531,
+      "currency": "HKD",
+      "grossHKD": 0,
+      "commission": 0,
+      "netHKD": 0
+    },
+    {
       "date": "2025-12-01",
       "symbol": "SOFI",
       "type": "Buy",
@@ -3068,6 +3233,50 @@
       "grossHKD": -13725.247140000001,
       "commission": 0,
       "netHKD": -13725.247140000001
+    },
+    {
+      "date": "2025-12-01",
+      "symbol": "USD.HKD",
+      "type": "Buy",
+      "quantity": 0,
+      "price": 7.78874,
+      "currency": "HKD",
+      "grossHKD": 15.5716,
+      "commission": -15.5716,
+      "netHKD": 0
+    },
+    {
+      "date": "2025-12-01",
+      "symbol": "USD.HKD",
+      "type": "Buy",
+      "quantity": 0,
+      "price": 7.7913,
+      "currency": "HKD",
+      "grossHKD": 0,
+      "commission": 0,
+      "netHKD": 0
+    },
+    {
+      "date": "2025-12-01",
+      "symbol": "USD.HKD",
+      "type": "Sell",
+      "quantity": 0,
+      "price": 7.78636,
+      "currency": "HKD",
+      "grossHKD": 0,
+      "commission": 0,
+      "netHKD": 0
+    },
+    {
+      "date": "2025-12-01",
+      "symbol": "USD.HKD",
+      "type": "Sell",
+      "quantity": 0,
+      "price": 7.78643779,
+      "currency": "HKD",
+      "grossHKD": 0,
+      "commission": 0,
+      "netHKD": 0
     },
     {
       "date": "2025-11-18",
@@ -3114,6 +3323,83 @@
       "netHKD": -37212.7982101196
     },
     {
+      "date": "2025-11-18",
+      "symbol": "USD.HKD",
+      "type": "Buy",
+      "quantity": 0,
+      "price": 7.78424,
+      "currency": "HKD",
+      "grossHKD": 15.5488,
+      "commission": -15.5488,
+      "netHKD": 0
+    },
+    {
+      "date": "2025-11-18",
+      "symbol": "USD.HKD",
+      "type": "Sell",
+      "quantity": 0,
+      "price": 7.78184,
+      "currency": "HKD",
+      "grossHKD": 0,
+      "commission": 0,
+      "netHKD": 0
+    },
+    {
+      "date": "2025-11-18",
+      "symbol": "USD.HKD",
+      "type": "Sell",
+      "quantity": 0,
+      "price": 7.78216,
+      "currency": "HKD",
+      "grossHKD": 0,
+      "commission": 0,
+      "netHKD": 0
+    },
+    {
+      "date": "2025-11-18",
+      "symbol": "USD.HKD",
+      "type": "Buy",
+      "quantity": 0,
+      "price": 7.78696,
+      "currency": "HKD",
+      "grossHKD": 0,
+      "commission": 0,
+      "netHKD": 0
+    },
+    {
+      "date": "2025-11-18",
+      "symbol": "USD.HKD",
+      "type": "Buy",
+      "quantity": 0,
+      "price": 7.78685,
+      "currency": "HKD",
+      "grossHKD": 0,
+      "commission": 0,
+      "netHKD": 0
+    },
+    {
+      "date": "2025-11-18",
+      "symbol": "USD.HKD",
+      "type": "Sell",
+      "quantity": 0,
+      "price": 7.78136,
+      "currency": "HKD",
+      "grossHKD": 0,
+      "commission": 0,
+      "netHKD": 0
+    },
+    {
+      "date": "2025-11-18",
+      "symbol": "USD.HKD",
+      "type": "Buy",
+      "quantity": 0,
+      "price": 7.78774201,
+      "currency": "HKD",
+      "grossHKD": 0,
+      "commission": 0,
+      "netHKD": 0
+    },
+    {
       "date": "2025-11-10",
       "symbol": "MAGS",
       "type": "Buy",
@@ -3147,6 +3433,17 @@
       "netHKD": -39890.491001888
     },
     {
+      "date": "2025-11-10",
+      "symbol": "USD.HKD",
+      "type": "Buy",
+      "quantity": 0,
+      "price": 7.7738,
+      "currency": "HKD",
+      "grossHKD": 15.5542,
+      "commission": -15.5542,
+      "netHKD": 0
+    },
+    {
       "date": "2025-11-07",
       "symbol": "GSIB",
       "type": "Sell",
@@ -3167,6 +3464,17 @@
       "grossHKD": 22575.36588,
       "commission": -0.087725688,
       "netHKD": 22575.278154312
+    },
+    {
+      "date": "2025-11-07",
+      "symbol": "USD.HKD",
+      "type": "Sell",
+      "quantity": 0,
+      "price": 7.7772,
+      "currency": "HKD",
+      "grossHKD": 0,
+      "commission": 0,
+      "netHKD": 0
     },
     {
       "date": "2025-10-30",
@@ -3233,31 +3541,42 @@
       "grossHKD": -18724.977,
       "commission": -7.7782466700000015,
       "netHKD": -18732.75524667
+    },
+    {
+      "date": "2025-10-30",
+      "symbol": "USD.HKD",
+      "type": "Buy",
+      "quantity": 0,
+      "price": 7.7707,
+      "currency": "HKD",
+      "grossHKD": 15.542,
+      "commission": -15.542,
+      "netHKD": 0
     }
   ],
   "dailyPnL": [
     {
       "date": "2025-10-29",
-      "pnl": 0.0,
-      "cumulative": 0.0,
-      "endingValue": 10000.0
+      "pnl": 0,
+      "cumulative": 0,
+      "endingValue": 10000
     },
     {
       "date": "2025-10-30",
       "pnl": -0.6276,
-      "cumulative": -0.6276,
+      "cumulative": -0.63,
       "endingValue": 59722.807389106
     },
     {
       "date": "2025-10-31",
       "pnl": 0.2493,
-      "cumulative": -0.3799,
+      "cumulative": -0.38,
       "endingValue": 59871.670349592
     },
     {
       "date": "2025-11-03",
       "pnl": 0.3898,
-      "cumulative": 0.0084,
+      "cumulative": 0.01,
       "endingValue": 60105.038707552
     },
     {
@@ -3269,97 +3588,97 @@
     {
       "date": "2025-11-05",
       "pnl": 0.5405,
-      "cumulative": 0.2993,
+      "cumulative": 0.3,
       "endingValue": 60279.856171504
     },
     {
       "date": "2025-11-06",
       "pnl": 0.3737,
-      "cumulative": 0.6741,
+      "cumulative": 0.67,
       "endingValue": 60505.112956492
     },
     {
       "date": "2025-11-07",
       "pnl": -0.6678,
-      "cumulative": 0.0018,
+      "cumulative": 0,
       "endingValue": 60136.84089128
     },
     {
       "date": "2025-11-10",
       "pnl": 0.1335,
-      "cumulative": 0.1353,
+      "cumulative": 0.14,
       "endingValue": 200269.653467696
     },
     {
       "date": "2025-11-11",
       "pnl": -0.2964,
-      "cumulative": -0.1615,
+      "cumulative": -0.16,
       "endingValue": 199676.007668112
     },
     {
       "date": "2025-11-12",
       "pnl": 0.1311,
-      "cumulative": -0.0307,
+      "cumulative": -0.03,
       "endingValue": 199937.715869792
     },
     {
       "date": "2025-11-13",
       "pnl": -2.4328,
-      "cumulative": -2.4628,
+      "cumulative": -2.46,
       "endingValue": 195073.535331264
     },
     {
       "date": "2025-11-14",
       "pnl": -0.0511,
-      "cumulative": -2.5126,
+      "cumulative": -2.51,
       "endingValue": 194973.880041008
     },
     {
       "date": "2025-11-17",
       "pnl": -1.1134,
-      "cumulative": -3.5981,
+      "cumulative": -3.6,
       "endingValue": 192802.947943488
     },
     {
       "date": "2025-11-18",
       "pnl": -0.9224,
-      "cumulative": -4.4873,
+      "cumulative": -4.49,
       "endingValue": 230655.572531191
     },
     {
       "date": "2025-11-19",
       "pnl": 0.4704,
-      "cumulative": -4.038,
+      "cumulative": -4.04,
       "endingValue": 231740.557202191
     },
     {
       "date": "2025-11-20",
       "pnl": -1.0757,
-      "cumulative": -5.0703,
+      "cumulative": -5.07,
       "endingValue": 229247.730269191
     },
     {
       "date": "2025-11-21",
       "pnl": 0.4942,
-      "cumulative": -4.6011,
+      "cumulative": -4.6,
       "endingValue": 230380.634075191
     },
     {
       "date": "2025-11-24",
       "pnl": 1.8572,
-      "cumulative": -2.8294,
+      "cumulative": -2.83,
       "endingValue": 234659.314905191
     },
     {
       "date": "2025-11-25",
       "pnl": 0.6307,
-      "cumulative": -2.2165,
+      "cumulative": -2.22,
       "endingValue": 236139.322379191
     },
     {
       "date": "2025-11-26",
       "pnl": 0.8706,
-      "cumulative": -1.3652,
+      "cumulative": -1.37,
       "endingValue": 238195.174025191
     },
     {
@@ -3371,79 +3690,79 @@
     {
       "date": "2025-11-28",
       "pnl": 1.0037,
-      "cumulative": -0.3598,
+      "cumulative": -0.36,
       "endingValue": 240622.982937191
     },
     {
       "date": "2025-12-01",
       "pnl": -0.1009,
-      "cumulative": -0.4604,
+      "cumulative": -0.46,
       "endingValue": 270349.968596969
     },
     {
       "date": "2025-12-02",
       "pnl": 0.2913,
-      "cumulative": -0.1704,
+      "cumulative": -0.17,
       "endingValue": 271137.513876304
     },
     {
       "date": "2025-12-03",
       "pnl": -0.0047,
-      "cumulative": -0.1751,
+      "cumulative": -0.18,
       "endingValue": 271124.79558616
     },
     {
       "date": "2025-12-04",
       "pnl": 1.1122,
-      "cumulative": 0.9352,
+      "cumulative": 0.94,
       "endingValue": 274140.29882566
     },
     {
       "date": "2025-12-05",
       "pnl": -0.839,
-      "cumulative": 0.0884,
+      "cumulative": 0.09,
       "endingValue": 271840.39615266
     },
     {
       "date": "2025-12-08",
       "pnl": 0.1145,
-      "cumulative": 0.203,
+      "cumulative": 0.2,
       "endingValue": 272151.595672723
     },
     {
       "date": "2025-12-09",
       "pnl": 0.1226,
-      "cumulative": 0.3259,
+      "cumulative": 0.33,
       "endingValue": 272485.384101267
     },
     {
       "date": "2025-12-10",
       "pnl": -0.9152,
-      "cumulative": -0.5923,
+      "cumulative": -0.59,
       "endingValue": 269991.556629462
     },
     {
       "date": "2025-12-11",
       "pnl": 0.2458,
-      "cumulative": -0.3479,
+      "cumulative": -0.35,
       "endingValue": 270655.324812832
     },
     {
       "date": "2025-12-12",
       "pnl": -1.1203,
-      "cumulative": -1.4643,
+      "cumulative": -1.46,
       "endingValue": 267623.279931592
     },
     {
       "date": "2025-12-15",
       "pnl": -1.3489,
-      "cumulative": -2.7935,
+      "cumulative": -2.79,
       "endingValue": 264013.218125203
     },
     {
       "date": "2025-12-16",
       "pnl": 0.3602,
-      "cumulative": -2.4434,
+      "cumulative": -2.44,
       "endingValue": 264964.182100745
     },
     {
@@ -3455,415 +3774,415 @@
     {
       "date": "2025-12-18",
       "pnl": 0.6557,
-      "cumulative": -2.3037,
+      "cumulative": -2.3,
       "endingValue": 265343.601624277
     },
     {
       "date": "2025-12-19",
       "pnl": 0.3805,
-      "cumulative": -1.9319,
+      "cumulative": -1.93,
       "endingValue": 266353.3110075
     },
     {
       "date": "2025-12-22",
       "pnl": -0.2463,
-      "cumulative": -2.1734,
+      "cumulative": -2.17,
       "endingValue": 265697.26192138
     },
     {
       "date": "2025-12-23",
       "pnl": -0.1936,
-      "cumulative": -2.3628,
+      "cumulative": -2.36,
       "endingValue": 265182.978996865
     },
     {
       "date": "2025-12-24",
       "pnl": 0.2651,
-      "cumulative": -2.104,
+      "cumulative": -2.1,
       "endingValue": 265885.898285325
     },
     {
       "date": "2025-12-25",
-      "pnl": 0.0,
-      "cumulative": -2.104,
+      "pnl": 0,
+      "cumulative": -2.1,
       "endingValue": 265885.898285325
     },
     {
       "date": "2025-12-26",
       "pnl": 0.025,
-      "cumulative": -2.0795,
+      "cumulative": -2.08,
       "endingValue": 265952.435904082
     },
     {
       "date": "2025-12-29",
       "pnl": -1.0486,
-      "cumulative": -3.1063,
+      "cumulative": -3.11,
       "endingValue": 263163.71478866
     },
     {
       "date": "2025-12-30",
       "pnl": 0.0875,
-      "cumulative": -3.0215,
+      "cumulative": -3.02,
       "endingValue": 263393.887722012
     },
     {
       "date": "2025-12-31",
       "pnl": 0.2486,
-      "cumulative": -2.7804,
+      "cumulative": -2.78,
       "endingValue": 264048.761013114
     },
     {
       "date": "2026-01-01",
       "pnl": 0.018,
-      "cumulative": -2.7629,
+      "cumulative": -2.76,
       "endingValue": 264096.255181579
     },
     {
       "date": "2026-01-02",
       "pnl": 0.1499,
-      "cumulative": -2.6172,
+      "cumulative": -2.62,
       "endingValue": 264492.074762268
     },
     {
       "date": "2026-01-05",
       "pnl": -0.0648,
-      "cumulative": -2.6803,
+      "cumulative": -2.68,
       "endingValue": 264320.700620715
     },
     {
       "date": "2026-01-06",
       "pnl": 0.0437,
-      "cumulative": -2.6378,
+      "cumulative": -2.64,
       "endingValue": 264436.122359045
     },
     {
       "date": "2026-01-07",
       "pnl": 0.1539,
-      "cumulative": -2.4879,
+      "cumulative": -2.49,
       "endingValue": 264843.108083811
     },
     {
       "date": "2026-01-08",
       "pnl": 0.4269,
-      "cumulative": -2.0717,
+      "cumulative": -2.07,
       "endingValue": 265973.66651004
     },
     {
       "date": "2026-01-09",
       "pnl": 0.1492,
-      "cumulative": -1.9255,
+      "cumulative": -1.93,
       "endingValue": 266370.544846026
     },
     {
       "date": "2026-01-12",
       "pnl": -0.2555,
-      "cumulative": -2.1762,
+      "cumulative": -2.18,
       "endingValue": 265689.86086715
     },
     {
       "date": "2026-01-13",
       "pnl": -0.5794,
-      "cumulative": -2.7429,
+      "cumulative": -2.74,
       "endingValue": 264150.523267139
     },
     {
       "date": "2026-01-14",
       "pnl": -0.0355,
-      "cumulative": -2.7775,
+      "cumulative": -2.78,
       "endingValue": 264056.713521686
     },
     {
       "date": "2026-01-15",
       "pnl": -0.0064,
-      "cumulative": -2.7837,
+      "cumulative": -2.78,
       "endingValue": 264039.783654678
     },
     {
       "date": "2026-01-16",
       "pnl": -0.0074,
-      "cumulative": -2.7909,
+      "cumulative": -2.79,
       "endingValue": 264020.224994063
     },
     {
       "date": "2026-01-19",
       "pnl": -0.0124,
-      "cumulative": -2.803,
+      "cumulative": -2.8,
       "endingValue": 259995.883940448
     },
     {
       "date": "2026-01-20",
       "pnl": 0.0392,
-      "cumulative": -2.7649,
+      "cumulative": -2.76,
       "endingValue": 260097.673578806
     },
     {
       "date": "2026-01-21",
       "pnl": -0.0244,
-      "cumulative": -2.7886,
+      "cumulative": -2.79,
       "endingValue": 260034.311076231
     },
     {
       "date": "2026-01-22",
       "pnl": -0.001,
-      "cumulative": -2.7896,
+      "cumulative": -2.79,
       "endingValue": 260031.653218004
     },
     {
       "date": "2026-01-23",
       "pnl": -0.0038,
-      "cumulative": -2.7934,
+      "cumulative": -2.79,
       "endingValue": 260021.648201335
     },
     {
       "date": "2026-01-26",
       "pnl": 0.0223,
-      "cumulative": -2.7717,
+      "cumulative": -2.77,
       "endingValue": 260079.542734457
     },
     {
       "date": "2026-01-27",
       "pnl": 0.0231,
-      "cumulative": -2.7493,
+      "cumulative": -2.75,
       "endingValue": 260139.577730476
     },
     {
       "date": "2026-01-28",
       "pnl": 0.0195,
-      "cumulative": -2.7303,
+      "cumulative": -2.73,
       "endingValue": 294196.916872852
     },
     {
       "date": "2026-01-29",
       "pnl": 0.0526,
-      "cumulative": -2.6792,
+      "cumulative": -2.68,
       "endingValue": 294351.532856673
     },
     {
       "date": "2026-01-30",
       "pnl": 0.1079,
-      "cumulative": -2.5742,
+      "cumulative": -2.57,
       "endingValue": 294669.026492759
     },
     {
       "date": "2026-02-02",
       "pnl": -0.0285,
-      "cumulative": -2.6019,
+      "cumulative": -2.6,
       "endingValue": 294585.189166287
     },
     {
       "date": "2026-02-03",
       "pnl": 0.033,
-      "cumulative": -2.5698,
+      "cumulative": -2.57,
       "endingValue": 294682.381074532
     },
     {
       "date": "2026-02-04",
       "pnl": -0.0051,
-      "cumulative": -2.5748,
+      "cumulative": -2.57,
       "endingValue": 294667.294516306
     },
     {
       "date": "2026-02-05",
       "pnl": 0.0211,
-      "cumulative": -2.5542,
+      "cumulative": -2.55,
       "endingValue": 294729.454057527
     },
     {
       "date": "2026-02-06",
       "pnl": -0.009,
-      "cumulative": -2.563,
+      "cumulative": -2.56,
       "endingValue": 294703.052418195
     },
     {
       "date": "2026-02-09",
       "pnl": 0.0263,
-      "cumulative": -2.5374,
+      "cumulative": -2.54,
       "endingValue": 294780.530270096
     },
     {
       "date": "2026-02-10",
       "pnl": 0.0448,
-      "cumulative": -2.4937,
+      "cumulative": -2.49,
       "endingValue": 294912.551206753
     },
     {
       "date": "2026-02-11",
       "pnl": -0.0016,
-      "cumulative": -2.4952,
+      "cumulative": -2.5,
       "endingValue": 294907.919650945
     },
     {
       "date": "2026-02-12",
       "pnl": -0.023,
-      "cumulative": -2.5177,
+      "cumulative": -2.52,
       "endingValue": 294840.019893236
     },
     {
       "date": "2026-02-13",
       "pnl": 0.0035,
-      "cumulative": -2.5142,
+      "cumulative": -2.51,
       "endingValue": 294850.472804474
     },
     {
       "date": "2026-02-16",
       "pnl": -0.0064,
-      "cumulative": -2.5205,
+      "cumulative": -2.52,
       "endingValue": 294831.610850666
     },
     {
       "date": "2026-02-17",
       "pnl": 0.0071,
-      "cumulative": -2.5136,
+      "cumulative": -2.51,
       "endingValue": 294852.513761143
     },
     {
       "date": "2026-02-18",
       "pnl": -0.0141,
-      "cumulative": -2.5273,
+      "cumulative": -2.53,
       "endingValue": 294811.013458765
     },
     {
       "date": "2026-02-19",
       "pnl": 0.0074,
-      "cumulative": -2.5201,
+      "cumulative": -2.52,
       "endingValue": 294832.781176288
     },
     {
       "date": "2026-02-20",
       "pnl": 0.0064,
-      "cumulative": -2.5138,
+      "cumulative": -2.51,
       "endingValue": 294851.645860096
     },
     {
       "date": "2026-02-23",
       "pnl": 0.0672,
-      "cumulative": -2.4483,
+      "cumulative": -2.45,
       "endingValue": 295049.890630369
     },
     {
       "date": "2026-02-24",
       "pnl": 0.046,
-      "cumulative": -2.4034,
+      "cumulative": -2.4,
       "endingValue": 295185.729457787
     },
     {
       "date": "2026-02-25",
       "pnl": -0.031,
-      "cumulative": -2.4336,
+      "cumulative": -2.43,
       "endingValue": 295094.309800462
     },
     {
       "date": "2026-02-26",
       "pnl": 0.0435,
-      "cumulative": -2.3912,
+      "cumulative": -2.39,
       "endingValue": 295222.608214357
     },
     {
       "date": "2026-02-27",
       "pnl": -0.0075,
-      "cumulative": -2.3985,
+      "cumulative": -2.4,
       "endingValue": 315199.11051874
     },
     {
       "date": "2026-03-02",
       "pnl": -0.0157,
-      "cumulative": -2.4138,
+      "cumulative": -2.41,
       "endingValue": 315149.672379563
     },
     {
       "date": "2026-03-03",
       "pnl": -0.0837,
-      "cumulative": -2.4955,
+      "cumulative": -2.5,
       "endingValue": 314885.793261962
     },
     {
       "date": "2026-03-04",
       "pnl": 0.1704,
-      "cumulative": -2.3293,
+      "cumulative": -2.33,
       "endingValue": 315422.382401906
     },
     {
       "date": "2026-03-05",
       "pnl": 0.023,
-      "cumulative": -2.3069,
+      "cumulative": -2.31,
       "endingValue": 315494.895239269
     },
     {
       "date": "2026-03-06",
       "pnl": 0.0461,
-      "cumulative": -2.2618,
+      "cumulative": -2.26,
       "endingValue": 315640.445768864
     },
     {
       "date": "2026-03-09",
       "pnl": -0.0112,
-      "cumulative": -2.2728,
+      "cumulative": -2.27,
       "endingValue": 315605.02988969
     },
     {
       "date": "2026-03-10",
       "pnl": 0.0372,
-      "cumulative": -2.2365,
+      "cumulative": -2.24,
       "endingValue": 315722.350290603
     },
     {
       "date": "2026-03-11",
       "pnl": 0.0205,
-      "cumulative": -2.2164,
+      "cumulative": -2.22,
       "endingValue": 315787.216895966
     },
     {
       "date": "2026-03-12",
       "pnl": 0.0205,
-      "cumulative": -2.1963,
+      "cumulative": -2.2,
       "endingValue": 315852.086497328
     },
     {
       "date": "2026-03-13",
       "pnl": 0.0167,
-      "cumulative": -2.1799,
+      "cumulative": -2.18,
       "endingValue": 315904.852397256
     },
     {
       "date": "2026-03-16",
       "pnl": 0.0386,
-      "cumulative": -2.1422,
+      "cumulative": -2.14,
       "endingValue": 316026.841239735
     },
     {
       "date": "2026-03-17",
       "pnl": 0.0793,
-      "cumulative": -2.0646,
+      "cumulative": -2.06,
       "endingValue": 316277.379289432
     },
     {
       "date": "2026-03-18",
       "pnl": 0.0333,
-      "cumulative": -2.032,
+      "cumulative": -2.03,
       "endingValue": 316382.63054991
     },
     {
       "date": "2026-03-19",
       "pnl": -0.0611,
-      "cumulative": -2.0919,
+      "cumulative": -2.09,
       "endingValue": 316189.20756833
     },
     {
       "date": "2026-03-20",
       "pnl": -0.0037,
-      "cumulative": -2.0955,
+      "cumulative": -2.1,
       "endingValue": 316177.408053272
     },
     {
       "date": "2026-03-23",
       "pnl": 0.0182,
-      "cumulative": -2.0778,
+      "cumulative": -2.08,
       "endingValue": 316234.845711764
     },
     {
       "date": "2026-03-24",
       "pnl": -0.1952,
-      "cumulative": -2.2689,
+      "cumulative": -2.27,
       "endingValue": 315617.412422208
     },
     {
@@ -3875,43 +4194,43 @@
     {
       "date": "2026-03-26",
       "pnl": 0.0986,
-      "cumulative": -2.2737,
+      "cumulative": -2.27,
       "endingValue": 315601.900378435
     },
     {
       "date": "2026-03-27",
       "pnl": 0.0921,
-      "cumulative": -2.1838,
+      "cumulative": -2.18,
       "endingValue": 315892.416157948
     },
     {
       "date": "2026-03-30",
       "pnl": 0.0385,
-      "cumulative": -2.1461,
+      "cumulative": -2.15,
       "endingValue": 320015.639845153
     },
     {
       "date": "2026-03-31",
       "pnl": 0.0537,
-      "cumulative": -2.0936,
+      "cumulative": -2.09,
       "endingValue": 320187.465490018
     },
     {
       "date": "2026-04-01",
       "pnl": -0.0216,
-      "cumulative": -2.1147,
+      "cumulative": -2.11,
       "endingValue": 320118.333006107
     },
     {
       "date": "2026-04-02",
       "pnl": 0.0065,
-      "cumulative": -2.1083,
+      "cumulative": -2.11,
       "endingValue": 320139.207573672
     },
     {
       "date": "2026-04-03",
       "pnl": -0.0128,
-      "cumulative": -2.1208,
+      "cumulative": -2.12,
       "endingValue": 320098.364648456
     }
   ],
@@ -4024,13 +4343,13 @@
   "summary": {
     "totalDeposited": 388099.7,
     "totalWithdrawn": 64089.9,
-    "endingCash": 319847,
-    "totalPnL": -3895.8,
+    "endingCash": 319831.899848456,
+    "totalPnL": -3911.44,
     "totalCommissions": -2606.27,
     "totalInterest": 394.93,
-    "totalReturn": -2.1208,
+    "totalReturn": -2.12,
     "netLiquidationValue": 320098.364648456,
-    "cash": 319847,
+    "cash": 319831.899848456,
     "mtdInterest": 266.48,
     "netDeposited": 324009.8
   }
