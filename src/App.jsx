@@ -1,5 +1,6 @@
 import { HashRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import { AuthProvider, useAuth } from './contexts/AuthContext'
+import { MaskProvider } from './contexts/MaskContext'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import Dashboard from './pages/Dashboard'
@@ -39,9 +40,11 @@ function AppRoutes() {
 export default function App() {
   return (
     <AuthProvider>
-      <Router>
-        <AppRoutes />
-      </Router>
+      <MaskProvider>
+        <Router>
+          <AppRoutes />
+        </Router>
+      </MaskProvider>
     </AuthProvider>
   )
 }

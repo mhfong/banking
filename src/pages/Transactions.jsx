@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useAuth } from '../contexts/AuthContext'
+import { useMask } from '../contexts/MaskContext'
 import { db } from '../firebase'
 import {
   collection, query, where, orderBy, onSnapshot,
@@ -15,6 +16,7 @@ const CATEGORIES = {
 
 export default function Transactions() {
   const { user } = useAuth()
+  const { mask } = useMask()
   const [transactions, setTransactions] = useState([])
   const [showForm, setShowForm] = useState(false)
   const [type, setType] = useState('expense')
@@ -176,7 +178,7 @@ export default function Transactions() {
               </div>
               <div className="transaction-right">
                 <span className={`transaction-amount ${t.type}`}>
-                  {t.type === 'income' ? '+' : '-'}${t.amount.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                  {mask((t.type === 'income' ? '+' : '-') + '$' + t.amount.toLocaleString('en-US', { minimumFractionDigits: 2 }))}
                 </span>
                 <button className="btn-delete" onClick={() => handleDelete(t.id)}><i className="fas fa-trash-alt"></i></button>
               </div>

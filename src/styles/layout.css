@@ -93,6 +93,14 @@
   gap: 2px;
 }
 
+.mask-nav-btn:hover {
+  color: var(--accent) !important;
+}
+
+.mask-nav-btn i {
+  font-size: 18px;
+}
+
 .logout-btn:hover {
   color: var(--red);
 }

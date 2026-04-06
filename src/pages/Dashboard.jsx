@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useAuth } from '../contexts/AuthContext'
+import { useMask } from '../contexts/MaskContext'
 import { db } from '../firebase'
 import { collection, query, where, orderBy, onSnapshot, Timestamp } from 'firebase/firestore'
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts'
@@ -15,6 +16,7 @@ const CATEGORIES = {
 
 export default function Dashboard() {
   const { user } = useAuth()
+  const { mask } = useMask()
   const [transactions, setTransactions] = useState([])
   const [period, setPeriod] = useState('month') // month, 3months, year
 
@@ -90,21 +92,21 @@ export default function Dashboard() {
       <div className="stats-grid">
         <div className="stat-card income">
           <span className="stat-label">Total Income</span>
-          <span className="stat-value">${totalIncome.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
+          <span className="stat-value">{mask('$' + totalIncome.toLocaleString('en-US', { minimumFractionDigits: 2 }))}</span>
         </div>
         <div className="stat-card expense">
           <span className="stat-label">Total Expenses</span>
-          <span className="stat-value">${totalExpense.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
+          <span className="stat-value">{mask('$' + totalExpense.toLocaleString('en-US', { minimumFractionDigits: 2 }))}</span>
         </div>
         <div className="stat-card balance">
           <span className="stat-label">Net Balance</span>
           <span className="stat-value" style={{ color: balance >= 0 ? '#10b981' : '#f43f5e' }}>
-            ${balance.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+            {mask('$' + balance.toLocaleString('en-US', { minimumFractionDigits: 2 }))}
           </span>
         </div>
         <div className="stat-card savings">
           <span className="stat-label">Savings Rate</span>
-          <span className="stat-value">{savingsRate}%</span>
+          <span className="stat-value">{mask(savingsRate + '%')}</span>
         </div>
       </div>
 
@@ -178,7 +180,7 @@ export default function Dashboard() {
                   <td>{t.description}</td>
                   <td><span className="category-badge">{t.category}</span></td>
                   <td className={t.type === 'income' ? 'amount-income' : 'amount-expense'}>
-                    {t.type === 'income' ? '+' : '-'}${t.amount.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                    {mask((t.type === 'income' ? '+' : '-') + '$' + t.amount.toLocaleString('en-US', { minimumFractionDigits: 2 }))}
                   </td>
                 </tr>
               ))}
