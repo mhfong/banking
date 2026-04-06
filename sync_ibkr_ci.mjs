@@ -1,10 +1,21 @@
 // IBKR Flex Query Sync - CI version v3 (proven parsing logic)
 import { readFileSync, writeFileSync } from 'fs'
 import { execSync } from 'child_process'
+import { initializeApp } from 'firebase/app'
+import { getFirestore, collection, getDocs, writeBatch, doc, Timestamp } from 'firebase/firestore'
 
 const FLEX_TOKEN = process.env.IBKR_TOKEN
 const QUERY_ID = process.env.IBKR_QUERY_ID
+const FIREBASE_API_KEY = process.env.VITE_FIREBASE_API_KEY || 'AIzaSyDK4xT9IqS2F-3WrNVtCbCKesPq3cf9JDY'
 const BASE_URL = 'https://gdcdyn.interactivebrokers.com/Universal/servlet/FlexStatementService'
+
+// Init Firebase
+const fbApp = initializeApp({
+  apiKey: FIREBASE_API_KEY,
+  authDomain: 'login-system-7d812.firebaseapp.com',
+  projectId: 'login-system-7d812'
+})
+const fireDb = getFirestore(fbApp)
 
 if (!FLEX_TOKEN || !QUERY_ID) {
   console.error('Missing IBKR_TOKEN or IBKR_QUERY_ID env vars')
@@ -124,6 +135,81 @@ function parseFlex(csv) {
   return { navChanges, trades, deposits, latestNAV }
 }
 
+async function syncDepositsToFirebase(rawCsv) {
+  try {
+    const lines = rawCsv.split('\n')
+    
+    // Get existing IBKR transactions
+    const snap = await getDocs(collection(fireDb, 'transactions'))
+    const existingKeys = new Set()
+    snap.docs.forEach(d => {
+      const data = d.data()
+      if (data.paymentMethod === 'IBKR') {
+        existingKeys.add(`${data.date}|${data.amount}`)
+      }
+    })
+
+    const newTxns = []
+    for (const line of lines) {
+      const cols = line.split(',').map(c => c.replace(/^"|"$/g, ''))
+      // Cash transaction rows: HKD, DateTime, Amount, Type
+      if (cols.length === 4 && cols[0] === 'HKD' && /^\d{8}/.test(cols[1])) {
+        const amount = parseFloat(cols[2] || 0)
+        const type = (cols[3] || '').toLowerCase()
+        const dateRaw = cols[1].substring(0, 8)
+        const date = `${dateRaw.substring(0,4)}-${dateRaw.substring(4,6)}-${dateRaw.substring(6,8)}`
+        
+        if (date < '2025-01-01') continue
+        
+        if (type.includes('deposit') && amount > 0) {
+          const key = `${date}|${amount}`
+          if (!existingKeys.has(key)) {
+            newTxns.push({
+              date,
+              description: 'IBKR Deposit',
+              amount: amount,
+              type: 'expense',
+              category: 'Investment',
+              paymentMethod: 'IBKR',
+              createdAt: Timestamp.fromDate(new Date(date + 'T00:00:00')),
+              userId: 'global'
+            })
+            existingKeys.add(key)
+          }
+        } else if ((type.includes('withdrawal') || type.includes('disbursement')) && amount < 0) {
+          const key = `${date}|${Math.abs(amount)}`
+          if (!existingKeys.has(key)) {
+            newTxns.push({
+              date,
+              description: 'IBKR Withdrawal',
+              amount: Math.abs(amount),
+              type: 'income',
+              category: 'Investment',
+              paymentMethod: 'IBKR',
+              createdAt: Timestamp.fromDate(new Date(date + 'T00:00:00')),
+              userId: 'global'
+            })
+            existingKeys.add(key)
+          }
+        }
+      }
+    }
+
+    if (newTxns.length > 0) {
+      const batch = writeBatch(fireDb)
+      for (const t of newTxns) {
+        batch.set(doc(collection(fireDb, 'transactions')), t)
+      }
+      await batch.commit()
+      console.log(`Added ${newTxns.length} IBKR transactions to Firebase`)
+    } else {
+      console.log('No new IBKR transactions to add')
+    }
+  } catch (e) {
+    console.error('Firebase deposit sync error:', e.message)
+  }
+}
+
 async function main() {
   console.log('=== IBKR Auto-Sync v3 ===')
 
@@ -189,6 +275,9 @@ async function main() {
       existing.summary.netDeposited += d.amount
     }
   }
+
+  // Sync deposits/withdrawals to Firebase Transactions
+  await syncDepositsToFirebase(csv)
 
   // Save
   existing.lastSyncAt = new Date().toISOString()
