@@ -20,7 +20,7 @@ const CATEGORY_ICONS = {
   'Home/Rent': 'fa-home',
   Travel: 'fa-plane',
   Drinks: 'fa-glass-martini',
-  'Card Collecting': 'fa-credit-card',
+  'Card Collecting': 'fa-clone',
   Salary: 'fa-briefcase',
   Investment: 'fa-chart-line',
   ATM: 'fa-money-bill',
