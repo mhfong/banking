@@ -2,12 +2,14 @@ import { useState, useMemo } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLine, CartesianGrid } from 'recharts'
 import { useMask } from '../contexts/MaskContext'
+import MaskToggle from '../components/MaskToggle'
+import CustomSelect from '../components/CustomSelect'
 import data from '../data/ibkr_parsed.json'
 import '../styles/investment.css'
 
 const PERIODS = ['1W','MTD','1M','3M','YTD','1Y','All']
 const DAYS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat']
-const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December']
+const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
 
 function filterByPeriod(dailyPnL, period) {
   if (!dailyPnL.length) return dailyPnL
@@ -172,6 +174,7 @@ export default function Investment() {
       {/* Header */}
       <div className="inv-header">
         <h1><i className="fas fa-chart-line"></i> Investment</h1>
+        <MaskToggle />
       </div>
 
       <div className="inv-last-updated">Last Updated: {data.lastSyncAt ? new Date(data.lastSyncAt).toLocaleString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false }) : 'N/A'}</div>
@@ -253,12 +256,18 @@ export default function Investment() {
         <div className="calendar-nav">
           <button onClick={prevMonth}><i className="fas fa-chevron-left"></i></button>
           <div className="calendar-selectors">
-            <select className="month-select" value={calMonth} onChange={e => setCalMonth(parseInt(e.target.value))}>
-              {MONTHS.map((m, i) => <option key={i} value={i}>{m}</option>)}
-            </select>
-            <select className="year-select" value={calYear} onChange={e => setCalYear(parseInt(e.target.value))}>
-              {Array.from({length: 5}, (_, i) => 2024 + i).map(y => <option key={y} value={y}>{y}</option>)}
-            </select>
+            <CustomSelect
+              className="select-month"
+              value={calMonth}
+              options={MONTHS.map((m, i) => ({ value: i, label: m }))}
+              onChange={v => setCalMonth(v)}
+            />
+            <CustomSelect
+              className="select-year"
+              value={calYear}
+              options={Array.from({length: 5}, (_, i) => ({ value: 2024 + i, label: String(2024 + i) }))}
+              onChange={v => setCalYear(v)}
+            />
           </div>
           <button onClick={nextMonth}><i className="fas fa-chevron-right"></i></button>
           <button className="today-btn" onClick={() => { setCalYear(new Date().getFullYear()); setCalMonth(new Date().getMonth()) }}>Today</button>

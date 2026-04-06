@@ -2,12 +2,10 @@ import { NavLink, useNavigate } from 'react-router-dom'
 import { signOut } from 'firebase/auth'
 import { auth } from '../firebase'
 import { useAuth } from '../contexts/AuthContext'
-import { useMask } from '../contexts/MaskContext'
 import '../styles/layout.css'
 
 export default function Layout({ children }) {
   const { user } = useAuth()
-  const { masked, toggle } = useMask()
   const navigate = useNavigate()
 
   async function handleLogout() {
@@ -18,9 +16,6 @@ export default function Layout({ children }) {
   return (
     <div className="layout">
       <nav className="sidebar">
-        <div className="sidebar-header">
-          <i className="fas fa-university"></i>
-        </div>
         <div className="sidebar-nav">
           <NavLink to="/" end className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} title="Dashboard">
             <i className="fas fa-chart-pie"></i>
@@ -36,10 +31,6 @@ export default function Layout({ children }) {
           </NavLink>
         </div>
         <div className="sidebar-bottom">
-          <button className="nav-item mask-nav-btn" onClick={toggle} title={masked ? 'Show values' : 'Hide values'}>
-            <i className={`fas ${masked ? 'fa-eye-slash' : 'fa-eye'}`}></i>
-            <span>{masked ? 'Show' : 'Hide'}</span>
-          </button>
           <NavLink to="/settings" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} title="Settings">
             <i className="fas fa-cog"></i>
             <span>Settings</span>

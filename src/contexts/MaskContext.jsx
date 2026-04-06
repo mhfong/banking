@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from 'react'
+import { createContext, useContext, useState, useEffect } from 'react'
 
 const MaskContext = createContext()
 
@@ -7,9 +7,13 @@ export function useMask() {
 }
 
 export function MaskProvider({ children }) {
-  const [masked, setMasked] = useState(false)
+  const [masked, setMasked] = useState(() => localStorage.getItem('masked') === 'true')
   const toggle = () => setMasked(m => !m)
   const mask = (v) => masked ? '***' : v
+
+  useEffect(() => {
+    localStorage.setItem('masked', masked)
+  }, [masked])
 
   return (
     <MaskContext.Provider value={{ masked, toggle, mask }}>

@@ -2,7 +2,7 @@ name: IBKR Daily Sync
 
 on:
   schedule:
-    - cron: '0 21 * * 1-5'  # UTC 21:00 Mon-Fri = HK 05:00 AM
+    - cron: '30 21 * * 1-5'  # UTC 21:30 Mon-Fri = HK 05:30 AM
   workflow_dispatch:  # Manual trigger
 
 permissions:
