@@ -210,7 +210,7 @@ export default function Settings() {
                   <option value="dashboard">Dashboard</option>
                   <option value="transactions">Transactions</option>
                   <option value="performance">Performance</option>
-                  <option value="pnl-calendar">P&L Calendar</option>
+                  <option value="pnl-calendar">PNL Calendar</option>
                 </select>
               </div>
               <div className="form-group">

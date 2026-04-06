@@ -81,7 +81,7 @@ export default function Performance() {
           <div className="stat-value">${summary.endingCash.toLocaleString()}</div>
         </div>
         <div className="stat-card">
-          <div className="stat-label">Total P&L</div>
+          <div className="stat-label">Total PNL</div>
           <div className={`stat-value ${summary.totalPnL >= 0 ? 'positive' : 'negative'}`}>{fmt(summary.totalPnL)}</div>
         </div>
         <div className="stat-card">

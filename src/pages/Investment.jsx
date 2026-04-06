@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLine, CartesianGrid } from 'recharts'
 import { useMask } from '../contexts/MaskContext'
 import data from '../data/ibkr_parsed.json'
@@ -41,6 +41,7 @@ const fmtPct = (v) => (v >= 0 ? '+' : '') + v.toFixed(2) + '%'
 
 export default function Investment() {
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
   const [period, setPeriod] = useState('All')
   const { masked, mask } = useMask()
   const { trades, dailyPnL, summary } = data
@@ -48,19 +49,48 @@ export default function Investment() {
   const chartData = useMemo(() => filterByPeriod(dailyPnL, period), [dailyPnL, period])
 
   // Calendar state
-  const pnlMap = useMemo(() => {
-    const m = {}
-    dailyPnL.forEach(d => { m[d.date] = { pnl: d.pnl, cumulative: d.cumulative } })
-    return m
-  }, [dailyPnL])
+  // Build set of dates with actual trades (for clickable check)
+  const tradeDates = useMemo(() => {
+    const s = new Set()
+    trades.filter(t => !t.symbol.includes('.')).forEach(t => s.add(t.date))
+    return s
+  }, [trades])
 
-  const [calYear, setCalYear] = useState(new Date().getFullYear())
-  const [calMonth, setCalMonth] = useState(new Date().getMonth())
+  // Build calendar PnL from IBKR FIFO Realized PNL
+  const pnlMap = useMemo(() => {
+    const fifo = data.fifoDailyPnL || []
+    const m = {}
+    for (const d of fifo) {
+      if (Math.abs(d.pnl) >= 0.01) {
+        m[d.date] = {
+          pnl: d.pnl,
+          cumulative: 0,
+          pctChange: summary.netDeposited ? Math.round((d.pnl / summary.netDeposited) * 10000) / 100 : 0
+        }
+      }
+    }
+    return m
+  }, [data.fifoDailyPnL, summary.netDeposited])
+
+  const initMonth = searchParams.get('month')
+  const [calYear, setCalYear] = useState(initMonth ? parseInt(initMonth.split('-')[0]) : new Date().getFullYear())
+  const [calMonth, setCalMonth] = useState(initMonth ? parseInt(initMonth.split('-')[1]) - 1 : new Date().getMonth())
 
   const todayStr = useMemo(() => {
     const now = new Date()
     return `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`
   }, [])
+
+  // Calculate annual PnL = sum of monthly PnL for selected year
+  const annualPnL = useMemo(() => {
+    let total = 0
+    for (const [date, data] of Object.entries(pnlMap)) {
+      if (date.startsWith(String(calYear))) {
+        total += data.pnl
+      }
+    }
+    return Math.round(total * 100) / 100
+  }, [pnlMap, calYear])
 
   const prevMonth = () => { if (calMonth === 0) { setCalMonth(11); setCalYear(y => y-1) } else setCalMonth(m => m-1) }
   const nextMonth = () => { if (calMonth === 11) { setCalMonth(0); setCalYear(y => y+1) } else setCalMonth(m => m+1) }
@@ -90,27 +120,27 @@ export default function Investment() {
     const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate()
     const cells = []
     for (let i = 0; i < firstDay; i++) cells.push(null)
-    let total = 0, wins = 0, losses = 0, best = -Infinity, worst = Infinity
+    let total = 0, wins = 0, losses = 0, best = -Infinity, worst = Infinity, bestDay = null, worstDay = null
     for (let d = 1; d <= daysInMonth; d++) {
       const dateStr = `${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`
       const pnlData = pnlMap[dateStr] ?? null
       const pnl = pnlData ? pnlData.pnl : null
-      const cumBefore = pnlData ? pnlData.cumulative - pnlData.pnl : null
-      const pctChange = pnl !== null && cumBefore && Math.abs(cumBefore) > 0 ? (pnl / Math.abs(summary.netDeposited)) * 100 : null
+      const pctChange = pnlData ? pnlData.pctChange : null
       const closed = isMarketClosed(calYear, calMonth, d)
-      cells.push({ day: d, pnl, pctChange, closed })
+      const hasTrades = tradeDates.has(dateStr)
+      cells.push({ day: d, pnl, pctChange, closed, hasTrades })
       if (pnl !== null) {
         total += pnl
         if (pnl > 0) wins++
         if (pnl < 0) losses++
-        if (pnl > best) best = pnl
-        if (pnl < worst) worst = pnl
+        if (pnl > best) { best = pnl; bestDay = d }
+        if (pnl < worst) { worst = pnl; worstDay = d }
       }
     }
     const tradeDays = wins + losses
     return {
       cells, monthlyTotal: Math.round(total * 100) / 100,
-      calStats: { wins, losses, winRate: tradeDays ? Math.round(wins/tradeDays*100) : 0, best: best === -Infinity ? 0 : best, worst: worst === Infinity ? 0 : worst }
+      calStats: { wins, losses, winRate: tradeDays ? Math.round(wins/tradeDays*100) : 0, best: best === -Infinity ? 0 : best, worst: worst === Infinity ? 0 : worst, bestDay, worstDay }
     }
   }, [calYear, calMonth, pnlMap])
 
@@ -144,15 +174,15 @@ export default function Investment() {
         <h1><i className="fas fa-chart-line"></i> Investment</h1>
       </div>
 
-      <div className="inv-last-updated">Last Updated: {new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })} {new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false })}</div>
+      <div className="inv-last-updated">Last Updated: {data.lastSyncAt ? new Date(data.lastSyncAt).toLocaleString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false }) : 'N/A'}</div>
 
       <div className="inv-stats">
         <div className="inv-stat-card highlight">
           <div className="inv-stat-label">Net Liquidation Value</div>
-          <div className="inv-stat-value">{mask('$' + summary.netLiquidationValue.toLocaleString())}</div>
+          <div className="inv-stat-value">{mask('$' + (Math.round(summary.netLiquidationValue * 10) / 10).toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 }))}</div>
         </div>
         <div className="inv-stat-card">
-          <div className="inv-stat-label">Total P&L</div>
+          <div className="inv-stat-label">Total PNL</div>
           <div className={`inv-stat-value ${summary.totalPnL >= 0 ? 'positive' : 'negative'}`}>{mask(fmt(Math.round(summary.totalPnL)))}</div>
         </div>
         <div className="inv-stat-card">
@@ -214,10 +244,10 @@ export default function Investment() {
         </div>
       </div>
 
-      {/* P&L Calendar Section */}
+      {/* PNL Calendar Section */}
       <div className="calendar-section">
         <div className="calendar-header-row">
-          <h3><i className="fas fa-calendar-alt"></i> Monthly P&L Calendar</h3>
+          <h3><i className="fas fa-calendar-alt"></i> PNL Calendar</h3>
         </div>
 
         <div className="calendar-nav">
@@ -234,21 +264,14 @@ export default function Investment() {
           <button className="today-btn" onClick={() => { setCalYear(new Date().getFullYear()); setCalMonth(new Date().getMonth()) }}>Today</button>
         </div>
 
-        <div className="cal-monthly-total">
-          <span className="cal-total-label">Monthly Total</span>
-          <span className={`cal-total-value ${monthlyTotal >= 0 ? 'positive' : 'negative'}`}>
-            {masked ? '***' : fmtShort(monthlyTotal)}
-          </span>
-        </div>
-
         <div className="calendar-grid">
           {DAYS.map(d => <div key={d} className="cal-day-header">{d}</div>)}
           {cells.map((c, i) => c === null ? (
             <div key={`e${i}`} className="cal-cell empty" />
           ) : (
-            <div key={c.day} className={`cal-cell ${c.pnl === null ? (c.closed ? 'closed' : '') : c.pnl > 0 ? 'profit' : c.pnl < 0 ? 'loss' : ''} ${c.pnl !== null ? 'clickable' : ''} ${`${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(c.day).padStart(2,'0')}` === todayStr ? 'today' : ''}`}
+            <div key={c.day} className={`cal-cell ${c.pnl === null ? (c.closed ? 'closed' : '') : c.pnl > 0 ? 'profit' : c.pnl < 0 ? 'loss' : ''} ${c.hasTrades ? 'clickable' : ''} ${`${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(c.day).padStart(2,'0')}` === todayStr ? 'today' : ''} ${c.day === calStats.bestDay && c.pnl > 0 ? 'best-day' : ''} ${c.day === calStats.worstDay && c.pnl < 0 ? 'worst-day' : ''}`}
             onClick={() => {
-              if (c.pnl !== null) {
+              if (c.hasTrades) {
                 const dateStr = `${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(c.day).padStart(2,'0')}`
                 navigate(`/investment/trades?date=${dateStr}`)
               }
@@ -283,12 +306,12 @@ export default function Investment() {
             <div className="cal-stat-value">{calStats.winRate}%</div>
           </div>
           <div className="cal-stat">
-            <div className="cal-stat-label">Best Day</div>
-            <div className="cal-stat-value positive">{fmtShort(calStats.best)}</div>
+            <div className="cal-stat-label">Monthly PNL</div>
+            <div className={`cal-stat-value ${monthlyTotal >= 0 ? 'positive' : 'negative'}`}>{mask(fmtShort(monthlyTotal))}</div>
           </div>
           <div className="cal-stat">
-            <div className="cal-stat-label">Worst Day</div>
-            <div className="cal-stat-value negative">{fmtShort(calStats.worst)}</div>
+            <div className="cal-stat-label">Annual PNL</div>
+            <div className={`cal-stat-value ${annualPnL >= 0 ? 'positive' : 'negative'}`}>{mask(fmtShort(annualPnL))}</div>
           </div>
         </div>
       </div>

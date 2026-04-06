@@ -87,7 +87,14 @@ export default function Trades() {
   return (
     <div className="trades-page">
       <div className="trades-top-bar">
-        <button className="back-btn" onClick={() => navigate('/investment')}>
+        <button className="back-btn" onClick={() => {
+          const date = searchParams.get('date')
+          if (date) {
+            navigate(`/investment?month=${date.substring(0, 7)}`)
+          } else {
+            navigate('/investment')
+          }
+        }}>
           <i className="fas fa-arrow-left"></i> Back
         </button>
         <h1>Trades</h1>
@@ -132,7 +139,7 @@ export default function Trades() {
           <div className="trades-count">{totalTrades} Trade(s) · {groupedTrades.length} Day(s)</div>
         </div>
         <div className="trades-summary-right">
-          <div className="trades-realized-label">REALIZED P&L</div>
+          <div className="trades-realized-label">REALIZED PNL</div>
           <div className={`trades-realized-badge ${totalPnL >= 0 ? 'positive' : 'negative'}`}>
             {fmt(totalPnL)} HKD
           </div>
@@ -144,7 +151,7 @@ export default function Trades() {
       <div className="trades-col-header">
         <span>TRADE</span>
         <span>FILL PRICE / AMT / COMM</span>
-        <span>P&L</span>
+        <span>PNL</span>
       </div>
 
       {/* Grouped by date - paginated */}

@@ -53,7 +53,7 @@ export default function PnLCalendar() {
 
   return (
     <div className="pnl-calendar-page">
-      <h1>Daily P&L Calendar</h1>
+      <h1>Daily PNL Calendar</h1>
       <div className="calendar-nav">
         <button onClick={prev}><i className="fas fa-chevron-left"></i></button>
         <h2>{MONTHS[month]} {year}</h2>

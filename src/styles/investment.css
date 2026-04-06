@@ -276,8 +276,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 20px;
+  gap: 12px;
   margin-bottom: 12px;
+  min-height: 44px;
 }
 
 .calendar-nav button {
@@ -289,6 +290,12 @@
   cursor: pointer;
   font-size: 14px;
   transition: background 0.2s;
+  flex-shrink: 0;
+  width: 40px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .calendar-nav button:hover {
@@ -297,12 +304,13 @@
 
 .today-btn {
   font-size: 12px !important;
-  padding: 5px 12px !important;
-  margin-left: 12px;
+  padding: 5px 8px !important;
+  margin-left: 8px;
   background: var(--accent) !important;
   border-color: var(--accent) !important;
   color: white !important;
   font-weight: 600 !important;
+  width: auto !important;
 }
 
 .today-btn:hover {
@@ -335,11 +343,13 @@
 }
 
 .month-select {
-  width: 140px;
+  width: 150px;
+  text-align: center;
 }
 
 .year-select {
-  width: 80px;
+  width: 85px;
+  text-align: center;
 }
 
 .month-select:focus, .year-select:focus {
@@ -375,6 +385,7 @@
   gap: 3px;
   margin-bottom: 20px;
   width: 100%;
+  min-height: 420px;
 }
 
 .cal-day-header {
@@ -430,8 +441,20 @@
   box-shadow: 0 2px 8px rgba(0,0,0,0.3);
 }
 
+.cal-cell.best-day {
+  border: 2px solid var(--green) !important;
+  box-shadow: 0 0 8px rgba(87, 171, 90, 0.4);
+  background: rgba(87, 171, 90, 0.2);
+}
+
+.cal-cell.worst-day {
+  border: 2px solid var(--red) !important;
+  box-shadow: 0 0 8px rgba(229, 83, 75, 0.4);
+  background: rgba(229, 83, 75, 0.2);
+}
+
 .cal-closed-label {
-  font-size: 7px;
+  font-size: 10px;
   font-weight: 600;
   color: var(--text-secondary);
   opacity: 0.5;
@@ -451,7 +474,7 @@
 }
 
 .cal-day-num {
-  font-size: 11px;
+  font-size: 12px;
   color: var(--text-secondary);
   font-weight: 500;
   line-height: 1;
@@ -466,14 +489,14 @@
 }
 
 .cal-day-pnl {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
   line-height: 1.2;
 }
 
 .cal-day-pct {
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 500;
   color: var(--text-secondary);
   font-variant-numeric: tabular-nums;

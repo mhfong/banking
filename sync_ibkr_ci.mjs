@@ -191,6 +191,7 @@ async function main() {
   }
 
   // Save
+  existing.lastSyncAt = new Date().toISOString()
   writeFileSync('ibkr_parsed.json', JSON.stringify(existing, null, 2))
   writeFileSync('src/data/ibkr_parsed.json', JSON.stringify(existing))
   console.log('Saved. Committing...')
