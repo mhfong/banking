@@ -5,22 +5,22 @@
       "symbol": "GDX",
       "type": "Buy",
       "quantity": 5,
-      "price": 83.0,
+      "price": 83,
       "currency": "USD",
-      "grossHKD": -415.0,
-      "commission": -1.0,
-      "netHKD": -416.0
+      "grossHKD": -415,
+      "commission": -1,
+      "netHKD": -416
     },
     {
       "date": "2026-03-27",
       "symbol": "GDX",
       "type": "Buy",
       "quantity": 95,
-      "price": 83.0,
+      "price": 83,
       "currency": "USD",
-      "grossHKD": -7885.0,
-      "commission": 0.0,
-      "netHKD": -7885.0
+      "grossHKD": -7885,
+      "commission": 0,
+      "netHKD": -7885
     },
     {
       "date": "2026-03-27",
@@ -29,7 +29,7 @@
       "quantity": 100,
       "price": 83.02,
       "currency": "USD",
-      "grossHKD": 8302.0,
+      "grossHKD": 8302,
       "commission": -1.02,
       "netHKD": 8300.98
     },
@@ -40,9 +40,9 @@
       "quantity": 120,
       "price": 83.6,
       "currency": "USD",
-      "grossHKD": -10032.0,
-      "commission": -1.0,
-      "netHKD": -10033.0
+      "grossHKD": -10032,
+      "commission": -1,
+      "netHKD": -10033
     },
     {
       "date": "2026-03-24",
@@ -62,9 +62,9 @@
       "quantity": 100,
       "price": 105.97,
       "currency": "USD",
-      "grossHKD": -10597.0,
-      "commission": -1.0,
-      "netHKD": -10598.0
+      "grossHKD": -10597,
+      "commission": -1,
+      "netHKD": -10598
     },
     {
       "date": "2026-03-03",
@@ -73,7 +73,7 @@
       "quantity": 100,
       "price": 106.5,
       "currency": "USD",
-      "grossHKD": 10650.0,
+      "grossHKD": 10650,
       "commission": -1.02,
       "netHKD": 10648.98
     },
@@ -85,7 +85,7 @@
       "price": 97.1586,
       "currency": "USD",
       "grossHKD": -971.59,
-      "commission": -1.0,
+      "commission": -1,
       "netHKD": -972.59
     },
     {
@@ -95,9 +95,9 @@
       "quantity": 10,
       "price": 97.2,
       "currency": "USD",
-      "grossHKD": 972.0,
-      "commission": -1.0,
-      "netHKD": 971.0
+      "grossHKD": 972,
+      "commission": -1,
+      "netHKD": 971
     },
     {
       "date": "2026-01-13",
@@ -107,7 +107,7 @@
       "price": 96.898,
       "currency": "USD",
       "grossHKD": -14534.7,
-      "commission": -1.0,
+      "commission": -1,
       "netHKD": -14535.7
     },
     {
@@ -162,7 +162,7 @@
       "price": 96.7,
       "currency": "USD",
       "grossHKD": -14891.8,
-      "commission": -1.0,
+      "commission": -1,
       "netHKD": -14892.8
     },
     {
@@ -172,7 +172,7 @@
       "quantity": 150,
       "price": 96.7,
       "currency": "USD",
-      "grossHKD": -14505.0,
+      "grossHKD": -14505,
       "commission": -0.52,
       "netHKD": -14505.52
     },
@@ -205,7 +205,7 @@
       "quantity": 350,
       "price": 96.7,
       "currency": "USD",
-      "grossHKD": -33845.0,
+      "grossHKD": -33845,
       "commission": -1.75,
       "netHKD": -33846.75
     },
@@ -216,7 +216,7 @@
       "quantity": 350,
       "price": 96.6,
       "currency": "USD",
-      "grossHKD": 33810.0,
+      "grossHKD": 33810,
       "commission": -1.82,
       "netHKD": 33808.18
     },
@@ -238,7 +238,7 @@
       "quantity": 350,
       "price": 96.94,
       "currency": "USD",
-      "grossHKD": 33929.0,
+      "grossHKD": 33929,
       "commission": -1.82,
       "netHKD": 33927.18
     },
@@ -249,7 +249,7 @@
       "quantity": 340,
       "price": 96.7,
       "currency": "USD",
-      "grossHKD": -32878.0,
+      "grossHKD": -32878,
       "commission": -1.7,
       "netHKD": -32879.7
     },
@@ -260,7 +260,7 @@
       "quantity": 340,
       "price": 96.75,
       "currency": "USD",
-      "grossHKD": 32895.0,
+      "grossHKD": 32895,
       "commission": -1.77,
       "netHKD": 32893.23
     },
@@ -271,7 +271,7 @@
       "quantity": 340,
       "price": 96.9,
       "currency": "USD",
-      "grossHKD": -32946.0,
+      "grossHKD": -32946,
       "commission": -1.7,
       "netHKD": -32947.7
     },
@@ -280,20 +280,20 @@
       "symbol": "GDX",
       "type": "Sell",
       "quantity": 25,
-      "price": 97.0,
+      "price": 97,
       "currency": "USD",
-      "grossHKD": 2425.0,
-      "commission": -1.0,
-      "netHKD": 2424.0
+      "grossHKD": 2425,
+      "commission": -1,
+      "netHKD": 2424
     },
     {
       "date": "2026-01-13",
       "symbol": "GDX",
       "type": "Sell",
       "quantity": 75,
-      "price": 97.0,
+      "price": 97,
       "currency": "USD",
-      "grossHKD": 7275.0,
+      "grossHKD": 7275,
       "commission": -0.01,
       "netHKD": 7274.99
     },
@@ -302,9 +302,9 @@
       "symbol": "GDX",
       "type": "Sell",
       "quantity": 240,
-      "price": 97.0,
+      "price": 97,
       "currency": "USD",
-      "grossHKD": 23280.0,
+      "grossHKD": 23280,
       "commission": -0.75,
       "netHKD": 23279.25
     },
@@ -315,7 +315,7 @@
       "quantity": 340,
       "price": 96.9,
       "currency": "USD",
-      "grossHKD": -32946.0,
+      "grossHKD": -32946,
       "commission": -1.7,
       "netHKD": -32947.7
     },
@@ -326,7 +326,7 @@
       "quantity": 340,
       "price": 96.95,
       "currency": "USD",
-      "grossHKD": 32963.0,
+      "grossHKD": 32963,
       "commission": -1.77,
       "netHKD": 32961.23
     },
@@ -359,7 +359,7 @@
       "quantity": 340,
       "price": 97.05,
       "currency": "USD",
-      "grossHKD": -32997.0,
+      "grossHKD": -32997,
       "commission": -1.7,
       "netHKD": -32998.7
     },
@@ -381,7 +381,7 @@
       "quantity": 100,
       "price": 96.95,
       "currency": "USD",
-      "grossHKD": 9695.0,
+      "grossHKD": 9695,
       "commission": -0.02,
       "netHKD": 9694.98
     },
@@ -403,7 +403,7 @@
       "quantity": 160,
       "price": 96.95,
       "currency": "USD",
-      "grossHKD": 15512.0,
+      "grossHKD": 15512,
       "commission": -0.73,
       "netHKD": 15511.27
     },
@@ -423,9 +423,9 @@
       "symbol": "GDX",
       "type": "Sell",
       "quantity": 340,
-      "price": 97.0,
+      "price": 97,
       "currency": "USD",
-      "grossHKD": 32980.0,
+      "grossHKD": 32980,
       "commission": -1.77,
       "netHKD": 32978.23
     },
@@ -437,7 +437,7 @@
       "price": 96.815,
       "currency": "USD",
       "grossHKD": -9681.5,
-      "commission": -1.0,
+      "commission": -1,
       "netHKD": -9682.5
     },
     {
@@ -469,9 +469,9 @@
       "quantity": 20,
       "price": 96.8,
       "currency": "USD",
-      "grossHKD": -1936.0,
-      "commission": -1.0,
-      "netHKD": -1937.0
+      "grossHKD": -1936,
+      "commission": -1,
+      "netHKD": -1937
     },
     {
       "date": "2026-01-13",
@@ -480,9 +480,9 @@
       "quantity": 25,
       "price": 96.8,
       "currency": "USD",
-      "grossHKD": -2420.0,
-      "commission": 0.0,
-      "netHKD": -2420.0
+      "grossHKD": -2420,
+      "commission": 0,
+      "netHKD": -2420
     },
     {
       "date": "2026-01-13",
@@ -492,7 +492,7 @@
       "price": 96.799,
       "currency": "USD",
       "grossHKD": -6291.94,
-      "commission": 0.0,
+      "commission": 0,
       "netHKD": -6291.94
     },
     {
@@ -502,9 +502,9 @@
       "quantity": 50,
       "price": 96.8,
       "currency": "USD",
-      "grossHKD": -4840.0,
-      "commission": 0.0,
-      "netHKD": -4840.0
+      "grossHKD": -4840,
+      "commission": 0,
+      "netHKD": -4840
     },
     {
       "date": "2026-01-13",
@@ -513,7 +513,7 @@
       "quantity": 80,
       "price": 96.8,
       "currency": "USD",
-      "grossHKD": -7744.0,
+      "grossHKD": -7744,
       "commission": -0.2,
       "netHKD": -7744.2
     },
@@ -557,7 +557,7 @@
       "quantity": 340,
       "price": 96.8,
       "currency": "USD",
-      "grossHKD": 32912.0,
+      "grossHKD": 32912,
       "commission": -1.77,
       "netHKD": 32910.23
     },
@@ -569,7 +569,7 @@
       "price": 96.8,
       "currency": "USD",
       "grossHKD": -9583.2,
-      "commission": -1.0,
+      "commission": -1,
       "netHKD": -9584.2
     },
     {
@@ -590,9 +590,9 @@
       "quantity": 100,
       "price": 96.74,
       "currency": "USD",
-      "grossHKD": -9674.0,
-      "commission": -1.0,
-      "netHKD": -9675.0
+      "grossHKD": -9674,
+      "commission": -1,
+      "netHKD": -9675
     },
     {
       "date": "2026-01-12",
@@ -601,7 +601,7 @@
       "quantity": 100,
       "price": 96.73,
       "currency": "USD",
-      "grossHKD": 9673.0,
+      "grossHKD": 9673,
       "commission": -1.02,
       "netHKD": 9671.98
     },
@@ -613,7 +613,7 @@
       "price": 96.47,
       "currency": "USD",
       "grossHKD": -15338.73,
-      "commission": -1.0,
+      "commission": -1,
       "netHKD": -15339.73
     },
     {
@@ -646,7 +646,7 @@
       "price": 96.3,
       "currency": "USD",
       "grossHKD": -866.7,
-      "commission": -1.0,
+      "commission": -1,
       "netHKD": -867.7
     },
     {
@@ -667,7 +667,7 @@
       "quantity": 50,
       "price": 96.3,
       "currency": "USD",
-      "grossHKD": -4815.0,
+      "grossHKD": -4815,
       "commission": -0.25,
       "netHKD": -4815.25
     },
@@ -678,7 +678,7 @@
       "quantity": 50,
       "price": 96.3,
       "currency": "USD",
-      "grossHKD": -4815.0,
+      "grossHKD": -4815,
       "commission": -0.25,
       "netHKD": -4815.25
     },
@@ -690,7 +690,7 @@
       "price": 96.29,
       "currency": "USD",
       "grossHKD": 577.74,
-      "commission": -1.0,
+      "commission": -1,
       "netHKD": 576.74
     },
     {
@@ -745,7 +745,7 @@
       "price": 92.43,
       "currency": "USD",
       "grossHKD": 1756.17,
-      "commission": -0.0,
+      "commission": 0,
       "netHKD": 1756.17
     },
     {
@@ -755,7 +755,7 @@
       "quantity": 100,
       "price": 92.43,
       "currency": "USD",
-      "grossHKD": 9243.0,
+      "grossHKD": 9243,
       "commission": -0.02,
       "netHKD": 9242.98
     },
@@ -766,7 +766,7 @@
       "quantity": 200,
       "price": 92.43,
       "currency": "USD",
-      "grossHKD": 18486.0,
+      "grossHKD": 18486,
       "commission": -0.86,
       "netHKD": 18485.14
     },
@@ -821,7 +821,7 @@
       "quantity": 100,
       "price": 92.5,
       "currency": "USD",
-      "grossHKD": 9250.0,
+      "grossHKD": 9250,
       "commission": -0.52,
       "netHKD": 9249.48
     },
@@ -888,7 +888,7 @@
       "price": 90.75,
       "currency": "USD",
       "grossHKD": 1542.75,
-      "commission": -1.0,
+      "commission": -1,
       "netHKD": 1541.75
     },
     {
@@ -921,7 +921,7 @@
       "price": 83.52,
       "currency": "USD",
       "grossHKD": -835.2,
-      "commission": -1.0,
+      "commission": -1,
       "netHKD": -836.2
     },
     {
@@ -932,7 +932,7 @@
       "price": 83.705,
       "currency": "USD",
       "grossHKD": 837.05,
-      "commission": -1.0,
+      "commission": -1,
       "netHKD": 836.05
     },
     {
@@ -943,7 +943,7 @@
       "price": 83.95,
       "currency": "USD",
       "grossHKD": -5624.65,
-      "commission": -1.0,
+      "commission": -1,
       "netHKD": -5625.65
     },
     {
@@ -954,7 +954,7 @@
       "price": 83.95,
       "currency": "USD",
       "grossHKD": -27955.35,
-      "commission": -1.0,
+      "commission": -1,
       "netHKD": -27956.35
     },
     {
@@ -997,9 +997,9 @@
       "quantity": 400,
       "price": 83.9,
       "currency": "USD",
-      "grossHKD": -33560.0,
-      "commission": -2.0,
-      "netHKD": -33562.0
+      "grossHKD": -33560,
+      "commission": -2,
+      "netHKD": -33562
     },
     {
       "date": "2026-01-02",
@@ -1008,7 +1008,7 @@
       "quantity": 400,
       "price": 84.1,
       "currency": "USD",
-      "grossHKD": 33640.0,
+      "grossHKD": 33640,
       "commission": -2.08,
       "netHKD": 33637.92
     },
@@ -1019,9 +1019,9 @@
       "quantity": 400,
       "price": 84.85,
       "currency": "USD",
-      "grossHKD": -33940.0,
-      "commission": -2.0,
-      "netHKD": -33942.0
+      "grossHKD": -33940,
+      "commission": -2,
+      "netHKD": -33942
     },
     {
       "date": "2026-01-02",
@@ -1030,7 +1030,7 @@
       "quantity": 400,
       "price": 84.83,
       "currency": "USD",
-      "grossHKD": 33932.0,
+      "grossHKD": 33932,
       "commission": -2.08,
       "netHKD": 33929.92
     },
@@ -1041,7 +1041,7 @@
       "quantity": 390,
       "price": 86.5,
       "currency": "USD",
-      "grossHKD": -33735.0,
+      "grossHKD": -33735,
       "commission": -1.95,
       "netHKD": -33736.95
     },
@@ -1052,7 +1052,7 @@
       "quantity": 390,
       "price": 86.7,
       "currency": "USD",
-      "grossHKD": 33813.0,
+      "grossHKD": 33813,
       "commission": -2.01,
       "netHKD": 33810.99
     },
@@ -1061,9 +1061,9 @@
       "symbol": "GDX",
       "type": "Buy",
       "quantity": 390,
-      "price": 87.0,
+      "price": 87,
       "currency": "USD",
-      "grossHKD": -33930.0,
+      "grossHKD": -33930,
       "commission": -1.95,
       "netHKD": -33931.95
     },
@@ -1074,7 +1074,7 @@
       "quantity": 100,
       "price": 86.7,
       "currency": "USD",
-      "grossHKD": 8670.0,
+      "grossHKD": 8670,
       "commission": -1.02,
       "netHKD": 8668.98
     },
@@ -1096,7 +1096,7 @@
       "quantity": 390,
       "price": 86.5,
       "currency": "USD",
-      "grossHKD": -33735.0,
+      "grossHKD": -33735,
       "commission": -1.95,
       "netHKD": -33736.95
     },
@@ -1118,7 +1118,7 @@
       "quantity": 200,
       "price": 86.28,
       "currency": "USD",
-      "grossHKD": 17256.0,
+      "grossHKD": 17256,
       "commission": -0.98,
       "netHKD": 17255.02
     },
@@ -1129,7 +1129,7 @@
       "quantity": 390,
       "price": 86.4,
       "currency": "USD",
-      "grossHKD": -33696.0,
+      "grossHKD": -33696,
       "commission": -1.95,
       "netHKD": -33697.95
     },
@@ -1140,7 +1140,7 @@
       "quantity": 390,
       "price": 86.2,
       "currency": "USD",
-      "grossHKD": 33618.0,
+      "grossHKD": 33618,
       "commission": -2.01,
       "netHKD": 33615.99
     },
@@ -1151,7 +1151,7 @@
       "quantity": 300,
       "price": 86.5,
       "currency": "USD",
-      "grossHKD": -25950.0,
+      "grossHKD": -25950,
       "commission": -1.5,
       "netHKD": -25951.5
     },
@@ -1162,7 +1162,7 @@
       "quantity": 90,
       "price": 86.5,
       "currency": "USD",
-      "grossHKD": -7785.0,
+      "grossHKD": -7785,
       "commission": -0.45,
       "netHKD": -7785.45
     },
@@ -1173,7 +1173,7 @@
       "quantity": 100,
       "price": 86.52,
       "currency": "USD",
-      "grossHKD": 8652.0,
+      "grossHKD": 8652,
       "commission": -1.02,
       "netHKD": 8650.98
     },
@@ -1184,7 +1184,7 @@
       "quantity": 225,
       "price": 86.52,
       "currency": "USD",
-      "grossHKD": 19467.0,
+      "grossHKD": 19467,
       "commission": -0.66,
       "netHKD": 19466.34
     },
@@ -1207,7 +1207,7 @@
       "price": 86.05,
       "currency": "USD",
       "grossHKD": -16951.85,
-      "commission": -1.0,
+      "commission": -1,
       "netHKD": -16952.85
     },
     {
@@ -1217,7 +1217,7 @@
       "quantity": 100,
       "price": 86.05,
       "currency": "USD",
-      "grossHKD": -8605.0,
+      "grossHKD": -8605,
       "commission": -0.48,
       "netHKD": -8605.49
     },
@@ -1239,7 +1239,7 @@
       "quantity": 390,
       "price": 85.9,
       "currency": "USD",
-      "grossHKD": 33501.0,
+      "grossHKD": 33501,
       "commission": -2.01,
       "netHKD": 33498.99
     },
@@ -1259,9 +1259,9 @@
       "symbol": "GDX",
       "type": "Sell",
       "quantity": 390,
-      "price": 86.0,
+      "price": 86,
       "currency": "USD",
-      "grossHKD": 33540.0,
+      "grossHKD": 33540,
       "commission": -2.01,
       "netHKD": 33537.99
     },
@@ -1272,7 +1272,7 @@
       "quantity": 390,
       "price": 85.7,
       "currency": "USD",
-      "grossHKD": -33423.0,
+      "grossHKD": -33423,
       "commission": -1.95,
       "netHKD": -33424.95
     },
@@ -1294,9 +1294,9 @@
       "quantity": 112,
       "price": 85.75,
       "currency": "USD",
-      "grossHKD": -9604.0,
-      "commission": -1.0,
-      "netHKD": -9605.0
+      "grossHKD": -9604,
+      "commission": -1,
+      "netHKD": -9605
     },
     {
       "date": "2025-12-29",
@@ -1383,7 +1383,7 @@
       "price": 85.685,
       "currency": "USD",
       "grossHKD": -16280.15,
-      "commission": -1.0,
+      "commission": -1,
       "netHKD": -16281.15
     },
     {
@@ -1393,7 +1393,7 @@
       "quantity": 200,
       "price": 85.685,
       "currency": "USD",
-      "grossHKD": -17137.0,
+      "grossHKD": -17137,
       "commission": -0.95,
       "netHKD": -17137.95
     },
@@ -1415,7 +1415,7 @@
       "quantity": 180,
       "price": 85.75,
       "currency": "USD",
-      "grossHKD": 15435.0,
+      "grossHKD": 15435,
       "commission": -0.93,
       "netHKD": 15434.07
     },
@@ -1426,9 +1426,9 @@
       "quantity": 100,
       "price": 85.77,
       "currency": "USD",
-      "grossHKD": -8577.0,
-      "commission": -1.0,
-      "netHKD": -8578.0
+      "grossHKD": -8577,
+      "commission": -1,
+      "netHKD": -8578
     },
     {
       "date": "2025-12-29",
@@ -1459,7 +1459,7 @@
       "quantity": 390,
       "price": 85.9,
       "currency": "USD",
-      "grossHKD": 33501.0,
+      "grossHKD": 33501,
       "commission": -2.01,
       "netHKD": 33498.99
     },
@@ -1471,7 +1471,7 @@
       "price": 86.09,
       "currency": "USD",
       "grossHKD": -7317.65,
-      "commission": -1.0,
+      "commission": -1,
       "netHKD": -7318.65
     },
     {
@@ -1547,7 +1547,7 @@
       "quantity": 325,
       "price": 91.4,
       "currency": "USD",
-      "grossHKD": 29705.0,
+      "grossHKD": 29705,
       "commission": -1.68,
       "netHKD": 29703.32
     },
@@ -1558,7 +1558,7 @@
       "quantity": 45,
       "price": 91.4,
       "currency": "USD",
-      "grossHKD": 4113.0,
+      "grossHKD": 4113,
       "commission": -0.23,
       "netHKD": 4112.77
     },
@@ -1569,9 +1569,9 @@
       "quantity": 100,
       "price": 91.3,
       "currency": "USD",
-      "grossHKD": -9130.0,
-      "commission": -1.0,
-      "netHKD": -9131.0
+      "grossHKD": -9130,
+      "commission": -1,
+      "netHKD": -9131
     },
     {
       "date": "2025-12-26",
@@ -1580,7 +1580,7 @@
       "quantity": 270,
       "price": 91.2,
       "currency": "USD",
-      "grossHKD": -24624.0,
+      "grossHKD": -24624,
       "commission": -1.35,
       "netHKD": -24625.35
     },
@@ -1624,7 +1624,7 @@
       "quantity": 370,
       "price": 91.1,
       "currency": "USD",
-      "grossHKD": -33707.0,
+      "grossHKD": -33707,
       "commission": -1.85,
       "netHKD": -33708.85
     },
@@ -1646,7 +1646,7 @@
       "quantity": 200,
       "price": 91.215,
       "currency": "USD",
-      "grossHKD": 18243.0,
+      "grossHKD": 18243,
       "commission": -0.88,
       "netHKD": 18242.12
     },
@@ -1679,7 +1679,7 @@
       "quantity": 200,
       "price": 91.245,
       "currency": "USD",
-      "grossHKD": 18249.0,
+      "grossHKD": 18249,
       "commission": -0.88,
       "netHKD": 18248.12
     },
@@ -1767,7 +1767,7 @@
       "quantity": 380,
       "price": 89.45,
       "currency": "USD",
-      "grossHKD": 33991.0,
+      "grossHKD": 33991,
       "commission": -1.96,
       "netHKD": 33989.04
     },
@@ -1779,7 +1779,7 @@
       "price": 89.2696,
       "currency": "USD",
       "grossHKD": -17853.92,
-      "commission": -1.0,
+      "commission": -1,
       "netHKD": -17854.92
     },
     {
@@ -1791,7 +1791,7 @@
       "currency": "USD",
       "grossHKD": -7141.6,
       "commission": -0.4,
-      "netHKD": -7142.0
+      "netHKD": -7142
     },
     {
       "date": "2025-12-23",
@@ -1811,7 +1811,7 @@
       "quantity": 380,
       "price": 89.35,
       "currency": "USD",
-      "grossHKD": 33953.0,
+      "grossHKD": 33953,
       "commission": -1.96,
       "netHKD": 33951.04
     },
@@ -1822,7 +1822,7 @@
       "quantity": 310,
       "price": 89.9,
       "currency": "USD",
-      "grossHKD": -27869.0,
+      "grossHKD": -27869,
       "commission": -1.55,
       "netHKD": -27870.55
     },
@@ -1833,7 +1833,7 @@
       "quantity": 70,
       "price": 89.9,
       "currency": "USD",
-      "grossHKD": -6293.0,
+      "grossHKD": -6293,
       "commission": -0.35,
       "netHKD": -6293.35
     },
@@ -1855,9 +1855,9 @@
       "quantity": 200,
       "price": 89.965,
       "currency": "USD",
-      "grossHKD": -17993.0,
-      "commission": -1.0,
-      "netHKD": -17994.0
+      "grossHKD": -17993,
+      "commission": -1,
+      "netHKD": -17994
     },
     {
       "date": "2025-12-23",
@@ -1866,7 +1866,7 @@
       "quantity": 100,
       "price": 89.96,
       "currency": "USD",
-      "grossHKD": -8996.0,
+      "grossHKD": -8996,
       "commission": -0.5,
       "netHKD": -8996.5
     },
@@ -1901,7 +1901,7 @@
       "currency": "USD",
       "grossHKD": -33613.12,
       "commission": -1.88,
-      "netHKD": -33615.0
+      "netHKD": -33615
     },
     {
       "date": "2025-12-23",
@@ -1923,7 +1923,7 @@
       "currency": "USD",
       "grossHKD": -26929.5,
       "commission": -1.5,
-      "netHKD": -26931.0
+      "netHKD": -26931
     },
     {
       "date": "2025-12-23",
@@ -1987,7 +1987,7 @@
       "quantity": 200,
       "price": 90.175,
       "currency": "USD",
-      "grossHKD": 18035.0,
+      "grossHKD": 18035,
       "commission": -0.53,
       "netHKD": 18034.47
     },
@@ -2042,7 +2042,7 @@
       "quantity": 100,
       "price": 90.19,
       "currency": "USD",
-      "grossHKD": 9019.0,
+      "grossHKD": 9019,
       "commission": -1.02,
       "netHKD": 9017.98
     },
@@ -2077,7 +2077,7 @@
       "currency": "USD",
       "grossHKD": -9021.5,
       "commission": -0.5,
-      "netHKD": -9022.0
+      "netHKD": -9022
     },
     {
       "date": "2025-12-23",
@@ -2087,7 +2087,7 @@
       "price": 90.29,
       "currency": "USD",
       "grossHKD": 1264.06,
-      "commission": -1.0,
+      "commission": -1,
       "netHKD": 1263.06
     },
     {
@@ -2108,7 +2108,7 @@
       "quantity": 370,
       "price": 90.4,
       "currency": "USD",
-      "grossHKD": -33448.0,
+      "grossHKD": -33448,
       "commission": -1.85,
       "netHKD": -33449.85
     },
@@ -2131,7 +2131,7 @@
       "price": 90.5682,
       "currency": "USD",
       "grossHKD": -18113.64,
-      "commission": -1.0,
+      "commission": -1,
       "netHKD": -18114.64
     },
     {
@@ -2141,7 +2141,7 @@
       "quantity": 100,
       "price": 90.57,
       "currency": "USD",
-      "grossHKD": -9057.0,
+      "grossHKD": -9057,
       "commission": -0.5,
       "netHKD": -9057.5
     },
@@ -2174,7 +2174,7 @@
       "quantity": 200,
       "price": 90.615,
       "currency": "USD",
-      "grossHKD": 18123.0,
+      "grossHKD": 18123,
       "commission": -0.91,
       "netHKD": 18122.09
     },
@@ -2208,7 +2208,7 @@
       "price": 90.568,
       "currency": "USD",
       "grossHKD": -15849.4,
-      "commission": -1.0,
+      "commission": -1,
       "netHKD": -15850.4
     },
     {
@@ -2240,9 +2240,9 @@
       "quantity": 200,
       "price": 90.54,
       "currency": "USD",
-      "grossHKD": -18108.0,
-      "commission": -1.0,
-      "netHKD": -18109.0
+      "grossHKD": -18108,
+      "commission": -1,
+      "netHKD": -18109
     },
     {
       "date": "2025-12-22",
@@ -2296,7 +2296,7 @@
       "price": 90.35,
       "currency": "USD",
       "grossHKD": -6776.25,
-      "commission": -1.0,
+      "commission": -1,
       "netHKD": -6777.25
     },
     {
@@ -2317,7 +2317,7 @@
       "quantity": 375,
       "price": 90.4,
       "currency": "USD",
-      "grossHKD": 33900.0,
+      "grossHKD": 33900,
       "commission": -1.94,
       "netHKD": 33898.06
     },
@@ -2428,7 +2428,7 @@
       "price": 88.105,
       "currency": "USD",
       "grossHKD": -15858.9,
-      "commission": -1.0,
+      "commission": -1,
       "netHKD": -15859.9
     },
     {
@@ -2451,7 +2451,7 @@
       "currency": "USD",
       "grossHKD": -8810.5,
       "commission": -0.5,
-      "netHKD": -8811.0
+      "netHKD": -8811
     },
     {
       "date": "2025-12-19",
@@ -2482,7 +2482,7 @@
       "quantity": 380,
       "price": 88.35,
       "currency": "USD",
-      "grossHKD": 33573.0,
+      "grossHKD": 33573,
       "commission": -1.96,
       "netHKD": 33571.04
     },
@@ -2493,7 +2493,7 @@
       "quantity": 380,
       "price": 88.05,
       "currency": "USD",
-      "grossHKD": -33459.0,
+      "grossHKD": -33459,
       "commission": -1.9,
       "netHKD": -33460.9
     },
@@ -2546,9 +2546,9 @@
       "symbol": "GDX",
       "type": "Sell",
       "quantity": 380,
-      "price": 88.0,
+      "price": 88,
       "currency": "USD",
-      "grossHKD": 33440.0,
+      "grossHKD": 33440,
       "commission": -1.96,
       "netHKD": 33438.04
     },
@@ -2559,7 +2559,7 @@
       "quantity": 380,
       "price": 85.35,
       "currency": "USD",
-      "grossHKD": -32433.0,
+      "grossHKD": -32433,
       "commission": -1.9,
       "netHKD": -32434.9
     },
@@ -2581,9 +2581,9 @@
       "quantity": 100,
       "price": 85.68,
       "currency": "USD",
-      "grossHKD": -8568.0,
-      "commission": -1.0,
-      "netHKD": -8569.0
+      "grossHKD": -8568,
+      "commission": -1,
+      "netHKD": -8569
     },
     {
       "date": "2025-12-18",
@@ -2614,7 +2614,7 @@
       "quantity": 380,
       "price": 85.7,
       "currency": "USD",
-      "grossHKD": 32566.0,
+      "grossHKD": 32566,
       "commission": -1.96,
       "netHKD": 32564.04
     },
@@ -2625,7 +2625,7 @@
       "quantity": 292,
       "price": 85.5,
       "currency": "USD",
-      "grossHKD": -24966.0,
+      "grossHKD": -24966,
       "commission": -1.46,
       "netHKD": -24967.46
     },
@@ -2659,7 +2659,7 @@
       "price": 85.225,
       "currency": "USD",
       "grossHKD": -7670.25,
-      "commission": -1.0,
+      "commission": -1,
       "netHKD": -7671.25
     },
     {
@@ -2669,7 +2669,7 @@
       "quantity": 200,
       "price": 85.225,
       "currency": "USD",
-      "grossHKD": -17045.0,
+      "grossHKD": -17045,
       "commission": -0.45,
       "netHKD": -17045.45
     },
@@ -2680,7 +2680,7 @@
       "quantity": 290,
       "price": 85.4,
       "currency": "USD",
-      "grossHKD": 24766.0,
+      "grossHKD": 24766,
       "commission": -1.5,
       "netHKD": 24764.5
     },
@@ -2702,7 +2702,7 @@
       "quantity": 380,
       "price": 85.45,
       "currency": "USD",
-      "grossHKD": 32471.0,
+      "grossHKD": 32471,
       "commission": -1.96,
       "netHKD": 32469.04
     },
@@ -2747,7 +2747,7 @@
       "price": 37.1,
       "currency": "USD",
       "grossHKD": 408.1,
-      "commission": -0.0,
+      "commission": 0,
       "netHKD": 408.1
     },
     {
@@ -2755,11 +2755,11 @@
       "symbol": "MSFT",
       "type": "Sell",
       "quantity": 8,
-      "price": 474.0,
+      "price": 474,
       "currency": "USD",
-      "grossHKD": 3792.0,
-      "commission": -1.0,
-      "netHKD": 3791.0
+      "grossHKD": 3792,
+      "commission": -1,
+      "netHKD": 3791
     },
     {
       "date": "2025-12-15",
@@ -2768,9 +2768,9 @@
       "quantity": 20,
       "price": 177.35,
       "currency": "USD",
-      "grossHKD": 3547.0,
-      "commission": -1.0,
-      "netHKD": 3546.0
+      "grossHKD": 3547,
+      "commission": -1,
+      "netHKD": 3546
     },
     {
       "date": "2025-12-10",
@@ -2779,9 +2779,9 @@
       "quantity": 5,
       "price": 42.2,
       "currency": "USD",
-      "grossHKD": 211.0,
-      "commission": -1.0,
-      "netHKD": 210.0
+      "grossHKD": 211,
+      "commission": -1,
+      "netHKD": 210
     },
     {
       "date": "2025-12-10",
@@ -2813,7 +2813,7 @@
       "price": 93.8107,
       "currency": "USD",
       "grossHKD": 656.67,
-      "commission": -1.0,
+      "commission": -1,
       "netHKD": 655.67
     },
     {
@@ -2824,7 +2824,7 @@
       "price": 27.17,
       "currency": "USD",
       "grossHKD": -1059.63,
-      "commission": -1.0,
+      "commission": -1,
       "netHKD": -1060.63
     },
     {
@@ -2835,7 +2835,7 @@
       "price": 596.225,
       "currency": "USD",
       "grossHKD": 1192.45,
-      "commission": -1.0,
+      "commission": -1,
       "netHKD": 1191.45
     },
     {
@@ -2846,7 +2846,7 @@
       "price": 51.27,
       "currency": "USD",
       "grossHKD": 358.89,
-      "commission": -1.0,
+      "commission": -1,
       "netHKD": 357.89
     },
     {
@@ -2857,7 +2857,7 @@
       "price": 51.27,
       "currency": "USD",
       "grossHKD": 461.43,
-      "commission": -0.0,
+      "commission": 0,
       "netHKD": 461.43
     },
     {
@@ -2890,7 +2890,7 @@
       "price": 490.34,
       "currency": "USD",
       "grossHKD": -3922.72,
-      "commission": -1.0,
+      "commission": -1,
       "netHKD": -3923.72
     },
     {
@@ -2900,9 +2900,9 @@
       "quantity": 5,
       "price": 96.8,
       "currency": "USD",
-      "grossHKD": -484.0,
-      "commission": -1.0,
-      "netHKD": -485.0
+      "grossHKD": -484,
+      "commission": -1,
+      "netHKD": -485
     },
     {
       "date": "2025-12-08",
@@ -2912,7 +2912,7 @@
       "price": 96.6,
       "currency": "USD",
       "grossHKD": -193.2,
-      "commission": -1.0,
+      "commission": -1,
       "netHKD": -194.2
     },
     {
@@ -2923,7 +2923,7 @@
       "price": 183.245,
       "currency": "USD",
       "grossHKD": -3664.9,
-      "commission": -1.0,
+      "commission": -1,
       "netHKD": -3665.9
     },
     {
@@ -2945,7 +2945,7 @@
       "price": 567.71,
       "currency": "USD",
       "grossHKD": -1135.42,
-      "commission": -1.0,
+      "commission": -1,
       "netHKD": -1136.42
     },
     {
@@ -2956,7 +2956,7 @@
       "price": 50.645,
       "currency": "USD",
       "grossHKD": 1114.19,
-      "commission": -1.0,
+      "commission": -1,
       "netHKD": 1113.19
     },
     {
@@ -2967,7 +2967,7 @@
       "price": 41.965,
       "currency": "USD",
       "grossHKD": 1091.09,
-      "commission": -1.0,
+      "commission": -1,
       "netHKD": 1090.09
     },
     {
@@ -2978,7 +2978,7 @@
       "price": 43.68,
       "currency": "USD",
       "grossHKD": -3712.8,
-      "commission": -1.0,
+      "commission": -1,
       "netHKD": -3713.8
     },
     {
@@ -3000,7 +3000,7 @@
       "price": 67.245,
       "currency": "USD",
       "grossHKD": 806.94,
-      "commission": -1.0,
+      "commission": -1,
       "netHKD": 805.94
     },
     {
@@ -3011,7 +3011,7 @@
       "price": 67.245,
       "currency": "USD",
       "grossHKD": 739.7,
-      "commission": -0.0,
+      "commission": 0,
       "netHKD": 739.69
     },
     {
@@ -3055,7 +3055,7 @@
       "price": 29.37,
       "currency": "USD",
       "grossHKD": -1997.16,
-      "commission": -1.0,
+      "commission": -1,
       "netHKD": -1998.16
     },
     {
@@ -3066,7 +3066,7 @@
       "price": 29.37,
       "currency": "USD",
       "grossHKD": -1762.2,
-      "commission": 0.0,
+      "commission": 0,
       "netHKD": -1762.2
     },
     {
@@ -3074,9 +3074,9 @@
       "symbol": "CHAT",
       "type": "Sell",
       "quantity": 80,
-      "price": 59.0,
+      "price": 59,
       "currency": "USD",
-      "grossHKD": 4720.0,
+      "grossHKD": 4720,
       "commission": -1.02,
       "netHKD": 4718.98
     },
@@ -3088,7 +3088,7 @@
       "price": 40.445,
       "currency": "USD",
       "grossHKD": -1051.57,
-      "commission": -1.0,
+      "commission": -1,
       "netHKD": -1052.57
     },
     {
@@ -3099,7 +3099,7 @@
       "price": 40.445,
       "currency": "USD",
       "grossHKD": -4044.5,
-      "commission": -0.0,
+      "commission": 0,
       "netHKD": -4044.5
     },
     {
@@ -3109,9 +3109,9 @@
       "quantity": 118,
       "price": 40.5,
       "currency": "USD",
-      "grossHKD": -4779.0,
-      "commission": -1.0,
-      "netHKD": -4780.0
+      "grossHKD": -4779,
+      "commission": -1,
+      "netHKD": -4780
     },
     {
       "date": "2025-11-10",
@@ -3121,7 +3121,7 @@
       "price": 64.13,
       "currency": "USD",
       "grossHKD": -5130.4,
-      "commission": -1.0,
+      "commission": -1,
       "netHKD": -5131.4
     },
     {
@@ -3143,7 +3143,7 @@
       "price": 67.32,
       "currency": "USD",
       "grossHKD": -10299.96,
-      "commission": -1.0,
+      "commission": -1,
       "netHKD": -10300.96
     },
     {
@@ -3153,7 +3153,7 @@
       "quantity": 100,
       "price": 48.38,
       "currency": "USD",
-      "grossHKD": 4838.0,
+      "grossHKD": 4838,
       "commission": -1.02,
       "netHKD": 4836.98
     },
@@ -3175,9 +3175,9 @@
       "quantity": 50,
       "price": 48.2,
       "currency": "USD",
-      "grossHKD": -2410.0,
-      "commission": -1.0,
-      "netHKD": -2411.0
+      "grossHKD": -2410,
+      "commission": -1,
+      "netHKD": -2411
     },
     {
       "date": "2025-10-30",
@@ -3187,7 +3187,7 @@
       "price": 48.31,
       "currency": "USD",
       "grossHKD": -7246.5,
-      "commission": -1.0,
+      "commission": -1,
       "netHKD": -7247.5
     },
     {
@@ -3198,7 +3198,7 @@
       "price": 48.315,
       "currency": "USD",
       "grossHKD": -4831.5,
-      "commission": -1.0,
+      "commission": -1,
       "netHKD": -4832.5
     },
     {
@@ -3208,7 +3208,7 @@
       "quantity": 100,
       "price": 48.32,
       "currency": "USD",
-      "grossHKD": 4832.0,
+      "grossHKD": 4832,
       "commission": -1.02,
       "netHKD": 4830.98
     },
@@ -3219,7 +3219,7 @@
       "quantity": 50,
       "price": 48.26,
       "currency": "USD",
-      "grossHKD": 2413.0,
+      "grossHKD": 2413,
       "commission": -0.01,
       "netHKD": 2412.99
     },
@@ -3231,686 +3231,14 @@
       "price": 48.325,
       "currency": "USD",
       "grossHKD": -483.25,
-      "commission": -1.0,
+      "commission": -1,
       "netHKD": -484.25
     }
   ],
   "dailyPnL": [
     {
-      "date": "2025-10-29",
-      "pnl": 0.0,
-      "cumulative": 0.0,
-      "endingValue": 10000.0
-    },
-    {
-      "date": "2025-10-30",
-      "pnl": -0.6276,
-      "cumulative": -0.63,
-      "endingValue": 59722.807389106
-    },
-    {
-      "date": "2025-10-31",
-      "pnl": 0.2493,
-      "cumulative": -0.38,
-      "endingValue": 59871.670349592
-    },
-    {
-      "date": "2025-11-03",
-      "pnl": 0.3898,
-      "cumulative": 0.01,
-      "endingValue": 60105.038707552
-    },
-    {
-      "date": "2025-11-04",
-      "pnl": -0.2483,
-      "cumulative": -0.24,
-      "endingValue": 59955.768463014
-    },
-    {
-      "date": "2025-11-05",
-      "pnl": 0.5405,
-      "cumulative": 0.3,
-      "endingValue": 60279.856171504
-    },
-    {
-      "date": "2025-11-06",
-      "pnl": 0.3737,
-      "cumulative": 0.67,
-      "endingValue": 60505.112956492
-    },
-    {
-      "date": "2025-11-07",
-      "pnl": -0.6678,
-      "cumulative": 0.0,
-      "endingValue": 60136.84089128
-    },
-    {
-      "date": "2025-11-10",
-      "pnl": 0.1335,
-      "cumulative": 0.14,
-      "endingValue": 200269.653467696
-    },
-    {
-      "date": "2025-11-11",
-      "pnl": -0.2964,
-      "cumulative": -0.16,
-      "endingValue": 199676.007668112
-    },
-    {
-      "date": "2025-11-12",
-      "pnl": 0.1311,
-      "cumulative": -0.03,
-      "endingValue": 199937.715869792
-    },
-    {
-      "date": "2025-11-13",
-      "pnl": -2.4328,
-      "cumulative": -2.46,
-      "endingValue": 195073.535331264
-    },
-    {
-      "date": "2025-11-14",
-      "pnl": -0.0511,
-      "cumulative": -2.51,
-      "endingValue": 194973.880041008
-    },
-    {
-      "date": "2025-11-17",
-      "pnl": -1.1134,
-      "cumulative": -3.6,
-      "endingValue": 192802.947943488
-    },
-    {
-      "date": "2025-11-18",
-      "pnl": -0.9224,
-      "cumulative": -4.49,
-      "endingValue": 230655.572531191
-    },
-    {
-      "date": "2025-11-19",
-      "pnl": 0.4704,
-      "cumulative": -4.04,
-      "endingValue": 231740.557202191
-    },
-    {
-      "date": "2025-11-20",
-      "pnl": -1.0757,
-      "cumulative": -5.07,
-      "endingValue": 229247.730269191
-    },
-    {
-      "date": "2025-11-21",
-      "pnl": 0.4942,
-      "cumulative": -4.6,
-      "endingValue": 230380.634075191
-    },
-    {
-      "date": "2025-11-24",
-      "pnl": 1.8572,
-      "cumulative": -2.83,
-      "endingValue": 234659.314905191
-    },
-    {
-      "date": "2025-11-25",
-      "pnl": 0.6307,
-      "cumulative": -2.22,
-      "endingValue": 236139.322379191
-    },
-    {
-      "date": "2025-11-26",
-      "pnl": 0.8706,
-      "cumulative": -1.37,
-      "endingValue": 238195.174025191
-    },
-    {
-      "date": "2025-11-27",
-      "pnl": 0.0154,
-      "cumulative": -1.35,
-      "endingValue": 238231.921193191
-    },
-    {
-      "date": "2025-11-28",
-      "pnl": 1.0037,
-      "cumulative": -0.36,
-      "endingValue": 240622.982937191
-    },
-    {
-      "date": "2025-12-01",
-      "pnl": -0.1009,
-      "cumulative": -0.46,
-      "endingValue": 270349.968596969
-    },
-    {
-      "date": "2025-12-02",
-      "pnl": 0.2913,
-      "cumulative": -0.17,
-      "endingValue": 271137.513876304
-    },
-    {
-      "date": "2025-12-03",
-      "pnl": -0.0047,
-      "cumulative": -0.18,
-      "endingValue": 271124.79558616
-    },
-    {
-      "date": "2025-12-04",
-      "pnl": 1.1122,
-      "cumulative": 0.94,
-      "endingValue": 274140.29882566
-    },
-    {
-      "date": "2025-12-05",
-      "pnl": -0.839,
-      "cumulative": 0.09,
-      "endingValue": 271840.39615266
-    },
-    {
-      "date": "2025-12-08",
-      "pnl": 0.1145,
-      "cumulative": 0.2,
-      "endingValue": 272151.595672723
-    },
-    {
-      "date": "2025-12-09",
-      "pnl": 0.1226,
-      "cumulative": 0.33,
-      "endingValue": 272485.384101267
-    },
-    {
-      "date": "2025-12-10",
-      "pnl": -0.9152,
-      "cumulative": -0.59,
-      "endingValue": 269991.556629462
-    },
-    {
-      "date": "2025-12-11",
-      "pnl": 0.2458,
-      "cumulative": -0.35,
-      "endingValue": 270655.324812832
-    },
-    {
-      "date": "2025-12-12",
-      "pnl": -1.1203,
-      "cumulative": -1.46,
-      "endingValue": 267623.279931592
-    },
-    {
-      "date": "2025-12-15",
-      "pnl": -1.3489,
-      "cumulative": -2.79,
-      "endingValue": 264013.218125203
-    },
-    {
-      "date": "2025-12-16",
-      "pnl": 0.3602,
-      "cumulative": -2.44,
-      "endingValue": 264964.182100745
-    },
-    {
-      "date": "2025-12-17",
-      "pnl": -0.5091,
-      "cumulative": -2.94,
-      "endingValue": 263615.192032616
-    },
-    {
-      "date": "2025-12-18",
-      "pnl": 0.6557,
-      "cumulative": -2.3,
-      "endingValue": 265343.601624277
-    },
-    {
-      "date": "2025-12-19",
-      "pnl": 0.3805,
-      "cumulative": -1.93,
-      "endingValue": 266353.3110075
-    },
-    {
-      "date": "2025-12-22",
-      "pnl": -0.2463,
-      "cumulative": -2.17,
-      "endingValue": 265697.26192138
-    },
-    {
-      "date": "2025-12-23",
-      "pnl": -0.1936,
-      "cumulative": -2.36,
-      "endingValue": 265182.978996865
-    },
-    {
-      "date": "2025-12-24",
-      "pnl": 0.2651,
-      "cumulative": -2.1,
-      "endingValue": 265885.898285325
-    },
-    {
-      "date": "2025-12-25",
-      "pnl": 0.0,
-      "cumulative": -2.1,
-      "endingValue": 265885.898285325
-    },
-    {
-      "date": "2025-12-26",
-      "pnl": 0.025,
-      "cumulative": -2.08,
-      "endingValue": 265952.435904082
-    },
-    {
-      "date": "2025-12-29",
-      "pnl": -1.0486,
-      "cumulative": -3.11,
-      "endingValue": 263163.71478866
-    },
-    {
-      "date": "2025-12-30",
-      "pnl": 0.0875,
-      "cumulative": -3.02,
-      "endingValue": 263393.887722012
-    },
-    {
-      "date": "2025-12-31",
-      "pnl": 0.2486,
-      "cumulative": -2.78,
-      "endingValue": 264048.761013114
-    },
-    {
-      "date": "2026-01-01",
-      "pnl": 0.018,
-      "cumulative": -2.76,
-      "endingValue": 264096.255181579
-    },
-    {
-      "date": "2026-01-02",
-      "pnl": 0.1499,
-      "cumulative": -2.62,
-      "endingValue": 264492.074762268
-    },
-    {
-      "date": "2026-01-05",
-      "pnl": -0.0648,
-      "cumulative": -2.68,
-      "endingValue": 264320.700620715
-    },
-    {
-      "date": "2026-01-06",
-      "pnl": 0.0437,
-      "cumulative": -2.64,
-      "endingValue": 264436.122359045
-    },
-    {
-      "date": "2026-01-07",
-      "pnl": 0.1539,
-      "cumulative": -2.49,
-      "endingValue": 264843.108083811
-    },
-    {
-      "date": "2026-01-08",
-      "pnl": 0.4269,
-      "cumulative": -2.07,
-      "endingValue": 265973.66651004
-    },
-    {
-      "date": "2026-01-09",
-      "pnl": 0.1492,
-      "cumulative": -1.93,
-      "endingValue": 266370.544846026
-    },
-    {
-      "date": "2026-01-12",
-      "pnl": -0.2555,
-      "cumulative": -2.18,
-      "endingValue": 265689.86086715
-    },
-    {
-      "date": "2026-01-13",
-      "pnl": -0.5794,
-      "cumulative": -2.74,
-      "endingValue": 264150.523267139
-    },
-    {
-      "date": "2026-01-14",
-      "pnl": -0.0355,
-      "cumulative": -2.78,
-      "endingValue": 264056.713521686
-    },
-    {
-      "date": "2026-01-15",
-      "pnl": -0.0064,
-      "cumulative": -2.78,
-      "endingValue": 264039.783654678
-    },
-    {
-      "date": "2026-01-16",
-      "pnl": -0.0074,
-      "cumulative": -2.79,
-      "endingValue": 264020.224994063
-    },
-    {
-      "date": "2026-01-19",
-      "pnl": -0.0124,
-      "cumulative": -2.8,
-      "endingValue": 259995.883940448
-    },
-    {
-      "date": "2026-01-20",
-      "pnl": 0.0392,
-      "cumulative": -2.76,
-      "endingValue": 260097.673578806
-    },
-    {
-      "date": "2026-01-21",
-      "pnl": -0.0244,
-      "cumulative": -2.79,
-      "endingValue": 260034.311076231
-    },
-    {
-      "date": "2026-01-22",
-      "pnl": -0.001,
-      "cumulative": -2.79,
-      "endingValue": 260031.653218004
-    },
-    {
-      "date": "2026-01-23",
-      "pnl": -0.0038,
-      "cumulative": -2.79,
-      "endingValue": 260021.648201335
-    },
-    {
-      "date": "2026-01-26",
-      "pnl": 0.0223,
-      "cumulative": -2.77,
-      "endingValue": 260079.542734457
-    },
-    {
-      "date": "2026-01-27",
-      "pnl": 0.0231,
-      "cumulative": -2.75,
-      "endingValue": 260139.577730476
-    },
-    {
-      "date": "2026-01-28",
-      "pnl": 0.0195,
-      "cumulative": -2.73,
-      "endingValue": 294196.916872852
-    },
-    {
-      "date": "2026-01-29",
-      "pnl": 0.0526,
-      "cumulative": -2.68,
-      "endingValue": 294351.532856673
-    },
-    {
-      "date": "2026-01-30",
-      "pnl": 0.1079,
-      "cumulative": -2.57,
-      "endingValue": 294669.026492759
-    },
-    {
-      "date": "2026-02-02",
-      "pnl": -0.0285,
-      "cumulative": -2.6,
-      "endingValue": 294585.189166287
-    },
-    {
-      "date": "2026-02-03",
-      "pnl": 0.033,
-      "cumulative": -2.57,
-      "endingValue": 294682.381074532
-    },
-    {
-      "date": "2026-02-04",
-      "pnl": -0.0051,
-      "cumulative": -2.57,
-      "endingValue": 294667.294516306
-    },
-    {
-      "date": "2026-02-05",
-      "pnl": 0.0211,
-      "cumulative": -2.55,
-      "endingValue": 294729.454057527
-    },
-    {
-      "date": "2026-02-06",
-      "pnl": -0.009,
-      "cumulative": -2.56,
-      "endingValue": 294703.052418195
-    },
-    {
-      "date": "2026-02-09",
-      "pnl": 0.0263,
-      "cumulative": -2.54,
-      "endingValue": 294780.530270096
-    },
-    {
-      "date": "2026-02-10",
-      "pnl": 0.0448,
-      "cumulative": -2.49,
-      "endingValue": 294912.551206753
-    },
-    {
-      "date": "2026-02-11",
-      "pnl": -0.0016,
-      "cumulative": -2.5,
-      "endingValue": 294907.919650945
-    },
-    {
-      "date": "2026-02-12",
-      "pnl": -0.023,
-      "cumulative": -2.52,
-      "endingValue": 294840.019893236
-    },
-    {
-      "date": "2026-02-13",
-      "pnl": 0.0035,
-      "cumulative": -2.51,
-      "endingValue": 294850.472804474
-    },
-    {
-      "date": "2026-02-16",
-      "pnl": -0.0064,
-      "cumulative": -2.52,
-      "endingValue": 294831.610850666
-    },
-    {
-      "date": "2026-02-17",
-      "pnl": 0.0071,
-      "cumulative": -2.51,
-      "endingValue": 294852.513761143
-    },
-    {
-      "date": "2026-02-18",
-      "pnl": -0.0141,
-      "cumulative": -2.53,
-      "endingValue": 294811.013458765
-    },
-    {
-      "date": "2026-02-19",
-      "pnl": 0.0074,
-      "cumulative": -2.52,
-      "endingValue": 294832.781176288
-    },
-    {
-      "date": "2026-02-20",
-      "pnl": 0.0064,
-      "cumulative": -2.51,
-      "endingValue": 294851.645860096
-    },
-    {
-      "date": "2026-02-23",
-      "pnl": 0.0672,
-      "cumulative": -2.45,
-      "endingValue": 295049.890630369
-    },
-    {
-      "date": "2026-02-24",
-      "pnl": 0.046,
-      "cumulative": -2.4,
-      "endingValue": 295185.729457787
-    },
-    {
-      "date": "2026-02-25",
-      "pnl": -0.031,
-      "cumulative": -2.43,
-      "endingValue": 295094.309800462
-    },
-    {
-      "date": "2026-02-26",
-      "pnl": 0.0435,
-      "cumulative": -2.39,
-      "endingValue": 295222.608214357
-    },
-    {
-      "date": "2026-02-27",
-      "pnl": -0.0075,
-      "cumulative": -2.4,
-      "endingValue": 315199.11051874
-    },
-    {
-      "date": "2026-03-02",
-      "pnl": -0.0157,
-      "cumulative": -2.41,
-      "endingValue": 315149.672379563
-    },
-    {
-      "date": "2026-03-03",
-      "pnl": -0.0837,
-      "cumulative": -2.5,
-      "endingValue": 314885.793261962
-    },
-    {
-      "date": "2026-03-04",
-      "pnl": 0.1704,
-      "cumulative": -2.33,
-      "endingValue": 315422.382401906
-    },
-    {
-      "date": "2026-03-05",
-      "pnl": 0.023,
-      "cumulative": -2.31,
-      "endingValue": 315494.895239269
-    },
-    {
-      "date": "2026-03-06",
-      "pnl": 0.0461,
-      "cumulative": -2.26,
-      "endingValue": 315640.445768864
-    },
-    {
-      "date": "2026-03-09",
-      "pnl": -0.0112,
-      "cumulative": -2.27,
-      "endingValue": 315605.02988969
-    },
-    {
-      "date": "2026-03-10",
-      "pnl": 0.0372,
-      "cumulative": -2.24,
-      "endingValue": 315722.350290603
-    },
-    {
-      "date": "2026-03-11",
-      "pnl": 0.0205,
-      "cumulative": -2.22,
-      "endingValue": 315787.216895966
-    },
-    {
-      "date": "2026-03-12",
-      "pnl": 0.0205,
-      "cumulative": -2.2,
-      "endingValue": 315852.086497328
-    },
-    {
-      "date": "2026-03-13",
-      "pnl": 0.0167,
-      "cumulative": -2.18,
-      "endingValue": 315904.852397256
-    },
-    {
-      "date": "2026-03-16",
-      "pnl": 0.0386,
-      "cumulative": -2.14,
-      "endingValue": 316026.841239735
-    },
-    {
-      "date": "2026-03-17",
-      "pnl": 0.0793,
-      "cumulative": -2.06,
-      "endingValue": 316277.379289432
-    },
-    {
-      "date": "2026-03-18",
-      "pnl": 0.0333,
-      "cumulative": -2.03,
-      "endingValue": 316382.63054991
-    },
-    {
-      "date": "2026-03-19",
-      "pnl": -0.0611,
-      "cumulative": -2.09,
-      "endingValue": 316189.20756833
-    },
-    {
-      "date": "2026-03-20",
-      "pnl": -0.0037,
-      "cumulative": -2.1,
-      "endingValue": 316177.408053272
-    },
-    {
-      "date": "2026-03-23",
-      "pnl": 0.0182,
-      "cumulative": -2.08,
-      "endingValue": 316234.845711764
-    },
-    {
-      "date": "2026-03-24",
-      "pnl": -0.1952,
-      "cumulative": -2.27,
-      "endingValue": 315617.412422208
-    },
-    {
-      "date": "2026-03-25",
-      "pnl": -0.1034,
-      "cumulative": -2.37,
-      "endingValue": 315291.083998064
-    },
-    {
-      "date": "2026-03-26",
-      "pnl": 0.0986,
-      "cumulative": -2.27,
-      "endingValue": 315601.900378435
-    },
-    {
-      "date": "2026-03-27",
-      "pnl": 0.0921,
-      "cumulative": -2.18,
-      "endingValue": 315892.416157948
-    },
-    {
-      "date": "2026-03-30",
-      "pnl": 0.0385,
-      "cumulative": -2.15,
-      "endingValue": 320015.639845153
-    },
-    {
-      "date": "2026-03-31",
-      "pnl": 0.0537,
-      "cumulative": -2.09,
-      "endingValue": 320187.465490018
-    },
-    {
-      "date": "2026-04-01",
-      "pnl": -0.0216,
-      "cumulative": -2.11,
-      "endingValue": 320118.333006107
-    },
-    {
-      "date": "2026-04-02",
-      "pnl": 0.0065,
-      "cumulative": -2.11,
-      "endingValue": 320139.207573672
-    },
-    {
-      "date": "2026-04-03",
-      "pnl": -0.0128,
+      "date": "2025-04-04",
+      "pnl": -2.1208,
       "cumulative": -2.12,
       "endingValue": 320098.364648456
     }
@@ -4077,7 +3405,7 @@
     },
     {
       "date": "2025-12-18",
-      "pnl": 1716.0,
+      "pnl": 1716,
       "commission": -30.54
     },
     {
@@ -4166,5 +3494,5 @@
       "commission": -7.99
     }
   ],
-  "lastSyncAt": "2026-04-06T10:43:00Z"
+  "lastSyncAt": "2026-04-06T22:38:21.664Z"
 }
