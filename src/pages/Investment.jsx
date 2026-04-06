@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts'
+import { LineChart, Line, Area, AreaChart, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLine, CartesianGrid, defs } from 'recharts'
 import data from '../data/ibkr_parsed.json'
 import '../styles/investment.css'
 
@@ -10,7 +10,14 @@ const MONTHS = ['January','February','March','April','May','June','July','August
 
 function filterByPeriod(dailyPnL, period) {
   if (!dailyPnL.length) return dailyPnL
-  const now = new Date(dailyPnL[dailyPnL.length - 1].date)
+  const withSplit = dailyPnL.map(d => ({
+    ...d,
+    pct: d.cumulative,
+    pctAbove: d.cumulative >= 0 ? d.cumulative : 0,
+    pctBelow: d.cumulative < 0 ? d.cumulative : 0,
+  }))
+  if (period === 'All') return withSplit
+  const now = new Date(withSplit[withSplit.length - 1].date)
   let cutoff
   switch(period) {
     case '1W': cutoff = new Date(now); cutoff.setDate(cutoff.getDate() - 7); break
@@ -19,13 +26,16 @@ function filterByPeriod(dailyPnL, period) {
     case '3M': cutoff = new Date(now); cutoff.setMonth(cutoff.getMonth() - 3); break
     case 'YTD': cutoff = new Date(now.getFullYear(), 0, 1); break
     case '1Y': cutoff = new Date(now); cutoff.setFullYear(cutoff.getFullYear() - 1); break
-    default: return dailyPnL
+    default: return withSplit
   }
   const cutStr = cutoff.toISOString().slice(0,10)
-  const filtered = dailyPnL.filter(d => d.date >= cutStr)
-  if (!filtered.length) return dailyPnL
-  const base = filtered[0].cumulative - filtered[0].pnl
-  return filtered.map(d => ({ ...d, cumulative: Math.round((d.cumulative - base)*100)/100 }))
+  const filtered = withSplit.filter(d => d.date >= cutStr)
+  if (!filtered.length) return withSplit
+  const base = filtered[0].pct - filtered[0].pnl
+  return filtered.map(d => {
+    const pct = Math.round((d.pct - base) * 100) / 100
+    return { ...d, pct, pctAbove: pct >= 0 ? pct : 0, pctBelow: pct < 0 ? pct : 0 }
+  })
 }
 
 const fmt = (v) => v >= 0 ? `+$${Math.abs(v).toLocaleString()}` : `-$${Math.abs(v).toLocaleString()}`
@@ -39,7 +49,10 @@ const fmtPct = (v) => (v >= 0 ? '+' : '') + v.toFixed(2) + '%'
 export default function Investment() {
   const navigate = useNavigate()
   const [period, setPeriod] = useState('All')
+  const [masked, setMasked] = useState(false)
   const { trades, dailyPnL, summary } = data
+
+  const mask = (v) => masked ? '***' : v
 
   const chartData = useMemo(() => filterByPeriod(dailyPnL, period), [dailyPnL, period])
 
@@ -50,10 +63,13 @@ export default function Investment() {
     return m
   }, [dailyPnL])
 
-  const dates = dailyPnL.map(d => d.date).sort()
-  const latestDate = dates.length ? new Date(dates[dates.length - 1]) : new Date()
-  const [calYear, setCalYear] = useState(latestDate.getFullYear())
-  const [calMonth, setCalMonth] = useState(latestDate.getMonth())
+  const [calYear, setCalYear] = useState(new Date().getFullYear())
+  const [calMonth, setCalMonth] = useState(new Date().getMonth())
+
+  const todayStr = useMemo(() => {
+    const now = new Date()
+    return `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`
+  }, [])
 
   const prevMonth = () => { if (calMonth === 0) { setCalMonth(11); setCalYear(y => y-1) } else setCalMonth(m => m-1) }
   const nextMonth = () => { if (calMonth === 11) { setCalMonth(0); setCalYear(y => y+1) } else setCalMonth(m => m+1) }
@@ -113,8 +129,8 @@ export default function Investment() {
     return (
       <div className="chart-tooltip">
         <div className="tooltip-date">{d.date}</div>
-        <div style={{ color: d.pnl >= 0 ? 'var(--green)' : 'var(--red)' }}>Day: {fmt(d.pnl)}</div>
-        <div style={{ color: d.cumulative >= 0 ? 'var(--green)' : 'var(--red)' }}>Total: {fmt(d.cumulative)}</div>
+        <div style={{ color: d.pct >= 0 ? 'var(--green)' : 'var(--red)' }}>{d.pct >= 0 ? '+' : ''}{d.pct.toFixed(2)}%</div>
+        <div style={{ color: 'var(--text-secondary)', fontSize: '11px' }}>Day: {masked ? '***' : fmt(d.pnl)}</div>
       </div>
     )
   }
@@ -124,43 +140,87 @@ export default function Investment() {
       {/* Header */}
       <div className="inv-header">
         <h1><i className="fas fa-chart-line"></i> Investment</h1>
+        <button className="mask-toggle" onClick={() => setMasked(!masked)} title={masked ? 'Show values' : 'Hide values'}>
+          <i className={`fas ${masked ? 'fa-eye-slash' : 'fa-eye'}`}></i>
+        </button>
       </div>
 
-      <div className={`inv-return ${summary.totalReturn >= 0 ? 'positive' : 'negative'}`}>
-        {fmtPct(summary.totalReturn)}
-      </div>
+      <div className="inv-last-updated">Last Updated: {(() => { const sorted = dailyPnL.map(d => d.date).sort(); const d = sorted.length ? new Date(sorted[sorted.length-1] + 'T00:00:00') : new Date(); return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) })()}</div>
 
       <div className="inv-stats">
         <div className="inv-stat-card highlight">
           <div className="inv-stat-label">Net Liquidation Value</div>
-          <div className="inv-stat-value">${summary.netLiquidationValue.toLocaleString()}</div>
+          <div className="inv-stat-value">{mask('$' + summary.netLiquidationValue.toLocaleString())}</div>
         </div>
         <div className="inv-stat-card">
           <div className="inv-stat-label">Total P&L</div>
-          <div className={`inv-stat-value ${summary.totalPnL >= 0 ? 'positive' : 'negative'}`}>{fmt(Math.round(summary.totalPnL))}</div>
+          <div className={`inv-stat-value ${summary.totalPnL >= 0 ? 'positive' : 'negative'}`}>{mask(fmt(Math.round(summary.totalPnL)))}</div>
         </div>
         <div className="inv-stat-card">
           <div className="inv-stat-label">Net Deposited</div>
-          <div className="inv-stat-value">${summary.netDeposited.toLocaleString()}</div>
+          <div className="inv-stat-value">{mask('$' + summary.netDeposited.toLocaleString())}</div>
         </div>
       </div>
 
-      <div className="period-toggles">
-        {PERIODS.map(p => (
-          <button key={p} className={period === p ? 'active' : ''} onClick={() => setPeriod(p)}>{p}</button>
-        ))}
-      </div>
+      <div className="chart-section">
+        <div className={`chart-return ${summary.totalReturn >= 0 ? 'positive' : 'negative'}`}>
+          {masked ? '***' : fmtPct(summary.totalReturn)}
+        </div>
+        <div className="chart-subtitle">Time-weighted return</div>
 
-      <div className="chart-container">
-        <ResponsiveContainer width="100%" height={280}>
-          <LineChart data={chartData} margin={{ top: 5, right: 10, left: 10, bottom: 5 }}>
-            <XAxis dataKey="date" tick={{ fontSize: 11, fill: '#768390' }} tickFormatter={d => d.slice(5)} />
-            <YAxis tick={{ fontSize: 11, fill: '#768390' }} tickFormatter={v => `${(v/1000).toFixed(0)}k`} />
-            <ReferenceLine y={0} stroke="#444c56" strokeDasharray="3 3" />
-            <Tooltip content={<CustomTooltip />} />
-            <Line type="monotone" dataKey="cumulative" stroke="#539bf5" strokeWidth={2} dot={false} />
-          </LineChart>
-        </ResponsiveContainer>
+        <div className="chart-container">
+          <ResponsiveContainer width="100%" height={280}>
+            <AreaChart data={chartData} margin={{ top: 5, right: 10, left: 10, bottom: 5 }}>
+              <defs>
+                <linearGradient id="greenGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#57ab5a" stopOpacity={0.3} />
+                  <stop offset="100%" stopColor="#57ab5a" stopOpacity={0.05} />
+                </linearGradient>
+                <linearGradient id="redGrad" x1="0" y1="1" x2="0" y2="0">
+                  <stop offset="0%" stopColor="#e5534b" stopOpacity={0.3} />
+                  <stop offset="100%" stopColor="#e5534b" stopOpacity={0.05} />
+                </linearGradient>
+                <clipPath id="clipAbove">
+                  <rect x="0" y="0" width="100%" height="50%" />
+                </clipPath>
+                <clipPath id="clipBelow">
+                  <rect x="0" y="50%" width="100%" height="50%" />
+                </clipPath>
+              </defs>
+              <CartesianGrid strokeDasharray="3 3" stroke="#444c56" opacity={0.3} />
+              <XAxis dataKey="date" tick={{ fontSize: 11, fill: '#768390' }} tickFormatter={d => d.slice(5)} />
+              <YAxis tick={{ fontSize: 11, fill: '#768390' }} tickFormatter={v => `${v.toFixed(1)}%`} />
+              <ReferenceLine y={0} stroke="#768390" strokeWidth={1.5} />
+              <Tooltip content={<CustomTooltip />} />
+              <Area
+                type="monotone"
+                dataKey="pctAbove"
+                stroke="#57ab5a"
+                strokeWidth={2}
+                fill="url(#greenGrad)"
+                dot={false}
+                connectNulls={false}
+                baseLine={0}
+              />
+              <Area
+                type="monotone"
+                dataKey="pctBelow"
+                stroke="#e5534b"
+                strokeWidth={2}
+                fill="url(#redGrad)"
+                dot={false}
+                connectNulls={false}
+                baseLine={0}
+              />
+            </AreaChart>
+          </ResponsiveContainer>
+        </div>
+
+        <div className="period-toggles">
+          {PERIODS.map(p => (
+            <button key={p} className={period === p ? 'active' : ''} onClick={() => setPeriod(p)}>{p}</button>
+          ))}
+        </div>
       </div>
 
       {/* P&L Calendar Section */}
@@ -186,7 +246,7 @@ export default function Investment() {
         <div className="cal-monthly-total">
           <span className="cal-total-label">Monthly Total</span>
           <span className={`cal-total-value ${monthlyTotal >= 0 ? 'positive' : 'negative'}`}>
-            {fmtShort(monthlyTotal)}
+            {masked ? '***' : fmtShort(monthlyTotal)}
           </span>
         </div>
 
@@ -195,7 +255,7 @@ export default function Investment() {
           {cells.map((c, i) => c === null ? (
             <div key={`e${i}`} className="cal-cell empty" />
           ) : (
-            <div key={c.day} className={`cal-cell ${c.pnl === null ? (c.closed ? 'closed' : '') : c.pnl > 0 ? 'profit' : c.pnl < 0 ? 'loss' : ''} ${c.pnl !== null ? 'clickable' : ''}`}
+            <div key={c.day} className={`cal-cell ${c.pnl === null ? (c.closed ? 'closed' : '') : c.pnl > 0 ? 'profit' : c.pnl < 0 ? 'loss' : ''} ${c.pnl !== null ? 'clickable' : ''} ${`${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(c.day).padStart(2,'0')}` === todayStr ? 'today' : ''}`}
             onClick={() => {
               if (c.pnl !== null) {
                 const dateStr = `${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(c.day).padStart(2,'0')}`
@@ -206,8 +266,8 @@ export default function Investment() {
               <span className="cal-day-num">{c.day}</span>
               {c.pnl !== null ? (
                 <div className="cal-pnl-wrapper">
-                  <span className="cal-day-pnl">{fmtShort(c.pnl)}</span>
-                  {c.pctChange !== null && <span className="cal-day-pct">{c.pctChange >= 0 ? '+' : ''}{c.pctChange.toFixed(2)}%</span>}
+                  <span className="cal-day-pnl">{masked ? '***' : fmtShort(c.pnl)}</span>
+                  {!masked && c.pctChange !== null && <span className="cal-day-pct">{c.pctChange >= 0 ? '+' : ''}{c.pctChange.toFixed(2)}%</span>}
                 </div>
               ) : c.closed ? (
                 <div className="cal-pnl-wrapper">

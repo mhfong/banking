@@ -54,12 +54,14 @@ export default function Trades() {
       .map(([date, trades]) => ({
         date,
         trades,
-        dailyPnL: trades.reduce((s, t) => s + t.netHKD, 0)
+        dailyPnL: trades.reduce((s, t) => s + t.netHKD, 0),
+        dailyComm: trades.reduce((s, t) => s + Math.abs(t.commission), 0)
       }))
   }, [trades, filter, dateFrom, dateTo])
 
   const totalTrades = groupedTrades.reduce((s, g) => s + g.trades.length, 0)
   const totalPnL = groupedTrades.reduce((s, g) => s + g.dailyPnL, 0)
+  const totalComm = groupedTrades.reduce((s, g) => s + g.dailyComm, 0)
   const totalPages = Math.max(1, Math.ceil(groupedTrades.length / PAGE_SIZE))
   const pagedGroups = groupedTrades.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE)
 
@@ -134,6 +136,7 @@ export default function Trades() {
           <div className={`trades-realized-badge ${totalPnL >= 0 ? 'positive' : 'negative'}`}>
             {fmt(totalPnL)} HKD
           </div>
+          <div className="trades-total-comm">Comm: {totalComm.toFixed(2)} HKD</div>
         </div>
       </div>
 
@@ -156,9 +159,12 @@ export default function Trades() {
           <div key={group.date} className="trade-day-group">
             <div className="trade-day-header">
               <span className="trade-day-date">{formatDate(group.date)}</span>
-              <span className={`trade-day-pnl ${group.dailyPnL >= 0 ? 'positive' : 'negative'}`}>
-                {fmt(group.dailyPnL)} HKD
-              </span>
+              <div className="trade-day-right">
+                <span className="trade-day-comm">Comm: {group.dailyComm.toFixed(2)}</span>
+                <span className={`trade-day-pnl ${group.dailyPnL >= 0 ? 'positive' : 'negative'}`}>
+                  {fmt(group.dailyPnL)} HKD
+                </span>
+              </div>
             </div>
             {group.trades.map((t, i) => {
               const isBuy = t.type === 'Buy'
@@ -187,8 +193,9 @@ export default function Trades() {
                   </div>
                   <div className="trade-right">
                     <div className={`trade-pnl ${t.netHKD >= 0 ? 'positive' : 'negative'}`}>
-                      {isBuy ? '' : fmt(t.netHKD + amt)}
+                      {fmt(t.netHKD)}
                     </div>
+                    {comm > 0 && <div className="trade-comm-right">Comm: {comm.toFixed(2)}</div>}
                   </div>
                 </div>
               )
