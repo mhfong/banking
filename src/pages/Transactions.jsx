@@ -17,7 +17,7 @@ const CATEGORY_ICONS = {
   Gambling: 'fa-dice',
   'Home': 'fa-home',
   'Rent': 'fa-home',
-  'Home/Rent': 'fa-home',
+  'Home': 'fa-home',
   Travel: 'fa-plane',
   Drinks: 'fa-glass-martini',
   'Card Collecting': 'fa-clone',
@@ -366,21 +366,19 @@ export default function Transactions() {
                     <i className={`fas ${getCategoryIcon(t.category)}`}></i>
                   </div>
                   <div className="txn-item-info">
-                    <div className="txn-item-desc">
-                      {t.category}
-                    </div>
-                    <div className="txn-item-remark">{t.description}</div>
-                    <div className="txn-item-payment">{t.paymentMethod || ''}</div>
+                    <div className="txn-item-desc">{t.category}</div>
+                    {t.description && <div className="txn-item-remark">{t.description}</div>}
                   </div>
                 </div>
                 <div className="txn-item-right">
                   <div className={`txn-item-amount ${t.type}`}>
                     {mask((t.type === 'expense' ? '-' : '+') + fmtAmount(t.amount))}
                   </div>
-                  <button className="txn-delete-btn" onClick={() => handleDelete(t.id)}>
-                    <i className="fas fa-trash-alt"></i>
-                  </button>
+                  <div className="txn-item-meta">{t.paymentMethod || ''}</div>
                 </div>
+                <button className="txn-delete-btn" onClick={() => handleDelete(t.id)}>
+                  <i className="fas fa-trash-alt"></i>
+                </button>
               </div>
             ))}
           </div>

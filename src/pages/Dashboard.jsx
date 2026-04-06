@@ -19,7 +19,13 @@ export default function Dashboard() {
   useEffect(() => {
     const q = query(collection(db, 'transactions'))
     const unsub = onSnapshot(q, (snap) => {
-      const txns = snap.docs.map(d => ({ id: d.id, ...d.data() }))
+      const txns = snap.docs.map(d => {
+        const data = d.data()
+        let date = data.date
+        if (date?.toDate) date = date.toDate().toISOString().substring(0, 10)
+        else if (typeof date !== 'string') date = ''
+        return { id: d.id, ...data, date }
+      })
       setTransactions(txns)
       setLoading(false)
     })
@@ -110,7 +116,7 @@ export default function Dashboard() {
     })
 
     // Regular expenses (bills)
-    const regularExpenses = realExpenses.filter(t => t.category === 'Bills' || t.category === 'Subscriptions' || t.category === 'Home/Rent')
+    const regularExpenses = realExpenses.filter(t => t.category === 'Bills' || t.category === 'Subscriptions' || t.category === 'Home')
     const monthlyRegular = Math.round(regularExpenses.reduce((s, t) => s + t.amount, 0) / numMonths)
 
     return {
@@ -195,25 +201,7 @@ export default function Dashboard() {
             </div>
           </div>
 
-          {/* Secondary Stats */}
-          <div className="stats-grid secondary">
-            <div className="stat-card">
-              <span className="stat-label">Savings Rate</span>
-              <span className="stat-value">{mask(stats.savingsRate + '%')}</span>
-            </div>
-            <div className="stat-card">
-              <span className="stat-label">Monthly Regular Bills</span>
-              <span className="stat-value">{mask(fmt(stats.monthlyRegular))}</span>
-            </div>
-            <div className="stat-card">
-              <span className="stat-label">Tracking Period</span>
-              <span className="stat-value">{stats.numMonths} months</span>
-            </div>
-            <div className="stat-card">
-              <span className="stat-label">Total Transactions</span>
-              <span className="stat-value">{stats.totalTransactions.toLocaleString()}</span>
-            </div>
-          </div>
+
 
           {/* Monthly Income vs Expense Chart */}
           <div className="chart-card">
