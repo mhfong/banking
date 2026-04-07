@@ -3,9 +3,10 @@ import { useAuth } from '../contexts/AuthContext'
 import { useMask } from '../contexts/MaskContext'
 import MaskToggle from '../components/MaskToggle'
 import { db } from '../firebase'
-import { collection, query, onSnapshot } from 'firebase/firestore'
+import { collection, query, onSnapshot, getDocs, writeBatch, doc, getDoc, setDoc } from 'firebase/firestore'
 import { BarChart, Bar, LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, ComposedChart, ReferenceLine } from 'recharts'
 import '../styles/dashboard.css'
+import ibkrData from '../data/ibkr_parsed.json'
 
 const COLORS = ['#539bf5','#e5534b','#57ab5a','#c69026','#6cb6ff','#986ee2','#e0823d','#768390','#57ab5a','#e5534b','#539bf5','#c69026','#6cb6ff','#986ee2','#e0823d','#768390','#57ab5a','#e5534b']
 
@@ -15,6 +16,44 @@ export default function Dashboard() {
   const [transactions, setTransactions] = useState([])
   const [selectedMonth, setSelectedMonth] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [startingBalance, setStartingBalance] = useState(null)
+  const [showBalancePopup, setShowBalancePopup] = useState(false)
+  const [balanceInput, setBalanceInput] = useState('')
+
+  // Load starting balance from user settings
+  useEffect(() => {
+    if (!user) return
+    async function loadBalance() {
+      const docRef = doc(db, 'userSettings', user.uid)
+      const snap = await getDoc(docRef)
+      if (snap.exists() && snap.data().startingBalance !== undefined) {
+        setStartingBalance(snap.data().startingBalance)
+      } else {
+        setShowBalancePopup(true)
+      }
+    }
+    loadBalance()
+  }, [user])
+
+  // One-time: migrate 'global' transactions to current user
+  useEffect(() => {
+    if (!user) return
+    async function migrate() {
+      const snap = await getDocs(collection(db, 'transactions'))
+      const globalDocs = snap.docs.filter(d => d.data().userId === 'global')
+      if (globalDocs.length === 0) return
+      // Only migrate if this user has no own transactions yet
+      const ownDocs = snap.docs.filter(d => d.data().userId === user.uid)
+      if (ownDocs.length > 0) return
+      console.log(`Migrating ${globalDocs.length} global transactions to ${user.uid}`)
+      for (let i = 0; i < globalDocs.length; i += 400) {
+        const batch = writeBatch(db)
+        globalDocs.slice(i, i + 400).forEach(d => batch.update(doc(db, 'transactions', d.id), { userId: user.uid }))
+        await batch.commit()
+      }
+    }
+    migrate()
+  }, [user])
 
   useEffect(() => {
     const q = query(collection(db, 'transactions'))
@@ -25,17 +64,24 @@ export default function Dashboard() {
         if (date?.toDate) date = date.toDate().toISOString().substring(0, 10)
         else if (typeof date !== 'string') date = ''
         return { id: d.id, ...data, date }
-      })
+      }).filter(t => t.userId === user.uid || t.userId === 'global')
       setTransactions(txns)
       setLoading(false)
     })
     return unsub
-  }, [])
+  }, [user])
 
   const stats = useMemo(() => {
-    if (!transactions.length) return null
+    if (!transactions.length) return {
+      totalExpense: 0, totalIncome: 0, totalNet: 0,
+      avgExpense: 0, avgIncome: 0, avgSaving: 0, savingsRate: 0,
+      monthlyData: [], categoryData: [], paymentData: [],
+      thisMonthTotal: 0, numMonths: 0, monthlyRegular: 0,
+      biggestExpense: null, totalTransactions: 0,
+      investmentTotal: 0, accountBalance: startingBalance || 0, netWorth: (startingBalance || 0) + (ibkrData.summary?.netLiquidationValue || 0), balanceTrend: [],
+    }
 
-    const STARTING_BALANCE = 231349.40 // HSBC balance as of 2025-01-01
+    const STARTING_BALANCE = startingBalance || 0
     const EXCLUDED_FROM_EXPENSE = ['Transfer', 'Investment', 'ATM']
     const realExpenses = transactions.filter(t => t.type === 'expense' && !EXCLUDED_FROM_EXPENSE.includes(t.category))
     const incomes = transactions.filter(t => t.type === 'income' && !EXCLUDED_FROM_EXPENSE.includes(t.category))
@@ -102,11 +148,13 @@ export default function Dashboard() {
     // Investment total
     const investmentTotal = transactions.filter(t => t.category === 'Investment').reduce((s, t) => s + t.amount, 0)
 
-    // HSBC Bank balance = starting balance + all HSBC-related flows
-    const hsbcBalance = 8102.85
-    // Net worth = HSBC + IBKR NLV
-    const ibkrNLV = 320187.47  // from ibkr_parsed.json
-    const netWorth = hsbcBalance + ibkrNLV
+    // HSBC Bank balance = starting balance + all flows (including transfers, investments, etc)
+    const allIncome = transactions.filter(t => t.type === 'income').reduce((s, t) => s + t.amount, 0)
+    const allExpense = transactions.filter(t => t.type === 'expense').reduce((s, t) => s + t.amount, 0)
+    const accountBalance = Math.round((STARTING_BALANCE + allIncome - allExpense) * 100) / 100
+    // Net worth = account balance + IBKR NLV (from ibkr_parsed.json)
+    const ibkrNLV = ibkrData.summary?.netLiquidationValue || 0
+    const netWorth = Math.round((accountBalance + ibkrNLV) * 100) / 100
 
     // Monthly balance trend
     let runBal = STARTING_BALANCE
@@ -126,9 +174,9 @@ export default function Dashboard() {
       thisMonthTotal, numMonths, monthlyRegular,
       biggestExpense,
       totalTransactions: transactions.length,
-      investmentTotal, hsbcBalance, netWorth, balanceTrend,
+      investmentTotal, accountBalance, netWorth, balanceTrend,
     }
-  }, [transactions])
+  }, [transactions, startingBalance])
 
   const monthBreakdown = useMemo(() => {
     if (!selectedMonth || !transactions.length) return null
@@ -172,12 +220,7 @@ export default function Dashboard() {
         <MaskToggle />
       </div>
 
-      {!stats ? (
-        <div className="empty-state">
-          <i className="fas fa-university"></i>
-          <p>No transactions yet</p>
-        </div>
-      ) : (
+      {stats && (
         <>
           {/* Key Stats */}
           <div className="stats-grid">
@@ -187,7 +230,7 @@ export default function Dashboard() {
             </div>
             <div className="stat-card expense">
               <span className="stat-label">Account Balance</span>
-              <span className="stat-value">{mask(fmt(stats.hsbcBalance))}</span>
+              <span className="stat-value">{mask(fmt(stats.accountBalance))}</span>
             </div>
             <div className="stat-card balance">
               <span className="stat-label">Avg Monthly Expense</span>
@@ -260,83 +303,44 @@ export default function Dashboard() {
                 </PieChart>
               </ResponsiveContainer>
             </div>
-
-            {/* Expense by Payment Method */}
-            <div className="chart-card">
-              <h3>By Payment Method</h3>
-              <ResponsiveContainer width="100%" height={300}>
-                <PieChart>
-                  <Pie data={stats.paymentData} cx="50%" cy="50%" innerRadius={60} outerRadius={110} paddingAngle={2} dataKey="value"
-                    label={({ name, percent }) => percent > 0.03 ? `${name} ${(percent * 100).toFixed(0)}%` : ''}>
-                    {stats.paymentData.map((_, i) => <Cell key={i} fill={COLORS[(i + 5) % COLORS.length]} />)}
-                  </Pie>
-                  <Tooltip formatter={(v) => ['$' + v.toLocaleString(), 'Amount']} />
-                </PieChart>
-              </ResponsiveContainer>
-            </div>
-          </div>
-
-          {/* Monthly Net Savings */}
-          <div className="chart-card">
-            <h3>Monthly Net Savings</h3>
-            <ResponsiveContainer width="100%" height={250}>
-              <BarChart data={stats.monthlyData} margin={{ top: 10, right: 10, left: 10, bottom: 5 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#444c56" opacity={0.2} />
-                <XAxis dataKey="month" tick={{ fontSize: 11, fill: '#768390' }} />
-                <YAxis tick={{ fontSize: 11, fill: '#768390' }} tickFormatter={v => `${(v/1000).toFixed(0)}k`} />
-                <Tooltip content={<CustomTooltip />} />
-                <ReferenceLine y={0} stroke="#768390" strokeDasharray="3 3" />
-                <Bar dataKey="net" name="Net" fill="#539bf5" radius={[4, 4, 0, 0]}>
-                  {stats.monthlyData.map((entry, i) => (
-                    <Cell key={i} fill={entry.net >= 0 ? '#57ab5a' : '#e5534b'} />
-                  ))}
-                </Bar>
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-
-          {/* Insights */}
-          <div className="insights-card">
-            <h3><i className="fas fa-lightbulb"></i> Insights</h3>
-            <div className="insights-grid">
-              <div className="insight">
-                <div className="insight-icon" style={{ color: '#e5534b' }}><i className="fas fa-utensils"></i></div>
-                <div>
-                  <div className="insight-title">Food is your biggest expense</div>
-                  <div className="insight-desc">{mask(fmt(stats.categoryData.find(c => c.name === 'Food')?.value || 0))} total ({Math.round((stats.categoryData.find(c => c.name === 'Food')?.value || 0) / stats.totalExpense * 100)}% of spending)</div>
-                </div>
-              </div>
-              <div className="insight">
-                <div className="insight-icon" style={{ color: '#c69026' }}><i className="fas fa-coins"></i></div>
-                <div>
-                  <div className="insight-title">Card collecting spend</div>
-                  <div className="insight-desc">{mask(fmt(stats.categoryData.find(c => c.name === 'Card Collecting')?.value || 0))} on PSA slabs, cards</div>
-                </div>
-              </div>
-              <div className="insight">
-                <div className="insight-icon" style={{ color: stats.savingsRate >= 20 ? '#57ab5a' : '#e5534b' }}><i className="fas fa-piggy-bank"></i></div>
-                <div>
-                  <div className="insight-title">Savings rate: {stats.savingsRate}%</div>
-                  <div className="insight-desc">{stats.savingsRate >= 20 ? 'Healthy! Above 20% target' : 'Below 20% recommended rate'}</div>
-                </div>
-              </div>
-              <div className="insight">
-                <div className="insight-icon" style={{ color: '#539bf5' }}><i className="fas fa-dice"></i></div>
-                <div>
-                  <div className="insight-title">Gambling spend</div>
-                  <div className="insight-desc">{mask(fmt(stats.categoryData.find(c => c.name === 'Gambling')?.value || 0))} — poker, mahjong</div>
-                </div>
-              </div>
-              <div className="insight">
-                <div className="insight-icon" style={{ color: '#6cb6ff' }}><i className="fas fa-chart-line"></i></div>
-                <div>
-                  <div className="insight-title">Invested {mask(fmt(stats.investmentTotal))}</div>
-                  <div className="insight-desc">IBKR deposits (excluded from expenses)</div>
-                </div>
-              </div>
-            </div>
           </div>
         </>
+      )}
+
+      {/* Starting Balance Popup */}
+      {showBalancePopup && (
+        <div className="popup-overlay">
+          <div className="popup-card">
+            <h3><i className="fas fa-wallet"></i> Welcome! Set Your Starting Balance</h3>
+            <p>Enter your current account balance to start tracking.</p>
+            <div className="popup-input-group">
+              <label>Starting Balance (HKD)</label>
+              <input
+                type="number"
+                value={balanceInput}
+                onChange={e => setBalanceInput(e.target.value)}
+                placeholder="e.g. 50000"
+                autoFocus
+              />
+            </div>
+            <div className="popup-buttons">
+              <button className="btn-primary" onClick={async () => {
+                const val = parseFloat(balanceInput) || 0
+                await setDoc(doc(db, 'userSettings', user.uid), { startingBalance: val }, { merge: true })
+                setStartingBalance(val)
+                setShowBalancePopup(false)
+              }}>
+                Save
+              </button>
+              <button className="btn-secondary" onClick={() => {
+                setStartingBalance(0)
+                setShowBalancePopup(false)
+              }}>
+                Skip (Start from $0)
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   )

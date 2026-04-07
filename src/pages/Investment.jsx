@@ -1,11 +1,14 @@
 import { useState, useMemo } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLine, CartesianGrid } from 'recharts'
+import { useAuth } from '../contexts/AuthContext'
 import { useMask } from '../contexts/MaskContext'
 import MaskToggle from '../components/MaskToggle'
 import CustomSelect from '../components/CustomSelect'
 import data from '../data/ibkr_parsed.json'
 import '../styles/investment.css'
+
+const OWNER_UID = '0G3jUSlKzQbzOrbD1cY0ari1Y4i1'
 
 const PERIODS = ['1W','MTD','1M','3M','YTD','1Y','All']
 const DAYS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat']
@@ -42,10 +45,26 @@ const fmtShort = (v) => {
 const fmtPct = (v) => (v >= 0 ? '+' : '') + v.toFixed(2) + '%'
 
 export default function Investment() {
+  const { user } = useAuth()
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const [period, setPeriod] = useState('All')
   const { masked, mask } = useMask()
+
+  if (user?.email !== 'mmhin412@gmail.com') {
+    return (
+      <div className="investment-page">
+        <div className="inv-header">
+          <h1><i className="fas fa-chart-line"></i> Investment</h1>
+        </div>
+        <div style={{ textAlign: 'center', padding: '60px 20px', color: 'var(--text-secondary)' }}>
+          <i className="fas fa-lock" style={{ fontSize: 40, marginBottom: 16, opacity: 0.3, display: 'block' }}></i>
+          <p>No investment data linked to this account</p>
+        </div>
+      </div>
+    )
+  }
+
   const { trades, dailyPnL, summary } = data
 
   const chartData = useMemo(() => filterByPeriod(dailyPnL, period), [dailyPnL, period])
@@ -191,6 +210,10 @@ export default function Investment() {
         <div className="inv-stat-card">
           <div className="inv-stat-label">Net Deposited</div>
           <div className="inv-stat-value">{mask('$' + summary.netDeposited.toLocaleString())}</div>
+        </div>
+        <div className="inv-stat-card">
+          <div className="inv-stat-label">Interest Earned</div>
+          <div className="inv-stat-value positive">{mask('+$' + (Math.round((summary.totalInterest || 0) * 100) / 100).toLocaleString())}</div>
         </div>
       </div>
 

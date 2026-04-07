@@ -59,6 +59,7 @@ function parseFlex(csv) {
   const trades = []
   const deposits = []
   let latestNAV = { total: 0, cash: 0 }
+  let totalInterest = 0
 
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i].trim()
@@ -75,6 +76,8 @@ function parseFlex(csv) {
       const fromDate = cols[4] || ''
       
       if ((startVal !== 0 || endVal !== 0) && fromDate.length === 8) {
+        const interest = parseFloat(cols[30] || 0)  // Interest field
+        if (interest !== 0) totalInterest += interest
         navChanges.push({
           date: parseDate(fromDate),
           startingValue: startVal,
@@ -132,7 +135,7 @@ function parseFlex(csv) {
     }
   }
 
-  return { navChanges, trades, deposits, latestNAV }
+  return { navChanges, trades, deposits, latestNAV, totalInterest }
 }
 
 async function syncDepositsToFirebase(rawCsv) {
@@ -172,7 +175,7 @@ async function syncDepositsToFirebase(rawCsv) {
               category: 'Investment',
               paymentMethod: 'IBKR',
               createdAt: Timestamp.fromDate(new Date(date + 'T00:00:00')),
-              userId: 'global'
+              userId: '0G3jUSlKzQbzOrbD1cY0ari1Y4i1'
             })
             existingKeys.add(key)
           }
@@ -187,7 +190,7 @@ async function syncDepositsToFirebase(rawCsv) {
               category: 'Investment',
               paymentMethod: 'IBKR',
               createdAt: Timestamp.fromDate(new Date(date + 'T00:00:00')),
-              userId: 'global'
+              userId: '0G3jUSlKzQbzOrbD1cY0ari1Y4i1'
             })
             existingKeys.add(key)
           }
@@ -217,8 +220,8 @@ async function main() {
   await sleep(5000)
   const csv = await getStatement(refCode)
 
-  const { navChanges, trades, deposits, latestNAV } = parseFlex(csv)
-  console.log(`Parsed: ${navChanges.length} NAV changes, ${trades.length} trades, ${deposits.length} deposits, Latest NAV: $${latestNAV.total}`)
+  const { navChanges, trades, deposits, latestNAV, totalInterest } = parseFlex(csv)
+  console.log(`Parsed: ${navChanges.length} NAV changes, ${trades.length} trades, ${deposits.length} deposits, Latest NAV: $${latestNAV.total}, Interest: $${totalInterest.toFixed(2)}`)
 
   // Load existing data
   const existing = JSON.parse(readFileSync('ibkr_parsed.json', 'utf-8'))
@@ -257,12 +260,16 @@ async function main() {
     console.log(`TWR: ${existing.summary.totalReturn}%, Days: ${dailyPnL.length}`)
   }
 
-  // Update NAV
+  // Update NAV + Interest
   if (latestNAV.total > 0) {
     existing.summary.netLiquidationValue = latestNAV.total
     existing.summary.cash = latestNAV.cash
     existing.summary.endingCash = latestNAV.cash
     existing.summary.totalPnL = Math.round((latestNAV.total - existing.summary.netDeposited) * 100) / 100
+  }
+  if (totalInterest !== 0) {
+    existing.summary.totalInterest = Math.round(totalInterest * 100) / 100
+    console.log(`Total Interest: $${existing.summary.totalInterest}`)
   }
 
   // Update deposits

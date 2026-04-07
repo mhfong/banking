@@ -123,7 +123,7 @@ export default function Transactions() {
       const txns = snap.docs.map(d => {
         const data = d.data()
         return { id: d.id, ...data, _date: parseDate(data.date), _dateStr: toDateStr(parseDate(data.date)) }
-      })
+      }).filter(t => t.userId === user.uid || t.userId === 'global')
       setTransactions(txns)
     })
     return unsub

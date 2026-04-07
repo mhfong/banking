@@ -177,6 +177,29 @@
   color: var(--text-secondary);
 }
 
+.btn-danger {
+  width: 100%;
+  padding: 12px;
+  background: rgba(229, 83, 75, 0.15);
+  border: 1px solid var(--red);
+  border-radius: 8px;
+  color: var(--red);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 16px;
+  transition: background 0.2s;
+}
+
+.btn-danger:hover {
+  background: rgba(229, 83, 75, 0.3);
+}
+
+.btn-danger:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 @media (max-width: 600px) {
   .settings-card .form-row {
     flex-direction: column;

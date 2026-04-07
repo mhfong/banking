@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useAuth } from '../contexts/AuthContext'
 import { updateProfile, updateEmail, updatePassword, EmailAuthProvider, reauthenticateWithCredential } from 'firebase/auth'
-import { doc, getDoc, setDoc } from 'firebase/firestore'
+import { doc, getDoc, setDoc, collection, getDocs, writeBatch } from 'firebase/firestore'
 import { db } from '../firebase'
 import '../styles/settings.css'
 
@@ -286,6 +286,26 @@ export default function Settings() {
               <p>Account created: {user?.metadata?.creationTime}</p>
               <p>Last sign in: {user?.metadata?.lastSignInTime}</p>
               <p>UID: <code>{user?.uid}</code></p>
+              <button className="btn-danger" onClick={async () => {
+                if (!window.confirm('Are you sure? This will delete ALL your transaction data. This cannot be undone.')) return
+                if (!window.confirm('REALLY sure? All data will be gone forever.')) return
+                setSaving(true)
+                try {
+                  const snap = await getDocs(collection(db, 'transactions'))
+                  const userDocs = snap.docs.filter(d => d.data().userId === user.uid)
+                  for (let i = 0; i < userDocs.length; i += 400) {
+                    const batch = writeBatch(db)
+                    userDocs.slice(i, i + 400).forEach(d => batch.delete(d.ref))
+                    await batch.commit()
+                  }
+                  showMessage('success', `Deleted ${userDocs.length} transactions`)
+                } catch (err) {
+                  showMessage('error', err.message)
+                }
+                setSaving(false)
+              }} disabled={saving}>
+                <i className="fas fa-trash-alt"></i> {saving ? 'Deleting...' : 'Clear All Transaction Data'}
+              </button>
             </div>
           </form>
         )}
