@@ -60,6 +60,7 @@ function parseFlex(csv) {
   const deposits = []
   let latestNAV = { total: 0, cash: 0 }
   let totalInterest = 0
+  const fifoDailyPnL = {}  // date -> { pnl, commission }
 
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i].trim()
@@ -89,8 +90,28 @@ function parseFlex(csv) {
       }
     }
 
-    // Trade rows: CurrencyPrimary, Symbol, DateTime, TradeDate, TradePrice, IBCommission, IBCommissionCurrency, NetCash, Buy/Sell
-    // These are 9-column rows starting with currency code like "USD" or "HKD"
+    // Trade rows extended format (50+ cols, has FifoPnlRealized at col 48)
+    if (cols.length > 50 && cols[9]?.startsWith('U') && cols[13] === 'STK' && (cols[8] === 'BUY' || cols[8] === 'SELL')) {
+      const date = parseDate(cols[3])
+      const symbol = cols[1]
+      const price = parseFloat(cols[4] || 0)
+      const commission = parseFloat(cols[5] || 0)
+      const netCash = parseFloat(cols[7] || 0)
+      const side = cols[8]
+      const fxRate = parseFloat(cols[12] || 1)
+      const fifoPnl = parseFloat(cols[48] || 0)
+      if (date && symbol && price > 0) {
+        trades.push({ date, symbol, type: side === 'BUY' ? 'Buy' : 'Sell', quantity: Math.round(Math.abs(netCash / price)), price, currency: cols[0], grossHKD: netCash - commission, commission, netHKD: netCash })
+        if (side === 'SELL' && fifoPnl !== 0) {
+          if (!fifoDailyPnL[date]) fifoDailyPnL[date] = { pnl: 0, commission: 0 }
+          fifoDailyPnL[date].pnl += Math.round(fifoPnl * fxRate * 100) / 100
+          fifoDailyPnL[date].commission += Math.round(commission * fxRate * 100) / 100
+        }
+      }
+      continue
+    }
+
+    // Trade rows simple format (9 cols)
     if (cols.length === 9 && /^[A-Z]{3}$/.test(cols[0]) && cols[1] && /^\d{8}/.test(cols[3])) {
       const currency = cols[0]
       const symbol = cols[1]
@@ -135,7 +156,7 @@ function parseFlex(csv) {
     }
   }
 
-  return { navChanges, trades, deposits, latestNAV, totalInterest }
+  return { navChanges, trades, deposits, latestNAV, totalInterest, fifoDailyPnL }
 }
 
 async function syncDepositsToFirebase(rawCsv) {
@@ -220,8 +241,8 @@ async function main() {
   await sleep(5000)
   const csv = await getStatement(refCode)
 
-  const { navChanges, trades, deposits, latestNAV, totalInterest } = parseFlex(csv)
-  console.log(`Parsed: ${navChanges.length} NAV changes, ${trades.length} trades, ${deposits.length} deposits, Latest NAV: $${latestNAV.total}, Interest: $${totalInterest.toFixed(2)}`)
+  const { navChanges, trades, deposits, latestNAV, totalInterest, fifoDailyPnL } = parseFlex(csv)
+  console.log(`Parsed: ${navChanges.length} NAV changes, ${trades.length} trades, ${deposits.length} deposits, Latest NAV: $${latestNAV.total}, Interest: $${totalInterest.toFixed(2)}, FIFO days: ${Object.keys(fifoDailyPnL).length}`)
 
   // Load existing data
   const existing = JSON.parse(readFileSync('ibkr_parsed.json', 'utf-8'))
@@ -281,6 +302,15 @@ async function main() {
       existing.summary.totalDeposited += d.amount
       existing.summary.netDeposited += d.amount
     }
+  }
+
+  // Update FIFO Daily PNL for calendar
+  if (Object.keys(fifoDailyPnL).length > 0) {
+    existing.fifoDailyPnL = Object.entries(fifoDailyPnL)
+      .filter(([, d]) => Math.abs(d.pnl) >= 0.01)
+      .sort(([a], [b]) => a.localeCompare(b))
+      .map(([date, d]) => ({ date, pnl: d.pnl, commission: d.commission }))
+    console.log(`FIFO PNL: ${existing.fifoDailyPnL.length} days`)
   }
 
   // Sync deposits/withdrawals to Firebase Transactions
