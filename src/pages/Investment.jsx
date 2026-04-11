@@ -60,12 +60,19 @@ export default function Investment() {
     async function loadTarget() {
       const snap = await getDoc(doc(db, 'userSettings', user.uid))
       if (snap.exists()) {
-        const tt = snap.data().tradingTarget
-        if (tt && typeof tt === 'object') {
-          if (tt.mode === 'pct') setTradingTargetOverride({ mode: 'pct', value: tt.value })
-          else if (tt.mode === 'amount') setTradingTargetOverride({ mode: 'amount', value: tt.value })
-        } else if (typeof tt === 'number') {
-          setTradingTargetOverride({ mode: 'amount', value: tt })
+        const d = snap.data()
+        // Support new monthlyTarget (%) field from Settings page
+        if (d.monthlyTarget != null) {
+          setTradingTargetOverride({ mode: 'pct', value: parseFloat(d.monthlyTarget) })
+        } else {
+          // Legacy tradingTarget support
+          const tt = d.tradingTarget
+          if (tt && typeof tt === 'object') {
+            if (tt.mode === 'pct') setTradingTargetOverride({ mode: 'pct', value: tt.value })
+            else if (tt.mode === 'amount') setTradingTargetOverride({ mode: 'amount', value: tt.value })
+          } else if (typeof tt === 'number') {
+            setTradingTargetOverride({ mode: 'amount', value: tt })
+          }
         }
       }
     }
