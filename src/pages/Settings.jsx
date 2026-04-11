@@ -266,7 +266,7 @@ export default function Settings() {
       )}
 
       {activeTab === 'account' && (
-        <form className="settings-form">
+        <div className="settings-form">
           <div className="settings-card">
             <h3><i className="fas fa-wallet"></i> Starting Balance</h3>
             <p className="settings-desc">Set your initial account balance for reference.</p>
@@ -383,7 +383,7 @@ export default function Settings() {
               </button>
             </form>
           </div>
-        </form>
+        </div>
       )}
 
       {activeTab === 'hotkeys' && (
