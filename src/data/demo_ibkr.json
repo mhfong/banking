@@ -1,0 +1,89 @@
+{
+  "trades": [
+    {"date":"2025-11-03","symbol":"AAPL","type":"Buy","quantity":20,"price":182.50,"currency":"USD","grossHKD":-28470,"commission":-1,"netHKD":-28471},
+    {"date":"2025-11-03","symbol":"AAPL","type":"Sell","quantity":20,"price":183.10,"currency":"USD","grossHKD":28563.6,"commission":-1.02,"netHKD":28562.58},
+    {"date":"2025-11-15","symbol":"TSLA","type":"Buy","quantity":30,"price":245.00,"currency":"USD","grossHKD":-57330,"commission":-1,"netHKD":-57331},
+    {"date":"2025-11-15","symbol":"TSLA","type":"Sell","quantity":30,"price":248.20,"currency":"USD","grossHKD":58078.8,"commission":-1.02,"netHKD":58077.78},
+    {"date":"2025-12-01","symbol":"NVDA","type":"Buy","quantity":15,"price":510.00,"currency":"USD","grossHKD":-59670,"commission":-1,"netHKD":-59671},
+    {"date":"2025-12-01","symbol":"NVDA","type":"Sell","quantity":15,"price":515.50,"currency":"USD","grossHKD":60313.5,"commission":-1.02,"netHKD":60312.48},
+    {"date":"2025-12-10","symbol":"AAPL","type":"Buy","quantity":25,"price":185.00,"currency":"USD","grossHKD":-36075,"commission":-1,"netHKD":-36076},
+    {"date":"2025-12-10","symbol":"AAPL","type":"Sell","quantity":25,"price":186.80,"currency":"USD","grossHKD":36426,"commission":-1.02,"netHKD":36424.98},
+    {"date":"2025-12-20","symbol":"MSFT","type":"Buy","quantity":10,"price":420.00,"currency":"USD","grossHKD":-32760,"commission":-1,"netHKD":-32761},
+    {"date":"2025-12-20","symbol":"MSFT","type":"Sell","quantity":10,"price":418.50,"currency":"USD","grossHKD":32643,"commission":-1.02,"netHKD":32641.98},
+    {"date":"2026-01-05","symbol":"TSLA","type":"Buy","quantity":40,"price":250.00,"currency":"USD","grossHKD":-78000,"commission":-1,"netHKD":-78001},
+    {"date":"2026-01-05","symbol":"TSLA","type":"Sell","quantity":40,"price":253.00,"currency":"USD","grossHKD":78936,"commission":-1.02,"netHKD":78934.98},
+    {"date":"2026-01-15","symbol":"NVDA","type":"Buy","quantity":12,"price":520.00,"currency":"USD","grossHKD":-48672,"commission":-1,"netHKD":-48673},
+    {"date":"2026-01-15","symbol":"NVDA","type":"Sell","quantity":12,"price":525.00,"currency":"USD","grossHKD":49140,"commission":-1.02,"netHKD":49138.98},
+    {"date":"2026-02-03","symbol":"AAPL","type":"Buy","quantity":30,"price":188.00,"currency":"USD","grossHKD":-43992,"commission":-1,"netHKD":-43993},
+    {"date":"2026-02-03","symbol":"AAPL","type":"Sell","quantity":30,"price":190.50,"currency":"USD","grossHKD":44577,"commission":-1.02,"netHKD":44575.98},
+    {"date":"2026-02-20","symbol":"MSFT","type":"Buy","quantity":8,"price":430.00,"currency":"USD","grossHKD":-26832,"commission":-1,"netHKD":-26833},
+    {"date":"2026-02-20","symbol":"MSFT","type":"Sell","quantity":8,"price":435.00,"currency":"USD","grossHKD":27144,"commission":-1.02,"netHKD":27142.98},
+    {"date":"2026-03-10","symbol":"TSLA","type":"Buy","quantity":35,"price":260.00,"currency":"USD","grossHKD":-70980,"commission":-1,"netHKD":-70981},
+    {"date":"2026-03-10","symbol":"TSLA","type":"Sell","quantity":35,"price":255.00,"currency":"USD","grossHKD":69615,"commission":-1.02,"netHKD":69613.98},
+    {"date":"2026-03-25","symbol":"NVDA","type":"Buy","quantity":10,"price":530.00,"currency":"USD","grossHKD":-41340,"commission":-1,"netHKD":-41341},
+    {"date":"2026-03-25","symbol":"NVDA","type":"Sell","quantity":10,"price":535.00,"currency":"USD","grossHKD":41730,"commission":-1.02,"netHKD":41728.98}
+  ],
+  "dailyPnL": [
+    {"date":"2025-10-31","pnl":0,"endingValue":80000,"cumulative":0},
+    {"date":"2025-11-03","pnl":0.115,"endingValue":80092,"cumulative":0.12},
+    {"date":"2025-11-15","pnl":0.93,"endingValue":80839,"cumulative":1.05},
+    {"date":"2025-12-01","pnl":0.79,"endingValue":81480,"cumulative":1.85},
+    {"date":"2025-12-10","pnl":0.43,"endingValue":81829,"cumulative":2.29},
+    {"date":"2025-12-20","pnl":-0.15,"endingValue":81710,"cumulative":2.14},
+    {"date":"2026-01-05","pnl":1.19,"endingValue":82683,"cumulative":3.35},
+    {"date":"2026-01-15","pnl":0.57,"endingValue":83149,"cumulative":3.94},
+    {"date":"2026-02-03","pnl":0.70,"endingValue":83731,"cumulative":4.66},
+    {"date":"2026-02-20","pnl":0.37,"endingValue":84041,"cumulative":5.05},
+    {"date":"2026-03-10","pnl":-1.67,"endingValue":82638,"cumulative":3.30},
+    {"date":"2026-03-25","pnl":0.47,"endingValue":83027,"cumulative":3.78},
+    {"date":"2026-04-03","pnl":0.10,"endingValue":83110,"cumulative":3.89}
+  ],
+  "deposits": [
+    {"date":"2025-10-31","amount":80000}
+  ],
+  "withdrawals": [],
+  "interests": [
+    {"date":"2026-01-06","type":"Credit Interest","amount":32.50},
+    {"date":"2026-02-04","type":"Credit Interest","amount":35.20},
+    {"date":"2026-03-04","type":"Credit Interest","amount":38.80}
+  ],
+  "fees": [],
+  "summary": {
+    "totalDeposited": 80000,
+    "totalWithdrawn": 0,
+    "endingCash": 83110,
+    "totalPnL": 3110,
+    "totalCommissions": -24.18,
+    "totalInterest": 106.50,
+    "totalReturn": 3.89,
+    "netLiquidationValue": 83110,
+    "cash": 83110,
+    "mtdInterest": 0,
+    "netDeposited": 80000
+  },
+  "fifoDailyPnL": [
+    {"date":"2025-11-03","pnl":91.58,"commission":-2.02},
+    {"date":"2025-11-15","pnl":746.78,"commission":-2.02},
+    {"date":"2025-12-01","pnl":641.48,"commission":-2.02},
+    {"date":"2025-12-10","pnl":348.98,"commission":-2.02},
+    {"date":"2025-12-20","pnl":-119.02,"commission":-2.02},
+    {"date":"2026-01-05","pnl":933.98,"commission":-2.02},
+    {"date":"2026-01-15","pnl":465.98,"commission":-2.02},
+    {"date":"2026-02-03","pnl":582.98,"commission":-2.02},
+    {"date":"2026-02-20","pnl":309.98,"commission":-2.02},
+    {"date":"2026-03-10","pnl":-1369.02,"commission":-2.02},
+    {"date":"2026-03-25","pnl":387.98,"commission":-2.02}
+  ],
+  "lastSyncAt": "2026-04-07T22:39:49.686Z",
+  "monthlyInterest": {
+    "2026-01": 32.50,
+    "2026-02": 35.20,
+    "2026-03": 38.80
+  },
+  "monthlyInterestAccrued": {
+    "2026-01": 32.50,
+    "2026-02": 35.20,
+    "2026-03": 38.80,
+    "2026-04": 5.00
+  }
+}

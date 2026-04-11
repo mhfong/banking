@@ -1,0 +1,29 @@
+name: IBKR Daily ETL
+
+on:
+  schedule:
+    - cron: '22 0 * * *'  # UTC 00:22 daily = HK 08:22 AM (after US market close)
+  workflow_dispatch:  # Manual trigger
+
+permissions:
+  contents: read
+
+jobs:
+  etl:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run IBKR ETL
+        env:
+          IBKR_TOKEN: ${{ secrets.IBKR_TOKEN }}
+          IBKR_QUERY_ID: ${{ secrets.IBKR_QUERY_ID }}
+          VITE_FIREBASE_API_KEY: ${{ secrets.VITE_FIREBASE_API_KEY }}
+        run: node etl_ibkr.mjs

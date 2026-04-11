@@ -1,0 +1,121 @@
+.auth-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 20px;
+  background: var(--bg-primary);
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 420px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 40px;
+}
+
+.auth-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.auth-header h1 {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.auth-header p {
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.auth-error {
+  background: #e5534b22;
+  border: 1px solid #e5534b44;
+  color: var(--red);
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  margin-bottom: 16px;
+}
+
+.auth-link {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.auth-link a {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.auth-link a:hover {
+  color: var(--accent-hover);
+}
+
+.auth-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 20px 0;
+  color: var(--text-secondary);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.btn-demo {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(135deg, rgba(83, 155, 245, 0.12) 0%, rgba(87, 171, 90, 0.12) 100%);
+  border: 1px solid rgba(83, 155, 245, 0.3);
+  border-radius: 10px;
+  color: var(--accent, #539bf5);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn-demo:hover {
+  background: linear-gradient(135deg, rgba(83, 155, 245, 0.2) 0%, rgba(87, 171, 90, 0.2) 100%);
+  border-color: var(--accent, #539bf5);
+  transform: translateY(-1px);
+}
+
+.btn-demo:active {
+  transform: translateY(0);
+}
+
+.btn-demo i {
+  font-size: 16px;
+}
+
+@media (max-width: 480px) {
+  .auth-card {
+    padding: 24px;
+    border-radius: 12px;
+  }
+
+  .auth-header h1 {
+    font-size: 20px;
+  }
+}
