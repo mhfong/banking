@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useAuth } from '../contexts/AuthContext'
-import { updateProfile, updatePassword, EmailAuthProvider, reauthenticateWithCredential } from 'firebase/auth'
+import { updatePassword, EmailAuthProvider, reauthenticateWithCredential } from 'firebase/auth'
 import { doc, getDoc, setDoc } from 'firebase/firestore'
 import { db } from '../firebase'
 import { useHotkeysConfig } from '../contexts/HotkeysContext'
@@ -94,8 +94,6 @@ function HotkeysForm() {
 export default function Settings() {
   const { user } = useAuth()
   const [activeTab, setActiveTab] = useState('profile')
-  const [displayName, setDisplayName] = useState('')
-  const [photoURL, setPhotoURL] = useState('')
   const [currentPassword, setCurrentPassword] = useState('')
   const [newPassword, setNewPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
@@ -108,8 +106,6 @@ export default function Settings() {
 
   useEffect(() => {
     if (user) {
-      setDisplayName(user.displayName || '')
-      setPhotoURL(user.photoURL || '')
       loadStartingBalance()
     }
   }, [user])
@@ -132,18 +128,6 @@ export default function Settings() {
   function showMessage(type, text) {
     setMessage({ type, text })
     setTimeout(() => setMessage({ type: '', text: '' }), 3000)
-  }
-
-  async function handleUpdateProfile(e) {
-    e.preventDefault()
-    setSaving(true)
-    try {
-      await updateProfile(user, { displayName, photoURL })
-      showMessage('success', 'Profile updated successfully!')
-    } catch (err) {
-      showMessage('error', err.message)
-    }
-    setSaving(false)
   }
 
   async function handleUpdateStartingBalance(e) {
@@ -204,7 +188,6 @@ export default function Settings() {
   }
 
   const tabs = [
-    { id: 'profile', label: 'Profile', icon: 'fas fa-user' },
     { id: 'account', label: 'Account', icon: 'fas fa-lock' },
     { id: 'hotkeys', label: 'Hotkeys', icon: 'fas fa-keyboard' },
   ]
@@ -232,38 +215,6 @@ export default function Settings() {
           </button>
         ))}
       </div>
-
-      {activeTab === 'profile' && (
-        <form className="settings-form" onSubmit={handleUpdateProfile}>
-          <div className="settings-card">
-            <h3><i className="fas fa-user-circle"></i> Profile Information</h3>
-            
-            <div className="form-group">
-              <label>Display Name</label>
-              <input
-                type="text"
-                value={displayName}
-                onChange={(e) => setDisplayName(e.target.value)}
-                placeholder="Enter your display name"
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Photo URL</label>
-              <input
-                type="url"
-                value={photoURL}
-                onChange={(e) => setPhotoURL(e.target.value)}
-                placeholder="https://example.com/photo.jpg"
-              />
-            </div>
-
-            <button type="submit" disabled={saving}>
-              <i className="fas fa-save"></i> {saving ? 'Saving...' : 'Save Changes'}
-            </button>
-          </div>
-        </form>
-      )}
 
       {activeTab === 'account' && (
         <div className="settings-form">
