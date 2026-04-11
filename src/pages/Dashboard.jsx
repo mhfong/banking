@@ -56,12 +56,18 @@ export default function Dashboard() {
       const snap = await getDoc(docRef)
       if (snap.exists() && snap.data().startingBalance !== undefined) {
         setStartingBalance(snap.data().startingBalance)
-        const tt = snap.data().tradingTarget
-        if (tt && typeof tt === 'object') {
-          if (tt.mode === 'pct') setTradingTargetOverride({ mode: 'pct', value: tt.value })
-          else if (tt.mode === 'amount') setTradingTargetOverride({ mode: 'amount', value: tt.value })
-        } else if (typeof tt === 'number') {
-          setTradingTargetOverride({ mode: 'amount', value: tt })
+        // Read monthlyTarget (%) from Settings page
+        if (snap.data().monthlyTarget != null) {
+          setTradingTargetOverride({ mode: 'pct', value: parseFloat(snap.data().monthlyTarget) })
+        } else {
+          // Legacy tradingTarget support
+          const tt = snap.data().tradingTarget
+          if (tt && typeof tt === 'object') {
+            if (tt.mode === 'pct') setTradingTargetOverride({ mode: 'pct', value: tt.value })
+            else if (tt.mode === 'amount') setTradingTargetOverride({ mode: 'amount', value: tt.value })
+          } else if (typeof tt === 'number') {
+            setTradingTargetOverride({ mode: 'amount', value: tt })
+          }
         }
         if (snap.data().transactionsLastUpdated) {
           setLastUpdated(new Date(snap.data().transactionsLastUpdated))
