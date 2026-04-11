@@ -6,10 +6,11 @@ on:
   workflow_dispatch:  # Manual trigger
 
 permissions:
-  contents: read
+  contents: write
+  pages: write
 
 jobs:
-  etl:
+  etl-and-deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -27,3 +28,11 @@ jobs:
           IBKR_QUERY_ID: ${{ secrets.IBKR_QUERY_ID }}
           VITE_FIREBASE_API_KEY: ${{ secrets.VITE_FIREBASE_API_KEY }}
         run: node etl_ibkr.mjs
+
+      - name: Build React app
+        env:
+          VITE_FIREBASE_API_KEY: ${{ secrets.VITE_FIREBASE_API_KEY }}
+        run: npm run build
+
+      - name: Deploy to GitHub Pages
+        run: npx gh-pages -d dist
