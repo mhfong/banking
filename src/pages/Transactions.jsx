@@ -103,7 +103,7 @@ export default function Transactions() {
   const [searchQuery, setSearchQuery] = useState('')
 
   // Controls
-  const [period, setPeriod] = useState(() => searchParams.get('from') ? PERIOD_OPTIONS[4] : PERIOD_OPTIONS[0]) // All if URL params, else 7 Days
+  const [period, setPeriod] = useState(() => searchParams.get('from') ? PERIOD_OPTIONS[4] : PERIOD_OPTIONS[1]) // All if URL params, else 30 Days
   const [showPeriod, setShowPeriod] = useState(false)
   const [showFilter, setShowFilter] = useState(false)
   const [sortBy, setSortBy] = useState('date') // date | expense
