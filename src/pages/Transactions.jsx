@@ -456,7 +456,7 @@ export default function Transactions() {
             <input type="date" className="date-picker-btn" value={dateFrom} onChange={e => { setDateFrom(e.target.value); setVisibleCount(PAGE_SIZE) }} />
             <span className="date-separator">-</span>
             <input type="date" className="date-picker-btn" value={dateTo} onChange={e => { setDateTo(e.target.value); setVisibleCount(PAGE_SIZE) }} />
-            <button className="date-clear" onClick={() => { const t = toDateStr(new Date()); const f = new Date(); f.setDate(f.getDate() - 6); setDateFrom(toDateStr(f)); setDateTo(t); setPeriod(PERIOD_OPTIONS[0]); setCategoryFilter({}); setPaymentFilter({}); setTypeFilter({ income: true, expense: true }); setSearchQuery(''); setVisibleCount(PAGE_SIZE) }}>
+            <button className="date-clear" onClick={() => { const t = toDateStr(new Date()); const f = new Date(); f.setDate(f.getDate() - 29); setDateFrom(toDateStr(f)); setDateTo(t); setPeriod(PERIOD_OPTIONS[1]); setCategoryFilter({}); setPaymentFilter({}); setTypeFilter({ income: true, expense: true }); setSearchQuery(''); setVisibleCount(PAGE_SIZE) }}>
                 <i className="fas fa-undo"></i>
               </button>
           </div>
