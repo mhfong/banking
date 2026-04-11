@@ -93,14 +93,12 @@ function HotkeysForm() {
 
 export default function Settings() {
   const { user } = useAuth()
-  const [activeTab, setActiveTab] = useState('profile')
+  const [activeTab, setActiveTab] = useState('account')
   const [currentPassword, setCurrentPassword] = useState('')
   const [newPassword, setNewPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [startingBalance, setStartingBalance] = useState(0)
   const [monthlyTarget, setMonthlyTarget] = useState(3)
-  const [maxMonthlyLoss, setMaxMonthlyLoss] = useState(5)
-  const [perTradeRisk, setPerTradeRisk] = useState(1)
   const [message, setMessage] = useState({ type: '', text: '' })
   const [saving, setSaving] = useState(false)
 
@@ -117,8 +115,6 @@ export default function Settings() {
         const data = snap.data()
         setStartingBalance(data.startingBalance || 0)
         setMonthlyTarget(data.monthlyTarget ?? 3)
-        setMaxMonthlyLoss(data.maxMonthlyLoss ?? 5)
-        setPerTradeRisk(data.perTradeRisk ?? 1)
       }
     } catch (err) {
       console.error('Error loading starting balance:', err.message)
@@ -151,11 +147,9 @@ export default function Settings() {
     setSaving(true)
     try {
       await setDoc(doc(db, 'userSettings', user.uid), {
-        monthlyTarget: parseFloat(monthlyTarget),
-        maxMonthlyLoss: parseFloat(maxMonthlyLoss),
-        perTradeRisk: parseFloat(perTradeRisk)
+        monthlyTarget: parseFloat(monthlyTarget)
       }, { merge: true })
-      showMessage('success', 'Investment targets updated successfully!')
+      showMessage('success', 'Monthly target updated successfully!')
     } catch (err) {
       showMessage('error', err.message)
     }
@@ -260,34 +254,8 @@ export default function Settings() {
                 />
               </div>
 
-              <div className="form-group">
-                <label>Max Monthly Loss (%)</label>
-                <input
-                  type="number"
-                  value={maxMonthlyLoss}
-                  onChange={(e) => setMaxMonthlyLoss(e.target.value)}
-                  step="0.1"
-                  min="0"
-                  max="100"
-                  placeholder="e.g. 5"
-                />
-              </div>
-
-              <div className="form-group">
-                <label>Per Trade Risk (%)</label>
-                <input
-                  type="number"
-                  value={perTradeRisk}
-                  onChange={(e) => setPerTradeRisk(e.target.value)}
-                  step="0.1"
-                  min="0"
-                  max="100"
-                  placeholder="e.g. 1"
-                />
-              </div>
-
               <button type="submit" disabled={saving}>
-                <i className="fas fa-save"></i> {saving ? 'Saving...' : 'Update Targets'}
+                <i className="fas fa-save"></i> {saving ? 'Saving...' : 'Update Target'}
               </button>
             </form>
           </div>
