@@ -5,7 +5,20 @@ useDefault = true
 # Firebase client-side config values are public by design and safe to commit.
 # They are scoped by Firebase Security Rules, not by secrecy.
 [[allowlists]]
-description = "Allow Firebase client-side config"
+description = "Allow Firebase client-side config (source)"
 paths = [
   "src/firebase.js"
+]
+
+[[allowlists]]
+description = "Allow Firebase API key in built dist"
+paths = [
+  "dist/"
+]
+
+# Ignore Firebase API key pattern (AIza...)
+[[allowlists]]
+description = "Firebase API Key pattern (public, safe)"
+regexes = [
+  "AIza[0-9A-Za-z\\-_]{35}"
 ]
