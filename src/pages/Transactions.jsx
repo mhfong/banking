@@ -109,7 +109,7 @@ export default function Transactions() {
   const [sortBy, setSortBy] = useState('date') // date | expense
   const [customDateFrom, setCustomDateFrom] = useState('')
   const [customDateTo, setCustomDateTo] = useState('')
-  const [dateFrom, setDateFrom] = useState(() => searchParams.get('from') || (() => { const d = new Date(); d.setDate(d.getDate() - 6); return toDateStr(d) })())
+  const [dateFrom, setDateFrom] = useState(() => searchParams.get('from') || (() => { const d = new Date(); d.setDate(d.getDate() - 29); return toDateStr(d) })())
   const [dateTo, setDateTo] = useState(() => searchParams.get('to') || toDateStr(new Date()))
 
   // Filters
