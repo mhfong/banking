@@ -213,6 +213,29 @@ export default function Settings() {
       {activeTab === 'account' && (
         <div className="settings-form">
           <div className="settings-card">
+            <h3><i className="fas fa-id-badge"></i> Account ID</h3>
+            <p className="settings-desc">Your unique account identifier.</p>
+            <div className="form-group">
+              <label>User ID</label>
+              <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                <input
+                  type="text"
+                  value={user?.uid || ''}
+                  readOnly
+                  style={{ fontFamily: 'monospace', fontSize: '0.85rem', color: 'var(--text-secondary)', cursor: 'default' }}
+                />
+                <button
+                  type="button"
+                  onClick={() => { navigator.clipboard.writeText(user?.uid || ''); showMessage('success', 'UID copied!') }}
+                  style={{ whiteSpace: 'nowrap', padding: '8px 14px' }}
+                >
+                  <i className="fas fa-copy"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div className="settings-card">
             <h3><i className="fas fa-wallet"></i> Starting Balance</h3>
             <p className="settings-desc">Set your initial account balance for reference.</p>
             
