@@ -77,25 +77,7 @@ export default function Investment() {
     loadTarget()
   }, [user])
 
-  if (!dataLoading && (!data || !data.summary || !data.summary.netLiquidationValue)) {
-    return (
-      <div className="investment-page">
-        <div className="inv-header">
-          <h1><i className="fas fa-chart-line"></i> Investment</h1>
-        </div>
-        <div style={{ textAlign: 'center', padding: '60px 20px', color: 'var(--text-secondary)' }}>
-          <i className="fas fa-lock" style={{ fontSize: 40, marginBottom: 16, opacity: 0.3, display: 'block' }}></i>
-          <p>No investment data linked to this account</p>
-        </div>
-      </div>
-    )
-  }
-
-  if (dataLoading) {
-    return <div className="loading-screen"><div className="spinner" /></div>
-  }
-
-  const { trades, dailyTWR: dailyPnL = [], summary } = data
+  const { trades = [], dailyTWR: dailyPnL = [], summary = {} } = data || {}
 
   const chartData = useMemo(() => filterByPeriod(dailyPnL, period), [dailyPnL, period])
 
@@ -205,6 +187,25 @@ export default function Investment() {
     if (min >= 0) return 1
     return max / (max - min)
   }, [chartData])
+
+  // Early returns AFTER all hooks
+  if (dataLoading) {
+    return <div className="loading-screen"><div className="spinner" /></div>
+  }
+
+  if (!data || !data.summary || !data.summary.netLiquidationValue) {
+    return (
+      <div className="investment-page">
+        <div className="inv-header">
+          <h1><i className="fas fa-chart-line"></i> Investment</h1>
+        </div>
+        <div style={{ textAlign: 'center', padding: '60px 20px', color: 'var(--text-secondary)' }}>
+          <i className="fas fa-lock" style={{ fontSize: 40, marginBottom: 16, opacity: 0.3, display: 'block' }}></i>
+          <p>No investment data linked to this account</p>
+        </div>
+      </div>
+    )
+  }
 
   const CustomTooltip = ({ active, payload }) => {
     if (!active || !payload?.length) return null
