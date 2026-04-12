@@ -10,8 +10,6 @@ import { db } from '../firebase'
 import { doc, getDoc } from 'firebase/firestore'
 import '../styles/investment.css'
 
-const OWNER_UID = '0G3jUSlKzQbzOrbD1cY0ari1Y4i1'
-
 const PERIODS = ['1W','MTD','1M','3M','YTD','1Y','All']
 const DAYS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat']
 const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
@@ -79,7 +77,7 @@ export default function Investment() {
     loadTarget()
   }, [user])
 
-  if (user?.email !== 'mmhin412@gmail.com') {
+  if (!dataLoading && (!data || !data.summary || !data.summary.netLiquidationValue)) {
     return (
       <div className="investment-page">
         <div className="inv-header">

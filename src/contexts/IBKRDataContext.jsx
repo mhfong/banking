@@ -18,8 +18,10 @@ export function IBKRDataProvider({ children }) {
       return;
     }
 
-    // Subscribe to the shared investment data document in Firestore
-    const unsub = onSnapshot(doc(db, 'investment_data', 'latest'), (snap) => {
+    // Subscribe to per-user investment data, fallback to 'latest' for legacy
+    const OWNER_UID = '0G3jUSlKzQbzOrbD1cY0ari1Y4i1'
+    const docId = user.uid === OWNER_UID ? 'latest' : user.uid
+    const unsub = onSnapshot(doc(db, 'investment_data', docId), (snap) => {
       if (snap.exists()) {
         setData(snap.data());
       }
