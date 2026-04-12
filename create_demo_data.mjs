@@ -15,8 +15,8 @@ const db = getFirestore(fbApp)
 const rand = (min, max) => Math.round((Math.random() * (max - min) + min) * 100) / 100
 const pick = (arr) => arr[Math.floor(Math.random() * arr.length)]
 
-const INCOME_CATS = ['Salary', 'Freelance', 'Side Income', 'Bonus']
-const EXPENSE_CATS = ['Food', 'Transport', 'Rent', 'Utilities', 'Entertainment', 'Shopping', 'Healthcare', 'Education', 'Insurance', 'Other']
+const INCOME_CATS = ['Income']
+const EXPENSE_CATS = ['Food', 'Transport', 'Bills', 'Gambling', 'Home', 'Travel', 'Card Collecting', 'Tax', 'Other']
 const PAYMENT_METHODS = ['Cash', 'Credit Card', 'Debit Card', 'Bank Transfer', 'FPS']
 
 function generateTransactions() {
@@ -33,19 +33,19 @@ function generateTransactions() {
       description: 'Monthly Salary',
       amount: rand(28000, 35000),
       type: 'income',
-      category: 'Salary',
+      category: 'Income',
       paymentMethod: 'Bank Transfer',
       userId: DEMO_UID,
       createdAt: Timestamp.fromDate(new Date(d.getFullYear(), d.getMonth(), 1))
     })
 
-    // Rent on 1st
+    // Bills on 1st
     txns.push({
       date: `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-01`,
       description: 'Monthly Rent',
       amount: 12000,
       type: 'expense',
-      category: 'Rent',
+      category: 'Bills',
       paymentMethod: 'Bank Transfer',
       userId: DEMO_UID,
       createdAt: Timestamp.fromDate(new Date(d.getFullYear(), d.getMonth(), 1))
@@ -55,17 +55,16 @@ function generateTransactions() {
     const numExpenses = Math.floor(Math.random() * 11) + 15
     for (let i = 0; i < numExpenses; i++) {
       const day = Math.min(28, Math.floor(Math.random() * 28) + 1)
-      const cat = pick(EXPENSE_CATS.filter(c => c !== 'Rent'))
+      const cat = pick(EXPENSE_CATS.filter(c => c !== 'Bills'))
       let amount
       switch(cat) {
         case 'Food': amount = rand(30, 200); break
         case 'Transport': amount = rand(10, 100); break
-        case 'Utilities': amount = rand(200, 800); break
-        case 'Entertainment': amount = rand(50, 500); break
-        case 'Shopping': amount = rand(100, 2000); break
-        case 'Healthcare': amount = rand(100, 1000); break
-        case 'Education': amount = rand(200, 3000); break
-        case 'Insurance': amount = rand(500, 2000); break
+        case 'Gambling': amount = rand(100, 2000); break
+        case 'Home': amount = rand(200, 800); break
+        case 'Travel': amount = rand(500, 5000); break
+        case 'Card Collecting': amount = rand(200, 3000); break
+        case 'Tax': amount = rand(500, 2000); break
         default: amount = rand(20, 300)
       }
       const dateStr = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`
@@ -85,14 +84,13 @@ function generateTransactions() {
     const numIncome = Math.floor(Math.random() * 3)
     for (let i = 0; i < numIncome; i++) {
       const day = Math.min(28, Math.floor(Math.random() * 28) + 1)
-      const cat = pick(INCOME_CATS.filter(c => c !== 'Salary'))
       const dateStr = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`
       txns.push({
         date: dateStr,
-        description: `${cat} payment`,
+        description: 'Bonus payment',
         amount: rand(1000, 8000),
         type: 'income',
-        category: cat,
+        category: 'Income',
         paymentMethod: pick(PAYMENT_METHODS),
         userId: DEMO_UID,
         createdAt: Timestamp.fromDate(new Date(d.getFullYear(), d.getMonth(), day))

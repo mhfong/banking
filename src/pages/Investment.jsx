@@ -16,7 +16,7 @@ const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov
 
 function filterByPeriod(dailyPnL, period) {
   if (!dailyPnL.length) return dailyPnL
-  const withPct = dailyPnL.map(d => ({ ...d, pct: d.cumulative }))
+  const withPct = dailyPnL.map(d => ({ ...d, pct: d.cumulative ?? d.cumulativeTWR ?? 0, pnl: d.pnl ?? d.dailyReturn ?? 0 }))
   if (period === 'All') return withPct
   const now = new Date(withPct[withPct.length - 1].date)
   let cutoff
@@ -185,7 +185,8 @@ export default function Investment() {
     const min = Math.min(...values)
     if (max <= 0) return 0
     if (min >= 0) return 1
-    return max / (max - min)
+    const offset = max / (max - min)
+    return isNaN(offset) ? 0.5 : offset
   }, [chartData])
 
   // Early returns AFTER all hooks
