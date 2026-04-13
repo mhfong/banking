@@ -177,6 +177,11 @@ export default function Dashboard() {
       .sort((a, b) => a[0].localeCompare(b[0]))
       .map(([month, d]) => ({
         month: month.substring(2), // 25-01
+        monthLabel: (() => {
+          const [y, m] = month.split('-')
+          const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+          return `${months[parseInt(m) - 1]} ${y.substring(2)}`
+        })(),
         income: Math.round(d.income),
         expense: Math.round(d.expense),
         net: Math.round(d.income - d.expense),
@@ -377,7 +382,7 @@ export default function Dashboard() {
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" stroke="#444c56" opacity={0.15} vertical={false} />
-                <XAxis dataKey="month" tick={{ fontSize: 11, fill: '#768390' }} axisLine={{ stroke: '#444c56' }} tickLine={false} />
+                <XAxis dataKey="monthLabel" tick={{ fontSize: 11, fill: '#768390' }} axisLine={{ stroke: '#444c56' }} tickLine={false} />
                 <YAxis tick={{ fontSize: 11, fill: '#768390' }} tickFormatter={v => `${(v/1000).toFixed(0)}k`} axisLine={false} tickLine={false} />
                 <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(83, 155, 245, 0.06)' }} />
                 <Area type="monotone" dataKey="income" name="Income" fill="url(#incomeGrad)" stroke="none" />
@@ -850,7 +855,7 @@ export default function Dashboard() {
                   const isFixed = FIXED_CATS.includes(entry.name)
                   const monthlyAvg = Math.round(entry.value / Math.max(stats.numMonths, 1))
                   const selectedSpend = Math.round(catMonthData.byCat[entry.name] || 0)
-                  const spendPct = (!isFixed && monthlyAvg > 0) ? Math.round((selectedSpend / monthlyAvg) * 100) : (isFixed ? 0 : 0)
+                  const spendPct = monthlyAvg > 0 ? Math.round((selectedSpend / monthlyAvg) * 100) : 0
                   const isWarning = !isFixed && spendPct >= 90
                   const isOver = !isFixed && spendPct > 100
                   const color = CAT_COLORS[entry.name] || '#768390'
