@@ -460,6 +460,10 @@ export default function Transactions() {
                 <i className="fas fa-undo"></i>
               </button>
           </div>
+          <div className="txn-summary-totals">
+            <span className="txn-totals-count">{totalCount} Transaction(s)</span>
+            <span className="txn-totals-badge">{mask('-' + fmtAmount(totalExpense))}</span>
+          </div>
         </div>
         <div className="txn-search">
           <i className="fas fa-search"></i>
@@ -470,18 +474,6 @@ export default function Transactions() {
             onChange={e => { setSearchQuery(e.target.value); setVisibleCount(PAGE_SIZE) }}
           />
           {searchQuery && <button className="txn-search-clear" onClick={() => setSearchQuery('')}><i className="fas fa-times"></i></button>}
-        </div>
-      </div>
-
-      {/* Summary totals */}
-      <div className="txn-totals-bar">
-        <div className="txn-totals-left">
-          <div className="txn-totals-range">{dateRange.from ? `${formatDateShort(dateRange.from)} - ${formatDateShort(dateRange.to)}` : 'No transactions'}</div>
-          <div className="txn-totals-count">{totalCount} Transaction(s)</div>
-        </div>
-        <div className="txn-totals-right">
-          <div className="txn-totals-label">TOTAL EXPENSES</div>
-          <div className="txn-totals-badge">{mask('-' + fmtAmount(totalExpense))}</div>
         </div>
       </div>
 

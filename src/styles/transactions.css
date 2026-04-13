@@ -168,6 +168,27 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 12px;
+}
+
+.txn-summary-totals {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.txn-totals-count {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.txn-totals-badge {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--red, #e5534b);
+  font-variant-numeric: tabular-nums;
 }
 
 .txn-date-range {
@@ -223,56 +244,6 @@
 
 /* Transaction list */
 /* Totals bar */
-.txn-totals-bar {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 12px 16px;
-  margin-bottom: 12px;
-  gap: 12px;
-}
-
-.txn-totals-left {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.txn-totals-range {
-  font-size: 12px;
-  color: var(--text-secondary);
-}
-
-.txn-totals-count {
-  font-size: 13px;
-  color: var(--text-primary);
-  font-weight: 500;
-}
-
-.txn-totals-right {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  align-items: flex-end;
-}
-
-.txn-totals-label {
-  font-size: 11px;
-  color: var(--text-secondary);
-  font-weight: 600;
-  letter-spacing: 0.05em;
-}
-
-.txn-totals-badge {
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--red, #e5534b);
-  font-variant-numeric: tabular-nums;
-}
-
 .txn-list {
   display: flex;
   flex-direction: column;
