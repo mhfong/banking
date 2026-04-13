@@ -689,6 +689,19 @@
     gap: 10px;
   }
 
+  .txn-summary-top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .txn-summary-totals {
+    align-items: flex-start;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+  }
+
   .txn-summary-right { text-align: left; }
 
   .txn-controls { gap: 6px; }
