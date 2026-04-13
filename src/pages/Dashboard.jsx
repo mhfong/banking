@@ -17,7 +17,7 @@ const COLORS = ['#539bf5','#57ab5a','#e5534b','#c69026','#986ee2','#6cb6ff','#e0
 const CAT_ICONS = {
   Food: 'fa-utensils', Transport: 'fa-bus', Bills: 'fa-file-alt', Gambling: 'fa-dice',
   Home: 'fa-home', Travel: 'fa-plane', 'Card Collecting': 'fa-clone', Income: 'fa-briefcase',
-  Investment: 'fa-chart-line', Tax: 'fa-file-invoice-dollar', Other: 'fa-question',
+  Investment: 'fa-chart-line', Tax: 'fa-file-invoice-dollar', Other: 'fa-ellipsis-h',
 }
 
 const CAT_COLORS = {
@@ -835,12 +835,12 @@ export default function Dashboard() {
                         <div className="cat-bar-header">
                           <span className="cat-bar-name">{entry.name}</span>
                           <span className="cat-bar-amounts">
-                            <span className={`cat-bar-current ${isWarning ? 'warning' : ''}`}>{mask('$' + currentMonth.toLocaleString())}</span>
+                            <span className={`cat-bar-current ${isOver ? 'over' : isWarning ? 'warning' : ''}`}>{mask('$' + currentMonth.toLocaleString())}</span>
                             <span className="cat-bar-divider">/</span>
                             <span className="cat-bar-avg">{mask('$' + monthlyAvg.toLocaleString())}</span>
                           </span>
                         </div>
-                        <div className="cat-bar-track">
+                        <div className={`cat-bar-track ${isOver ? 'track-over' : isWarning ? 'track-warning' : ''}`}>
                           <div className="cat-bar-fill" style={{ '--bar-width': `${Math.max(barPct, 2)}%`, background: isOver ? 'var(--red, #e5534b)' : isWarning ? '#f0a500' : color }} />
                           {monthlyAvg > 0 && <div className="cat-bar-avg-marker" />}
                         </div>
