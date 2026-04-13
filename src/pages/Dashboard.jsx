@@ -818,11 +818,13 @@ export default function Dashboard() {
               </div>
               <div className="cat-bars">
                 {stats.categoryData.map((entry) => {
+                  const FIXED_CATS = ['Home', 'Tax', 'Transport', 'Bills']
+                  const isFixed = FIXED_CATS.includes(entry.name)
                   const monthlyAvg = Math.round(entry.value / Math.max(stats.numMonths, 1))
                   const currentMonth = Math.round(stats.currentMonthByCategory[entry.name] || 0)
-                  const spendPct = monthlyAvg > 0 ? Math.round((currentMonth / monthlyAvg) * 100) : 0
-                  const isWarning = spendPct >= 90
-                  const isOver = spendPct > 100
+                  const spendPct = (!isFixed && monthlyAvg > 0) ? Math.round((currentMonth / monthlyAvg) * 100) : 0
+                  const isWarning = !isFixed && spendPct >= 90
+                  const isOver = !isFixed && spendPct > 100
                   const color = CAT_COLORS[entry.name] || '#768390'
                   const icon = CAT_ICONS[entry.name] || 'fa-star'
                   const barPct = Math.min(spendPct, 100)
