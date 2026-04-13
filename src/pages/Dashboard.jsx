@@ -47,6 +47,7 @@ export default function Dashboard() {
   const [editingGoalIdx, setEditingGoalIdx] = useState(null)
   const [editGoalLabel, setEditGoalLabel] = useState('')
   const [editGoalValue, setEditGoalValue] = useState('')
+  const [catMonth, setCatMonth] = useState(() => new Date().toISOString().substring(0, 7))
 
   // Load starting balance from user settings
   useEffect(() => {
@@ -262,6 +263,28 @@ export default function Dashboard() {
       })(),
     }
   }, [transactions, startingBalance])
+
+  // Category breakdown for selected cat month
+  const catMonthData = useMemo(() => {
+    const EXCLUDED = ['Transfer', 'Investment']
+    const monthExp = transactions.filter(t => t.type === 'expense' && t.date?.startsWith(catMonth) && !EXCLUDED.includes(t.category) && !t.excludeFromChart)
+    const byCat = {}
+    monthExp.forEach(t => { byCat[t.category || 'Other'] = (byCat[t.category || 'Other'] || 0) + t.amount })
+    const total = monthExp.reduce((s, t) => s + t.amount, 0)
+    return { byCat, total }
+  }, [transactions, catMonth])
+
+  const catMonthLabel = useMemo(() => {
+    const [y, m] = catMonth.split('-')
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    return `${months[parseInt(m) - 1]} ${y.substring(2)}`
+  }, [catMonth])
+
+  function shiftCatMonth(dir) {
+    const [y, m] = catMonth.split('-').map(Number)
+    const d = new Date(y, m - 1 + dir, 1)
+    setCatMonth(d.toISOString().substring(0, 7))
+  }
 
   const monthBreakdown = useMemo(() => {
     if (!selectedMonth || !transactions.length) return null
@@ -807,10 +830,15 @@ export default function Dashboard() {
             <div className="chart-card">
               <h3><i className="fas fa-chart-pie"></i> Expenses by Category</h3>
               <div className="cat-total-row">
+                <div className="cat-month-nav">
+                  <button className="cat-month-btn" onClick={() => shiftCatMonth(-1)}><i className="fas fa-chevron-left"></i></button>
+                  <span className="cat-month-label">{catMonthLabel}</span>
+                  <button className="cat-month-btn" onClick={() => shiftCatMonth(1)} disabled={catMonth >= new Date().toISOString().substring(0, 7)}><i className="fas fa-chevron-right"></i></button>
+                </div>
                 <div className="cat-total-stat cat-total-right">
-                  <span className="cat-total-label">CURRENT MTH / AVG MTH</span>
+                  <span className="cat-total-label">SELECTED / AVG MTH</span>
                   <div className="cat-total-combined">
-                    <span className="cat-total-value">{mask('$' + Math.round(stats.thisMonthTotal).toLocaleString())}</span>
+                    <span className="cat-total-value">{mask('$' + Math.round(catMonthData.total).toLocaleString())}</span>
                     <span className="cat-total-sep">/</span>
                     <span className="cat-total-avg">{mask('$' + Math.round(stats.totalExpense / Math.max(stats.numMonths, 1)).toLocaleString())}</span>
                   </div>
@@ -821,8 +849,8 @@ export default function Dashboard() {
                   const FIXED_CATS = ['Home', 'Tax', 'Transport', 'Bills']
                   const isFixed = FIXED_CATS.includes(entry.name)
                   const monthlyAvg = Math.round(entry.value / Math.max(stats.numMonths, 1))
-                  const currentMonth = Math.round(stats.currentMonthByCategory[entry.name] || 0)
-                  const spendPct = (!isFixed && monthlyAvg > 0) ? Math.round((currentMonth / monthlyAvg) * 100) : 0
+                  const selectedSpend = Math.round(catMonthData.byCat[entry.name] || 0)
+                  const spendPct = (!isFixed && monthlyAvg > 0) ? Math.round((selectedSpend / monthlyAvg) * 100) : (isFixed ? 0 : 0)
                   const isWarning = !isFixed && spendPct >= 90
                   const isOver = !isFixed && spendPct > 100
                   const color = CAT_COLORS[entry.name] || '#768390'
@@ -837,7 +865,7 @@ export default function Dashboard() {
                         <div className="cat-bar-header">
                           <span className="cat-bar-name">{entry.name}</span>
                           <span className="cat-bar-amounts">
-                            <span className={`cat-bar-current ${isOver ? 'over' : isWarning ? 'warning' : ''}`}>{mask('$' + currentMonth.toLocaleString())}</span>
+                            <span className={`cat-bar-current ${isOver ? 'over' : isWarning ? 'warning' : ''}`}>{mask('$' + selectedSpend.toLocaleString())}</span>
                             <span className="cat-bar-divider">/</span>
                             <span className="cat-bar-avg">{mask('$' + monthlyAvg.toLocaleString())}</span>
                           </span>
