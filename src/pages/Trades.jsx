@@ -253,7 +253,7 @@ export default function Trades() {
             </div>
             {group.trades.map((t, i) => {
               const isBuy = t.type === 'Buy'
-              const amt = Math.abs(t.grossHKD ?? 0)
+              const amt = Math.round(t.price * t.quantity)
               const comm = Math.abs(t.commission || 0)
               return (
                 <div key={i} className="trade-item">
