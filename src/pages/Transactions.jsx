@@ -460,10 +460,14 @@ export default function Transactions() {
                 <i className="fas fa-undo"></i>
               </button>
           </div>
-          <div className="txn-summary-totals">
+        </div>
+        <div className="txn-summary-stats">
+          <div className="txn-stats-left">
+            <span className="txn-totals-count">{totalCount} Transaction(s)</span>
+          </div>
+          <div className="txn-stats-right">
             <div className="txn-totals-label">TOTAL EXPENSES</div>
-            <div className="txn-totals-badge negative">{mask('-' + fmtAmount(totalExpense))}</div>
-            <div className="txn-totals-count">{totalCount} Transaction(s)</div>
+            <div className="txn-totals-badge negative">{mask(fmtAmount(totalExpense))}</div>
           </div>
         </div>
         <div className="txn-search">
