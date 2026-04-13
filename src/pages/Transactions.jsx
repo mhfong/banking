@@ -461,8 +461,9 @@ export default function Transactions() {
               </button>
           </div>
           <div className="txn-summary-totals">
-            <span className="txn-totals-count">{totalCount} Transaction(s)</span>
-            <span className="txn-totals-badge">{mask('-' + fmtAmount(totalExpense))}</span>
+            <div className="txn-totals-label">TOTAL EXPENSES</div>
+            <div className="txn-totals-badge negative">{mask('-' + fmtAmount(totalExpense))}</div>
+            <div className="txn-totals-count">{totalCount} Transaction(s)</div>
           </div>
         </div>
         <div className="txn-search">
