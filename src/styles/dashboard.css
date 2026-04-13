@@ -649,18 +649,22 @@
 /* Category Bar Chart */
 .cat-total-row {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: flex-start;
   margin-bottom: 16px;
   padding-bottom: 12px;
   border-bottom: 1px solid var(--border);
-  gap: 16px;
 }
 
 .cat-total-stat {
   display: flex;
   flex-direction: column;
   gap: 4px;
+}
+
+.cat-total-stat.cat-total-right {
+  align-items: flex-end;
+  text-align: right;
 }
 
 .cat-total-label {
@@ -854,15 +858,15 @@
 }
 
 .cat-bar-pct.warning {
-  color: #f0883e;
+  color: #f0a500;
   font-weight: 600;
 }
 
 .cat-bar-warn-badge {
   font-size: 10px;
   font-weight: 600;
-  color: #f0883e;
-  background: rgba(240, 136, 62, 0.12);
+  color: #f0a500;
+  background: rgba(240, 165, 0, 0.12);
   padding: 2px 6px;
   border-radius: 6px;
   display: inline-flex;
@@ -884,25 +888,29 @@
 
 /* Warning pulse animation */
 .cat-bar-row.cat-warning .cat-bar-icon {
-  animation: iconPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  animation: iconPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards, iconGlowAmber 1.8s ease-in-out 0.3s infinite;
 }
 
 .cat-bar-row.cat-over .cat-bar-icon {
-  box-shadow: 0 0 8px rgba(229, 83, 75, 0.6);
-  animation: iconGlow 1.5s ease-in-out infinite;
+  animation: iconPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards, iconGlowRed 1.5s ease-in-out 0.3s infinite;
 }
 
 .cat-bar-row.cat-over .cat-bar-track {
   background: rgba(229, 83, 75, 0.08);
 }
 
-@keyframes iconGlow {
-  0%, 100% {
-    box-shadow: 0 0 8px rgba(229, 83, 75, 0.6);
-  }
-  50% {
-    box-shadow: 0 0 12px rgba(229, 83, 75, 0.8), 0 0 20px rgba(229, 83, 75, 0.4);
-  }
+.cat-bar-row.cat-warning .cat-bar-track {
+  background: rgba(240, 165, 0, 0.06);
+}
+
+@keyframes iconGlowAmber {
+  0%, 100% { box-shadow: 0 0 6px rgba(240, 165, 0, 0.5); }
+  50% { box-shadow: 0 0 14px rgba(240, 165, 0, 0.9), 0 0 22px rgba(240, 165, 0, 0.4); }
+}
+
+@keyframes iconGlowRed {
+  0%, 100% { box-shadow: 0 0 6px rgba(229, 83, 75, 0.5); }
+  50% { box-shadow: 0 0 14px rgba(229, 83, 75, 0.9), 0 0 22px rgba(229, 83, 75, 0.4); }
 }
 
 .cat-bar-row:nth-child(1) .cat-bar-fill { animation-delay: 0.15s; }
