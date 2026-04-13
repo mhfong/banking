@@ -278,6 +278,7 @@ function processData(sections) {
     
     if (!date || !r.Symbol || price <= 0) continue
     
+    const grossUSD = Math.abs(qty) * price
     result.trades.push({
       date,
       symbol: r.Symbol,
@@ -285,6 +286,7 @@ function processData(sections) {
       quantity: Math.abs(qty),
       price,
       currency: r.CurrencyPrimary,
+      grossHKD: Math.round(grossUSD * fxRate * 100) / 100,
       commission: Math.round(Math.abs(comm) * fxRate * 100) / 100,
       netHKD: Math.round(netCash * fxRate * 100) / 100,
       fifoPnlUSD: fifoPnl,
