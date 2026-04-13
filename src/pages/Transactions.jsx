@@ -473,6 +473,29 @@ export default function Transactions() {
         </div>
       </div>
 
+      {/* Summary totals */}
+      <div className="txn-totals-bar">
+        <div className="txn-totals-left">
+          <div className="txn-totals-range">{dateRange.from ? `${formatDateShort(dateRange.from)} - ${formatDateShort(dateRange.to)}` : 'No transactions'}</div>
+          <div className="txn-totals-count">{totalCount} Transaction(s)</div>
+        </div>
+        <div className="txn-totals-right">
+          <div className="txn-totals-row">
+            <span className="txn-totals-label">IN</span>
+            <span className="txn-totals-value positive">{mask('+' + fmtAmount(totalIncome))}</span>
+          </div>
+          <div className="txn-totals-row">
+            <span className="txn-totals-label">OUT</span>
+            <span className="txn-totals-value negative">{mask('-' + fmtAmount(totalExpense))}</span>
+          </div>
+          <div className="txn-totals-divider" />
+          <div className="txn-totals-row">
+            <span className="txn-totals-label">NET</span>
+            <span className={`txn-totals-value ${netTotal >= 0 ? 'positive' : 'negative'}`}>{mask((netTotal >= 0 ? '+' : '-') + fmtAmount(Math.abs(netTotal)))}</span>
+          </div>
+        </div>
+      </div>
+
       {/* Transaction list */}
       <div className="txn-list">
         {visibleGroups.length === 0 && (
