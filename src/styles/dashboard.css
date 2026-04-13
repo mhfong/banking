@@ -650,21 +650,32 @@
 .cat-total-row {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   margin-bottom: 16px;
   padding-bottom: 12px;
   border-bottom: 1px solid var(--border);
+  gap: 16px;
+}
+
+.cat-total-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 
 .cat-total-label {
-  font-size: 13px;
+  font-size: 11px;
   color: var(--text-secondary);
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
 }
 
 .cat-total-value {
   font-size: 18px;
   font-weight: 700;
   color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
 }
 
 .cat-bars {

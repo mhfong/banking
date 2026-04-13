@@ -807,8 +807,14 @@ export default function Dashboard() {
             <div className="chart-card">
               <h3><i className="fas fa-chart-pie"></i> Expenses by Category</h3>
               <div className="cat-total-row">
-                <span className="cat-total-label">Monthly Average</span>
-                <span className="cat-total-value">{mask('$' + Math.round(stats.totalExpense / Math.max(stats.numMonths, 1)).toLocaleString())}</span>
+                <div className="cat-total-stat">
+                  <span className="cat-total-label">Current Month</span>
+                  <span className="cat-total-value">{mask('$' + Math.round(stats.thisMonthTotal).toLocaleString())}</span>
+                </div>
+                <div className="cat-total-stat">
+                  <span className="cat-total-label">Monthly Average</span>
+                  <span className="cat-total-value">{mask('$' + Math.round(stats.totalExpense / Math.max(stats.numMonths, 1)).toLocaleString())}</span>
+                </div>
               </div>
               <div className="cat-bars">
                 {stats.categoryData.map((entry) => {
