@@ -843,8 +843,8 @@
 .cat-bar-over-badge {
   font-size: 10px;
   font-weight: 600;
-  color: var(--red, #e5534b);
-  background: rgba(229, 83, 75, 0.12);
+  color: #d946ef;
+  background: rgba(217, 70, 239, 0.12);
   padding: 2px 6px;
   border-radius: 6px;
   display: inline-flex;
@@ -858,11 +858,21 @@
 }
 
 .cat-bar-row.cat-over .cat-bar-icon {
-  box-shadow: 0 0 0 2px rgba(229, 83, 75, 0.3);
+  box-shadow: 0 0 8px rgba(217, 70, 239, 0.6);
+  animation: iconGlow 1.5s ease-in-out infinite;
 }
 
 .cat-bar-row.cat-over .cat-bar-track {
-  background: rgba(229, 83, 75, 0.08);
+  background: rgba(217, 70, 239, 0.08);
+}
+
+@keyframes iconGlow {
+  0%, 100% {
+    box-shadow: 0 0 8px rgba(217, 70, 239, 0.6);
+  }
+  50% {
+    box-shadow: 0 0 12px rgba(217, 70, 239, 0.8), 0 0 20px rgba(217, 70, 239, 0.4);
+  }
 }
 
 .cat-bar-row:nth-child(1) .cat-bar-fill { animation-delay: 0.15s; }

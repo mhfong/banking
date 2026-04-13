@@ -835,7 +835,7 @@ export default function Dashboard() {
                           </span>
                         </div>
                         <div className="cat-bar-track">
-                          <div className="cat-bar-fill" style={{ '--bar-width': `${Math.max(barPct, 2)}%`, background: isOver ? 'var(--red, #e5534b)' : isWarning ? '#f0883e' : color }} />
+                          <div className="cat-bar-fill" style={{ '--bar-width': `${Math.max(barPct, 2)}%`, background: isOver ? '#d946ef' : isWarning ? '#f0883e' : color }} />
                           {monthlyAvg > 0 && <div className="cat-bar-avg-marker" />}
                         </div>
                         <div className="cat-bar-footer">
