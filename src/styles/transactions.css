@@ -227,7 +227,6 @@
   display: flex;
   flex-direction: column;
   gap: 2px;
-  justify-content: center;
   align-items: flex-start;
 }
 
@@ -240,7 +239,12 @@
   font-size: 14px;
   font-weight: 700;
   color: var(--text-primary);
-  line-height: 1.2;
+  line-height: 1.3;
+  align-self: flex-start;
+}
+
+.txn-stat-item.txn-stat-right .txn-stat-num {
+  align-self: flex-end;
 }
 
 .txn-stat-label {
@@ -255,12 +259,20 @@
   display: inline-block;
   padding: 3px 8px;
   border-radius: 12px;
-  background: rgba(229, 83, 75, 0.15);
-  color: var(--red, #e5534b);
   font-size: 12px;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
   line-height: 1.2;
+}
+
+.txn-stat-amount.negative {
+  background: rgba(229, 83, 75, 0.15);
+  color: var(--red, #e5534b);
+}
+
+.txn-stat-amount.positive {
+  background: rgba(87, 171, 90, 0.15);
+  color: var(--green, #57ab5a);
 }
 
 .txn-stat-sep {

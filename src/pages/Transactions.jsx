@@ -473,7 +473,7 @@ export default function Transactions() {
           <div className="txn-stat-sep" />
           <div className="txn-stat-item txn-stat-right">
             <span className="txn-stat-label">NET FLOW</span>
-            <span className="txn-stat-amount" style={{ color: netTotal >= 0 ? '#57ab5a' : '#e5534b' }}>{mask(fmtAmount(netTotal))}</span>
+            <span className={`txn-stat-amount ${netTotal >= 0 ? 'positive' : 'negative'}`}>{mask((netTotal >= 0 ? '+' : '') + fmtAmount(netTotal))}</span>
           </div>
         </div>
 
