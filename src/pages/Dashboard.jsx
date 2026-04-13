@@ -851,7 +851,7 @@ export default function Dashboard() {
                   <button className="cat-month-btn" onClick={() => shiftCatMonth(1)}><i className="fas fa-chevron-right"></i></button>
                 </div>
                 <div className="cat-total-stat cat-total-right">
-                  <span className="cat-total-label">SELECTED / AVG MTH</span>
+                  <span className="cat-total-label">MONTH TOTAL / AVERAGE</span>
                   <div className="cat-total-combined">
                     <span className="cat-total-value">{mask('$' + Math.round(catMonthData.total).toLocaleString())}</span>
                     <span className="cat-total-sep">/</span>
