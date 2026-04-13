@@ -450,26 +450,36 @@ export default function Transactions() {
       </div>
 
       {/* Summary bar */}
-      <div className="txn-summary-bar">
-        <div className="txn-summary-top">
-          <div className="txn-date-buttons">
-            <input type="date" className="date-picker-btn" value={dateFrom} onChange={e => { setDateFrom(e.target.value); setVisibleCount(PAGE_SIZE) }} />
-            <span className="date-separator">-</span>
-            <input type="date" className="date-picker-btn" value={dateTo} onChange={e => { setDateTo(e.target.value); setVisibleCount(PAGE_SIZE) }} />
-            <button className="date-clear" onClick={() => { const t = toDateStr(new Date()); const f = new Date(); f.setDate(f.getDate() - 29); setDateFrom(toDateStr(f)); setDateTo(t); setPeriod(PERIOD_OPTIONS[1]); setCategoryFilter({}); setPaymentFilter({}); setTypeFilter({ income: true, expense: true }); setSearchQuery(''); setVisibleCount(PAGE_SIZE) }}>
-                <i className="fas fa-undo"></i>
-              </button>
+      <div className="txn-filter-card">
+        {/* Date range row */}
+        <div className="txn-date-row">
+          <i className="fas fa-calendar-alt txn-cal-icon"></i>
+          <input type="date" className="txn-date-input" value={dateFrom} onChange={e => { setDateFrom(e.target.value); setVisibleCount(PAGE_SIZE) }} />
+          <span className="txn-date-arrow"><i className="fas fa-arrow-right"></i></span>
+          <input type="date" className="txn-date-input" value={dateTo} onChange={e => { setDateTo(e.target.value); setVisibleCount(PAGE_SIZE) }} />
+          <button className="txn-reset-btn" onClick={() => { const t = toDateStr(new Date()); const f = new Date(); f.setDate(f.getDate() - 29); setDateFrom(toDateStr(f)); setDateTo(t); setPeriod(PERIOD_OPTIONS[1]); setCategoryFilter({}); setPaymentFilter({}); setTypeFilter({ income: true, expense: true }); setSearchQuery(''); setVisibleCount(PAGE_SIZE) }}>
+            <i className="fas fa-undo"></i>
+          </button>
+        </div>
+
+        <div className="txn-card-divider" />
+
+        {/* Stats row */}
+        <div className="txn-stats-row">
+          <div className="txn-stat-item">
+            <span className="txn-stat-num">{totalCount}</span>
+            <span className="txn-stat-label">transactions</span>
+          </div>
+          <div className="txn-stat-sep" />
+          <div className="txn-stat-item txn-stat-right">
+            <span className="txn-stat-label">TOTAL EXPENSES</span>
+            <span className="txn-stat-amount">{mask(fmtAmount(totalExpense))}</span>
           </div>
         </div>
-        <div className="txn-summary-stats">
-          <div className="txn-stats-left">
-            <span className="txn-totals-count">{totalCount} Transaction(s)</span>
-          </div>
-          <div className="txn-stats-right">
-            <div className="txn-totals-label">TOTAL EXPENSES</div>
-            <div className="txn-totals-badge negative">{mask(fmtAmount(totalExpense))}</div>
-          </div>
-        </div>
+
+        <div className="txn-card-divider" />
+
+        {/* Search */}
         <div className="txn-search">
           <i className="fas fa-search"></i>
           <input
