@@ -480,19 +480,8 @@ export default function Transactions() {
           <div className="txn-totals-count">{totalCount} Transaction(s)</div>
         </div>
         <div className="txn-totals-right">
-          <div className="txn-totals-row">
-            <span className="txn-totals-label">IN</span>
-            <span className="txn-totals-value positive">{mask('+' + fmtAmount(totalIncome))}</span>
-          </div>
-          <div className="txn-totals-row">
-            <span className="txn-totals-label">OUT</span>
-            <span className="txn-totals-value negative">{mask('-' + fmtAmount(totalExpense))}</span>
-          </div>
-          <div className="txn-totals-divider" />
-          <div className="txn-totals-row">
-            <span className="txn-totals-label">NET</span>
-            <span className={`txn-totals-value ${netTotal >= 0 ? 'positive' : 'negative'}`}>{mask((netTotal >= 0 ? '+' : '-') + fmtAmount(Math.abs(netTotal)))}</span>
-          </div>
+          <div className="txn-totals-label">TOTAL EXPENSES</div>
+          <div className="txn-totals-badge">{mask('-' + fmtAmount(totalExpense))}</div>
         </div>
       </div>
 
