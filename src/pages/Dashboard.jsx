@@ -47,7 +47,10 @@ export default function Dashboard() {
   const [editingGoalIdx, setEditingGoalIdx] = useState(null)
   const [editGoalLabel, setEditGoalLabel] = useState('')
   const [editGoalValue, setEditGoalValue] = useState('')
-  const [catMonth, setCatMonth] = useState(() => new Date().toISOString().substring(0, 7))
+  const [catMonth, setCatMonth] = useState(() => {
+    const now = new Date()
+    return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`
+  })
 
   // Load starting balance from user settings
   useEffect(() => {
@@ -287,9 +290,15 @@ export default function Dashboard() {
 
   function shiftCatMonth(dir) {
     const [y, m] = catMonth.split('-').map(Number)
-    const fullYear = y < 100 ? 2000 + y : y // Handle 2-digit years
-    const d = new Date(fullYear, m - 1 + dir, 1)
-    setCatMonth(d.toISOString().substring(0, 7))
+    let newM = m + dir
+    let newY = y
+    if (newM > 12) { newM = 1; newY++ }
+    if (newM < 1) { newM = 12; newY-- }
+    const key = `${newY}-${String(newM).padStart(2, '0')}`
+    const now = new Date()
+    const currentKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`
+    if (key > currentKey) return
+    setCatMonth(key)
   }
 
   const monthBreakdown = useMemo(() => {
@@ -839,7 +848,7 @@ export default function Dashboard() {
                 <div className="cat-month-nav">
                   <button className="cat-month-btn" onClick={() => shiftCatMonth(-1)}><i className="fas fa-chevron-left"></i></button>
                   <span className="cat-month-label">{catMonthLabel}</span>
-                  <button className="cat-month-btn" onClick={() => shiftCatMonth(1)} disabled={catMonth > new Date().toISOString().substring(0, 7)}><i className="fas fa-chevron-right"></i></button>
+                  <button className="cat-month-btn" onClick={() => shiftCatMonth(1)}><i className="fas fa-chevron-right"></i></button>
                 </div>
                 <div className="cat-total-stat cat-total-right">
                   <span className="cat-total-label">SELECTED / AVG MTH</span>
