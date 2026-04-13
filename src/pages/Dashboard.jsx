@@ -252,6 +252,14 @@ export default function Dashboard() {
       biggestExpense,
       totalTransactions: transactions.length,
       investmentTotal, accountBalance, netWorth, balanceTrend,
+      currentMonthByCategory: (() => {
+        const currentMonth = new Date().toISOString().substring(0, 7)
+        const EXCLUDED = ['Transfer', 'Investment']
+        const thisMonthExp = transactions.filter(t => t.type === 'expense' && t.date?.startsWith(currentMonth) && !EXCLUDED.includes(t.category) && !t.excludeFromChart)
+        const byCat = {}
+        thisMonthExp.forEach(t => { byCat[t.category || 'Other'] = (byCat[t.category || 'Other'] || 0) + t.amount })
+        return byCat
+      })(),
     }
   }, [transactions, startingBalance])
 
@@ -804,24 +812,37 @@ export default function Dashboard() {
               </div>
               <div className="cat-bars">
                 {stats.categoryData.map((entry) => {
-                  const monthly = Math.round(entry.value / Math.max(stats.numMonths, 1))
-                  const pct = stats.totalExpense > 0 ? (entry.value / stats.totalExpense * 100) : 0
+                  const monthlyAvg = Math.round(entry.value / Math.max(stats.numMonths, 1))
+                  const currentMonth = Math.round(stats.currentMonthByCategory[entry.name] || 0)
+                  const spendPct = monthlyAvg > 0 ? Math.round((currentMonth / monthlyAvg) * 100) : 0
+                  const isWarning = spendPct >= 90
+                  const isOver = spendPct > 100
                   const color = CAT_COLORS[entry.name] || '#768390'
                   const icon = CAT_ICONS[entry.name] || 'fa-star'
+                  const barPct = Math.min(spendPct, 100)
                   return (
-                    <div key={entry.name} className="cat-bar-row">
+                    <div key={entry.name} className={`cat-bar-row ${isWarning ? 'cat-warning' : ''} ${isOver ? 'cat-over' : ''}`}>
                       <div className="cat-bar-icon" style={{ background: color + '20', color }}>
                         <i className={`fas ${icon}`}></i>
                       </div>
                       <div className="cat-bar-info">
                         <div className="cat-bar-header">
                           <span className="cat-bar-name">{entry.name}</span>
-                          <span className="cat-bar-amount">{mask('$' + monthly.toLocaleString())}/mo</span>
+                          <span className="cat-bar-amounts">
+                            <span className={`cat-bar-current ${isWarning ? 'warning' : ''}`}>{mask('$' + currentMonth.toLocaleString())}</span>
+                            <span className="cat-bar-divider">/</span>
+                            <span className="cat-bar-avg">{mask('$' + monthlyAvg.toLocaleString())}</span>
+                          </span>
                         </div>
                         <div className="cat-bar-track">
-                          <div className="cat-bar-fill" style={{ '--bar-width': `${Math.max(pct, 2)}%`, background: color }} />
+                          <div className="cat-bar-fill" style={{ '--bar-width': `${Math.max(barPct, 2)}%`, background: isOver ? 'var(--red, #e5534b)' : isWarning ? '#f0883e' : color }} />
+                          {monthlyAvg > 0 && <div className="cat-bar-avg-marker" />}
                         </div>
-                        <span className="cat-bar-pct">{pct.toFixed(1)}%</span>
+                        <div className="cat-bar-footer">
+                          <span className={`cat-bar-pct ${isWarning ? 'warning' : ''}`}>{spendPct}% of avg</span>
+                          {isWarning && !isOver && <span className="cat-bar-warn-badge"><i className="fas fa-exclamation-triangle"></i> Near limit</span>}
+                          {isOver && <span className="cat-bar-over-badge"><i className="fas fa-exclamation-circle"></i> Over budget</span>}
+                        </div>
                       </div>
                     </div>
                   )
