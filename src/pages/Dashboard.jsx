@@ -15,9 +15,9 @@ import '../styles/dashboard.css'
 const COLORS = ['#539bf5','#57ab5a','#e5534b','#c69026','#986ee2','#6cb6ff','#e0823d','#96d0ff','#dcbdfb','#f69d50','#768390','#8ddb8c']
 
 const CAT_ICONS = {
-  Food: 'fa-utensils', Transport: 'fa-bus', Bills: 'fa-receipt', Gambling: 'fa-dice',
+  Food: 'fa-utensils', Transport: 'fa-bus', Bills: 'fa-file-invoice', Gambling: 'fa-dice',
   Home: 'fa-home', Travel: 'fa-plane', 'Card Collecting': 'fa-clone', Income: 'fa-briefcase',
-  Investment: 'fa-chart-line', Tax: 'fa-file-invoice-dollar', Other: 'fa-ellipsis-h',
+  Investment: 'fa-chart-line', Tax: 'fa-file-invoice-dollar', Other: 'fa-circle',
 }
 
 const CAT_COLORS = {
@@ -808,12 +808,12 @@ export default function Dashboard() {
               <h3><i className="fas fa-chart-pie"></i> Expenses by Category</h3>
               <div className="cat-total-row">
                 <div className="cat-total-stat">
-                  <span className="cat-total-label">Current Month</span>
-                  <span className="cat-total-value">{mask('$' + Math.round(stats.thisMonthTotal).toLocaleString())}</span>
-                </div>
-                <div className="cat-total-stat">
-                  <span className="cat-total-label">Monthly Average</span>
-                  <span className="cat-total-value">{mask('$' + Math.round(stats.totalExpense / Math.max(stats.numMonths, 1)).toLocaleString())}</span>
+                  <span className="cat-total-label">CURRENT MTH / AVG MTH</span>
+                  <div className="cat-total-combined">
+                    <span className="cat-total-value">{mask('$' + Math.round(stats.thisMonthTotal).toLocaleString())}</span>
+                    <span className="cat-total-sep">/</span>
+                    <span className="cat-total-avg">{mask('$' + Math.round(stats.totalExpense / Math.max(stats.numMonths, 1)).toLocaleString())}</span>
+                  </div>
                 </div>
               </div>
               <div className="cat-bars">
@@ -841,7 +841,7 @@ export default function Dashboard() {
                           </span>
                         </div>
                         <div className="cat-bar-track">
-                          <div className="cat-bar-fill" style={{ '--bar-width': `${Math.max(barPct, 2)}%`, background: isOver ? '#d946ef' : isWarning ? '#f0883e' : color }} />
+                          <div className="cat-bar-fill" style={{ '--bar-width': `${Math.max(barPct, 2)}%`, background: isOver ? 'var(--red, #e5534b)' : isWarning ? '#f0883e' : color }} />
                           {monthlyAvg > 0 && <div className="cat-bar-avg-marker" />}
                         </div>
                         <div className="cat-bar-footer">

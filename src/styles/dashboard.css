@@ -660,7 +660,7 @@
 .cat-total-stat {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 4px;
 }
 
 .cat-total-label {
@@ -671,10 +671,29 @@
   text-transform: uppercase;
 }
 
+.cat-total-combined {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
 .cat-total-value {
   font-size: 18px;
   font-weight: 700;
   color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.cat-total-sep {
+  font-size: 14px;
+  color: var(--text-secondary);
+  opacity: 0.5;
+}
+
+.cat-total-avg {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-secondary);
   font-variant-numeric: tabular-nums;
 }
 
@@ -854,8 +873,8 @@
 .cat-bar-over-badge {
   font-size: 10px;
   font-weight: 600;
-  color: #d946ef;
-  background: rgba(217, 70, 239, 0.12);
+  color: var(--red, #e5534b);
+  background: rgba(229, 83, 75, 0.12);
   padding: 2px 6px;
   border-radius: 6px;
   display: inline-flex;
@@ -869,20 +888,20 @@
 }
 
 .cat-bar-row.cat-over .cat-bar-icon {
-  box-shadow: 0 0 8px rgba(217, 70, 239, 0.6);
+  box-shadow: 0 0 8px rgba(229, 83, 75, 0.6);
   animation: iconGlow 1.5s ease-in-out infinite;
 }
 
 .cat-bar-row.cat-over .cat-bar-track {
-  background: rgba(217, 70, 239, 0.08);
+  background: rgba(229, 83, 75, 0.08);
 }
 
 @keyframes iconGlow {
   0%, 100% {
-    box-shadow: 0 0 8px rgba(217, 70, 239, 0.6);
+    box-shadow: 0 0 8px rgba(229, 83, 75, 0.6);
   }
   50% {
-    box-shadow: 0 0 12px rgba(217, 70, 239, 0.8), 0 0 20px rgba(217, 70, 239, 0.4);
+    box-shadow: 0 0 12px rgba(229, 83, 75, 0.8), 0 0 20px rgba(229, 83, 75, 0.4);
   }
 }
 
