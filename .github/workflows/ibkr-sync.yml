@@ -2,7 +2,7 @@ name: IBKR Daily ETL
 
 on:
   schedule:
-    - cron: '22 0 * * *'  # UTC 00:22 daily = HK 08:22 AM (after US market close)
+    - cron: '0 21 * * *'  # UTC 21:00 = HK 05:00 AM (next day)
   workflow_dispatch:  # Manual trigger
 
 permissions:
