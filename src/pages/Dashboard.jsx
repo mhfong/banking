@@ -816,12 +816,6 @@ export default function Dashboard() {
                   </div>
                 </div>
               </div>
-                    <span className="cat-total-value">{mask('$' + Math.round(stats.thisMonthTotal).toLocaleString())}</span>
-                    <span className="cat-total-sep">/</span>
-                    <span className="cat-total-avg">{mask('$' + Math.round(stats.totalExpense / Math.max(stats.numMonths, 1)).toLocaleString())}</span>
-                  </div>
-                </div>
-              </div>
               <div className="cat-bars">
                 {stats.categoryData.map((entry) => {
                   const monthlyAvg = Math.round(entry.value / Math.max(stats.numMonths, 1))
