@@ -22,7 +22,7 @@ const CAT_ICONS = {
 
 const CAT_COLORS = {
   Food: '#ff6b6b', Transport: '#6cb6ff', Bills: '#c69026', Gambling: '#986ee2',
-  Home: '#57ab5a', Travel: '#e0823d', 'Card Collecting': '#dcbdfb', Income: '#57ab5a',
+  Home: '#57ab5a', Travel: '#1e90ff', 'Card Collecting': '#dcbdfb', Income: '#57ab5a',
   Investment: '#539bf5', Tax: '#f69d50', Other: '#768390',
 }
 
