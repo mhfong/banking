@@ -1,0 +1,124 @@
+/* STANDARDIZED SPACING & TYPOGRAPHY - Apply to all pages */
+/* This override file ensures consistency across Dashboard, Investment, Trades, Transactions, etc. */
+
+/* ===== HEADERS ===== */
+.dashboard-header, .investment-header, .trades-header, .transactions-header {
+  margin-bottom: var(--space-xl);
+  padding-bottom: var(--space-lg);
+  border-bottom: 1px solid var(--border);
+}
+
+.dashboard-header h1, .investment-header h1, .trades-header h1, .transactions-header h1,
+.dashboard h1, .investment h1, .trades h1, .transactions h1 {
+  font-size: var(--font-3xl) !important;
+  font-weight: var(--font-weight-bold) !important;
+  margin-bottom: var(--space-sm) !important;
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.dash-last-updated, .inv-last-updated, .trades-last-updated {
+  font-size: var(--font-sm) !important;
+  color: var(--text-secondary) !important;
+  margin-top: var(--space-sm) !important;
+}
+
+/* ===== STAT CARDS ===== */
+.stat-card, .inv-stat-card, .stat-item {
+  background: var(--bg-card) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius-md) !important;
+  padding: var(--space-xl) !important;
+  margin-bottom: 0 !important;
+}
+
+.stat-card-label, .inv-stat-label, .stat-label,
+.stat-card-label, [class*="label"] {
+  font-size: var(--font-sm) !important;
+  color: var(--text-secondary) !important;
+  font-weight: var(--font-weight-medium) !important;
+  margin-bottom: var(--space-md) !important;
+  text-transform: capitalize;
+  letter-spacing: 0.4px;
+}
+
+.stat-card-value, .inv-stat-value, .stat-value,
+[class*="value"]:not(.chart):not(.recharts) {
+  font-size: var(--font-3xl) !important;
+  font-weight: var(--font-weight-bold) !important;
+  font-variant-numeric: tabular-nums;
+  line-height: var(--line-height-tight);
+}
+
+/* ===== CARD CONTAINERS ===== */
+.card, .chart-card, .card-body {
+  background: var(--bg-card) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius-md) !important;
+  padding: var(--space-xl) !important;
+  margin-bottom: var(--space-2xl) !important;
+}
+
+.card h3, .chart-card h3, [class*="card"] h3 {
+  font-size: var(--font-lg) !important;
+  font-weight: var(--font-weight-semibold) !important;
+  margin-bottom: var(--space-lg) !important;
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+/* ===== GRIDS ===== */
+.stats-grid, .stat-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--space-lg) !important;
+  margin-bottom: var(--space-2xl) !important;
+}
+
+/* ===== BUTTONS & CONTROLS ===== */
+.btn-control, [class*="nav-btn"], .period-selector button {
+  padding: var(--space-md) var(--space-lg) !important;
+  font-size: var(--font-sm) !important;
+  font-weight: var(--font-weight-medium) !important;
+  border-radius: var(--radius-md) !important;
+  transition: all var(--duration-normal);
+}
+
+/* ===== COLORS (standardize positive/negative) ===== */
+.positive, .gain, [class*="positive"] {
+  color: var(--green) !important;
+}
+
+.negative, .loss, [class*="negative"] {
+  color: var(--red) !important;
+}
+
+.neutral {
+  color: var(--text-secondary);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .dashboard h1, .investment h1, .trades h1, .transactions h1 {
+    font-size: var(--font-2xl) !important;
+  }
+
+  .stat-card {
+    padding: var(--space-lg) !important;
+  }
+
+  .stat-card-value, .inv-stat-value {
+    font-size: var(--font-2xl) !important;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: var(--space-md) !important;
+  }
+
+  .card, .chart-card {
+    padding: var(--space-lg) !important;
+  }
+}
