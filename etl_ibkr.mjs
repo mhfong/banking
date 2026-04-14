@@ -133,11 +133,11 @@ function processData(sections) {
   }
   
   // === NAV Data ===
-  const navRows = (sections.EQUT || [])
-    .filter(r => parseFloat(r.Total || 0) > 0)
+  const navRows = (sections.CNAV || [])
+    .filter(r => parseFloat(r.EndingValue || 0) > 0)
     .map(r => ({
-      date: formatDate(r.ReportDate),
-      total: parseFloat(r.Total || 0)
+      date: formatDate(r.ToDate),
+      total: parseFloat(r.EndingValue || 0)
     }))
     .sort((a, b) => a.date.localeCompare(b.date))
   
