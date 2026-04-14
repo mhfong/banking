@@ -395,7 +395,16 @@ async function syncDepositsToTransactions(data) {
     
     const newTxns = []
     for (const d of data.deposits) {
-      const type = d.amount > 0 ? 'expense' : 'income'
+      // Skip aggregated/consolidated entries (cfByDate sums multiple deposits per date)
+      // Only sync individual deposit entries > 0 (actual money in)
+      // Skip negative amounts (withdrawals shown separately) and unreasonably large aggregated values
+      if (d.amount <= 0) continue
+      if (d.amount > 500000) {
+        console.log(`[ETL] Skipping suspicious large deposit: ${d.date} $${d.amount} (likely aggregated)`)
+        continue
+      }
+      
+      const type = 'expense'  // deposits to IBKR = money out of bank
       const key = `${d.date}|${Math.abs(d.amount)}|${type}`
       const fbCount = existingCounts[key] || 0
       
