@@ -332,7 +332,20 @@ function processData(sections) {
   }
   result.fifoDailyPnL.sort((a, b) => a.date.localeCompare(b.date))
   
-  // === Deposits ===
+  // === Deposits (raw individual entries for transaction sync) ===
+  result.rawDeposits = []
+  for (const r of (sections.CTRN || [])) {
+    const type = (r.Type || '').toLowerCase()
+    if (!type.includes('deposit') && !type.includes('withdrawal')) continue
+    const raw = (r['Date/Time'] || '')
+    const date = formatDate(raw)
+    const amount = parseFloat(r.Amount || 0)
+    if (date && amount !== 0) {
+      result.rawDeposits.push({ date, amount })
+    }
+  }
+  
+  // === Deposits (aggregated by snapped date, for TWR/summary only) ===
   for (const [date, amount] of Object.entries(cfByDate).sort(([a], [b]) => a.localeCompare(b))) {
     result.deposits.push({ date, amount })
   }
@@ -369,8 +382,9 @@ async function pushToFirebase(data) {
     data.trades.forEach(t => trade_map.set(tradeKey(t), t))
     data.trades = Array.from(trade_map.values()).sort((a, b) => b.date.localeCompare(a.date))
     
-    // Push to Firestore
-    await setDoc(docRef, data)
+    // Push to Firestore (exclude rawDeposits — internal use only)
+    const { rawDeposits, ...firebaseData } = data
+    await setDoc(docRef, firebaseData)
     console.log('[ETL] Pushed to Firestore')
   } catch (e) {
     console.error('[ETL] Firebase error:', e.message)
@@ -388,24 +402,18 @@ async function syncDepositsToTransactions(data) {
       const txn = d.data()
       if (txn.paymentMethod === 'IBKR') {
         const dateStr = typeof txn.date === 'string' ? txn.date : (txn.date?.toDate ? txn.date.toDate().toISOString().slice(0, 10) : String(txn.date))
-        const key = `${dateStr}|${txn.amount}|${txn.type}`
+        const key = `${dateStr}|${Math.round(txn.amount * 100) / 100}|${txn.type}`
         existingCounts[key] = (existingCounts[key] || 0) + 1
       }
     })
     
     const newTxns = []
-    for (const d of data.deposits) {
-      // Skip aggregated/consolidated entries (cfByDate sums multiple deposits per date)
-      // Only sync individual deposit entries > 0 (actual money in)
-      // Skip negative amounts (withdrawals shown separately) and unreasonably large aggregated values
+    for (const d of (data.rawDeposits || [])) {
+      // Only sync actual deposits (money into IBKR = expense from bank)
       if (d.amount <= 0) continue
-      if (d.amount > 500000) {
-        console.log(`[ETL] Skipping suspicious large deposit: ${d.date} $${d.amount} (likely aggregated)`)
-        continue
-      }
       
-      const type = 'expense'  // deposits to IBKR = money out of bank
-      const key = `${d.date}|${Math.abs(d.amount)}|${type}`
+      const type = 'expense'
+      const key = `${d.date}|${Math.round(d.amount * 100) / 100}|${type}`
       const fbCount = existingCounts[key] || 0
       
       if (fbCount === 0) {
