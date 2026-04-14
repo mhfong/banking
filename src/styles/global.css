@@ -1,6 +1,3 @@
-@import './design-tokens.css';
-@import './standardized.css';
-
 :root {
   --bg-primary: #22272e;
   --bg-secondary: #2d333b;
