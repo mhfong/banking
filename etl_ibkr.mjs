@@ -133,18 +133,34 @@ function processData(sections) {
   }
   
   // === NAV Data ===
-  const navRows = (sections.CNAV || [])
-    .filter(r => parseFloat(r.EndingValue || 0) > 0)
-    .map(r => ({
-      date: formatDate(r.ToDate),
-      total: parseFloat(r.EndingValue || 0)
-    }))
+  // EQUT has daily equity data (262 rows), CNAV has consolidated summary (1 row)
+  // EQUT Total = Stock + Cash; for cash-only accounts, Cash IS the NLV
+  const navRows = (sections.EQUT || [])
+    .map(r => {
+      const cash = parseFloat(r.Cash || 0)
+      const stock = parseFloat(r.Stock || 0)
+      const total = parseFloat(r.Total || 0)
+      // Use Total if > 0, otherwise use Cash + Stock
+      const nlv = total > 0 ? total : (cash + stock)
+      return {
+        date: formatDate(r.ReportDate),
+        total: nlv
+      }
+    })
+    .filter(r => r.total > 0 && r.date)
     .sort((a, b) => a.date.localeCompare(b.date))
   
-  if (navRows.length === 0) throw new Error('No NAV data found')
+  // Get NLV from CNAV (consolidated) as authoritative final value, fallback to last EQUT row
+  const cnavRow = (sections.CNAV || [])[0]
+  const cnavNLV = cnavRow ? parseFloat(cnavRow.EndingValue || 0) : 0
+  const cnavTWR = cnavRow ? parseFloat(cnavRow.TWR || 0) : 0
   
-  result.summary.netLiquidationValue = navRows[navRows.length - 1].total
-  console.log(`[ETL] NAV rows: ${navRows.length}, Latest NLV: $${result.summary.netLiquidationValue.toFixed(2)}`)
+  if (navRows.length === 0 && cnavNLV === 0) throw new Error('No NAV data found')
+  
+  // Use CNAV EndingValue as authoritative NLV, fallback to last EQUT row
+  result.summary.netLiquidationValue = cnavNLV > 0 ? cnavNLV : (navRows.length > 0 ? navRows[navRows.length - 1].total : 0)
+  console.log(`[ETL] EQUT rows: ${navRows.length}, CNAV NLV: $${cnavNLV.toFixed(2)}, CNAV TWR: ${cnavTWR}%`)
+  console.log(`[ETL] Using NLV: $${result.summary.netLiquidationValue.toFixed(2)}`)
   
   // === Cash Flows ===
   // Build NAV date set for snapping cash flows
