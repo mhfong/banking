@@ -110,13 +110,21 @@
 @media (max-width: 768px) {
   .sidebar {
     width: 100%;
-    position: relative;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
     flex-direction: row;
-    align-items: center;
+    align-items: stretch;
     padding: 0;
     border-right: none;
-    border-bottom: 1px solid var(--border);
-    height: 60px;
+    border-top: 1px solid var(--border);
+    border-bottom: none;
+    height: 64px;
+    z-index: 100;
+    background: var(--bg-card);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
   }
 
   .layout {
@@ -124,25 +132,16 @@
   }
 
   .sidebar-header {
-    padding: 0 16px;
-    border-bottom: none;
-    display: flex;
-    align-items: center;
-  }
-
-  .sidebar-header i {
-    font-size: 20px;
+    display: none;
   }
 
   .sidebar-nav {
     flex-direction: row;
     padding: 0;
     flex: 1;
-    justify-content: center;
+    justify-content: space-around;
     gap: 0;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
+    overflow: visible;
   }
 
   .sidebar-nav::-webkit-scrollbar {
@@ -150,26 +149,32 @@
   }
 
   .nav-item {
-    padding: 8px 12px;
-    gap: 2px;
+    flex: 1;
+    flex-direction: column;
+    padding: 8px 4px 10px;
+    gap: 4px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 0;
   }
 
   .nav-item i {
-    font-size: 16px;
+    font-size: 20px;
   }
 
   .nav-item span {
-    font-size: 9px;
+    font-size: 10px;
+    font-weight: 500;
   }
 
   .nav-item.active::before {
-    left: 8px;
-    right: 8px;
-    top: auto;
-    bottom: 0;
+    left: 20%;
+    right: 20%;
+    top: 0;
+    bottom: auto;
     width: auto;
     height: 3px;
-    border-radius: 3px 3px 0 0;
+    border-radius: 0 0 3px 3px;
   }
 
   .sidebar-bottom {
@@ -182,5 +187,6 @@
   .main-content {
     margin-left: 0;
     padding: 16px;
+    padding-bottom: 80px; /* space for fixed bottom nav */
   }
 }
