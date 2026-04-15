@@ -100,7 +100,7 @@ export default function Transactions() {
   const { mask } = useMask()
   const [searchParams] = useSearchParams()
   const navigate = useNavigate()
-  const cameFromDashboard = searchParams.get('category')
+  const cameFromDashboard = searchParams.get('category') || searchParams.get('from_dashboard')
   const [transactions, setTransactions] = useState([])
   const [lastUpdated, setLastUpdated] = useState(null)
   const [searchQuery, setSearchQuery] = useState('')

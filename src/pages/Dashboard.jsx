@@ -856,7 +856,7 @@ export default function Dashboard() {
                   const from = `${y}-${m}-01`
                   const lastDay = new Date(parseInt(y), parseInt(m), 0).getDate()
                   const to = `${y}-${m}-${String(lastDay).padStart(2, '0')}`
-                  navigate(`/transactions?from=${from}&to=${to}`)
+                  navigate(`/transactions?from=${from}&to=${to}&from_dashboard=1`)
                 }}>
                   <i className="fas fa-external-link-alt"></i> View Details
                 </button>
