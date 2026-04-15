@@ -464,10 +464,10 @@ export default function Transactions() {
 
   return (
     <div className="txn-page">
+      {cameFromDashboard && <button className="txn-back-btn" onClick={() => navigate('/dashboard')}><i className="fas fa-arrow-left"></i> Back to Dashboard</button>}
       {/* Top bar */}
       <div className="txn-top-bar">
         <div className="txn-title-row">
-          {cameFromDashboard && <button className="txn-back-btn" onClick={() => navigate('/dashboard')}><i className="fas fa-arrow-left"></i></button>}
           <h1><i className="fas fa-exchange-alt"></i> Transactions</h1>
         </div>
         <MaskToggle />
