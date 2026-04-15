@@ -159,7 +159,7 @@
 
 .chart-section-title i {
   margin-right: 8px;
-  color: var(--text-secondary);
+  color: var(--accent, #539bf5);
 }
 
 .chart-return {
