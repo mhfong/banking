@@ -464,7 +464,6 @@ export default function Transactions() {
 
   return (
     <div className="txn-page">
-      {cameFromDashboard && <button className="txn-back-btn" onClick={() => navigate('/dashboard')}><i className="fas fa-arrow-left"></i> Back to Dashboard</button>}
       {/* Top bar */}
       <div className="txn-top-bar">
         <div className="txn-title-row">
@@ -628,6 +627,7 @@ export default function Transactions() {
       )}
 
       {/* FAB */}
+      {cameFromDashboard && <button className="txn-back-btn" onClick={() => navigate('/dashboard')}><i className="fas fa-arrow-left"></i></button>}
       <button className="txn-back-top" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
         <i className="fas fa-chevron-up"></i>
       </button>
