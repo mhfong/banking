@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react'
+import { useState, useMemo, useEffect, useRef } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLine, CartesianGrid } from 'recharts'
 import { useAuth } from '../contexts/AuthContext'
@@ -8,6 +8,30 @@ import MaskToggle from '../components/MaskToggle'
 import CustomSelect from '../components/CustomSelect'
 import { db } from '../firebase'
 import { doc, getDoc } from 'firebase/firestore'
+
+// Count-up hook: animates from 0 to target over duration ms
+function useCountUp(target, duration = 800, decimals = 0) {
+  const [value, setValue] = useState(0)
+  const prevTarget = useRef(null)
+  useEffect(() => {
+    if (target === null || target === undefined || isNaN(target)) return
+    if (prevTarget.current === target) return
+    prevTarget.current = target
+    const start = Date.now()
+    const from = 0
+    const to = target
+    const tick = () => {
+      const elapsed = Date.now() - start
+      const progress = Math.min(elapsed / duration, 1)
+      // ease-out cubic
+      const eased = 1 - Math.pow(1 - progress, 3)
+      setValue(parseFloat((from + (to - from) * eased).toFixed(decimals)))
+      if (progress < 1) requestAnimationFrame(tick)
+    }
+    requestAnimationFrame(tick)
+  }, [target, duration, decimals])
+  return value
+}
 import '../styles/investment.css'
 
 const PERIODS = ['1W','MTD','1M','3M','YTD','1Y','All']
@@ -208,6 +232,12 @@ export default function Investment() {
     )
   }
 
+  // Count-up animated values for stat cards
+  const animNLV = useCountUp(Math.round((summary?.netLiquidationValue || 0) * 10) / 10, 900, 1)
+  const animPnL = useCountUp(Math.round(summary.totalPnL), 900, 0)
+  const animDeposited = useCountUp(Math.round(summary?.netDeposited || 0), 900, 0)
+  const animInterest = useCountUp(Math.round((summary?.totalInterest || 0) * 100) / 100, 900, 2)
+
   const CustomTooltip = ({ active, payload }) => {
     if (!active || !payload?.length) return null
     const d = payload[0].payload
@@ -231,25 +261,25 @@ export default function Investment() {
       <div className="inv-last-updated">Last Updated: {data.lastSyncAt ? new Date(data.lastSyncAt).toLocaleString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false }) : 'N/A'}</div>
 
       <div className="inv-stats">
-        <div className="inv-stat-card highlight">
+        <div className="inv-stat-card highlight" style={{ animationDelay: '0s' }}>
           <div className="inv-stat-label">Net Liquidation Value</div>
-          <div className="inv-stat-value">{mask('$' + (Math.round(summary.netLiquidationValue * 10) / 10).toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 }))}</div>
+          <div className="inv-stat-value">{mask('$' + animNLV.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 }))}</div>
         </div>
-        <div className="inv-stat-card">
+        <div className="inv-stat-card" style={{ animationDelay: '0.08s' }}>
           <div className="inv-stat-label">Total PNL</div>
-          <div className={`inv-stat-value ${summary.totalPnL >= 0 ? 'positive' : 'negative'}`}>{mask(fmt(Math.round(summary.totalPnL)))}</div>
+          <div className={`inv-stat-value ${summary.totalPnL >= 0 ? 'positive' : 'negative'}`}>{mask(fmt(animPnL))}</div>
         </div>
-        <div className="inv-stat-card">
+        <div className="inv-stat-card" style={{ animationDelay: '0.16s' }}>
           <div className="inv-stat-label">Net Deposited</div>
-          <div className="inv-stat-value">{mask('$' + Math.round(summary?.netDeposited || 0).toLocaleString())}</div>
+          <div className="inv-stat-value">{mask('$' + animDeposited.toLocaleString())}</div>
         </div>
-        <div className="inv-stat-card">
+        <div className="inv-stat-card" style={{ animationDelay: '0.24s' }}>
           <div className="inv-stat-label">Interest Earned</div>
-          <div className="inv-stat-value positive">{mask('+$' + (Math.round((summary?.totalInterest || 0) * 100) / 100).toLocaleString())}</div>
+          <div className="inv-stat-value positive">{mask('+$' + animInterest.toLocaleString())}</div>
         </div>
       </div>
 
-      <div className="chart-section">
+      <div className="chart-section" style={{ animationDelay: '0.32s' }}>
         <div className={`chart-return ${(summary.twr || 0) >= 0 ? 'positive' : 'negative'}`}>
           {masked ? '***' : fmtPct(summary.twr || 0)}
         </div>

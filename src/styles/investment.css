@@ -71,6 +71,9 @@
   border: 1px solid var(--border);
   border-radius: 12px;
   padding: 18px;
+  opacity: 0;
+  transform: translateY(15px);
+  animation: statCardIn 0.5s ease forwards;
 }
 
 .inv-stat-card.highlight {
@@ -94,6 +97,13 @@
 
 .inv-stat-value.positive { color: var(--green); }
 .inv-stat-value.negative { color: var(--red); }
+
+@keyframes statCardIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
 /* Period toggles */
 .period-toggles {
@@ -135,6 +145,9 @@
   border-radius: 12px;
   padding: 24px;
   margin-bottom: 24px;
+  opacity: 0;
+  transform: translateY(15px);
+  animation: statCardIn 0.5s ease forwards;
 }
 
 .chart-return {
