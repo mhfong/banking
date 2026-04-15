@@ -581,11 +581,23 @@ export default function Dashboard() {
               const monthlyGrowth = avgSaving + monthlyTarget + calcInterest(currentNet)
 
               // Pre-compute goal milestone info for each month
+              // Pre-compute goal milestone info — find crossing from actual projection data
               const goalMilestones = projectionGoals.map((g, i) => {
-                const gRemaining = g.value - currentNet
-                const gMonths = monthlyGrowth > 0 ? Math.ceil(Math.max(0, gRemaining) / monthlyGrowth) : null
                 const gReached = currentNet >= g.value
-                return { ...g, index: i, months: gMonths, reached: gReached, color: GOAL_COLORS[i % GOAL_COLORS.length] }
+                if (gReached) return { ...g, index: i, months: 0, reached: true, color: GOAL_COLORS[i % GOAL_COLORS.length] }
+                
+                // Find the first future month where trading projection >= goal value
+                let gMonths = null
+                for (let mi = 0; mi < allData.length; mi++) {
+                  const m = allData[mi]
+                  if (m.isHistory) continue
+                  if (m.trading != null && m.trading >= g.value) {
+                    // Count months from "Now" to this point
+                    gMonths = mi - allData.findIndex(d => d.isNow)
+                    break
+                  }
+                }
+                return { ...g, index: i, months: gMonths, reached: false, color: GOAL_COLORS[i % GOAL_COLORS.length] }
               })
 
               // Add milestone dot data to months array
@@ -785,7 +797,8 @@ export default function Dashboard() {
                         {projectionGoals.map((g, i) => {
                           const pct = Math.min(Math.round(currentNet / g.value * 100), 100)
                           const remaining = g.value - currentNet
-                          const monthsToGoal = monthlyGrowth > 0 ? Math.ceil(Math.max(0, remaining) / monthlyGrowth) : null
+                          // Use matching milestone months from projection data (compound)
+                          const monthsToGoal = goalMilestones[i]?.months
                           const isReached = currentNet >= g.value
                           const isEditing = editingGoalIdx === i
                           return (
