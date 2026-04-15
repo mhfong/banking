@@ -222,6 +222,12 @@ export default function Investment() {
     return <div className="loading-screen"><div className="spinner" /></div>
   }
 
+  // Count-up animated values for stat cards (must be before any early returns — Rules of Hooks)
+  const animNLV = useCountUp(Math.round((summary?.netLiquidationValue || 0) * 10) / 10, 900, 1)
+  const animPnL = useCountUp(Math.round(summary?.totalPnL || 0), 900, 0)
+  const animDeposited = useCountUp(Math.round(summary?.netDeposited || 0), 900, 0)
+  const animInterest = useCountUp(Math.round((summary?.totalInterest || 0) * 100) / 100, 900, 2)
+
   if (!data || !data.summary || !data.summary.netLiquidationValue) {
     return (
       <div className="investment-page">
@@ -235,12 +241,6 @@ export default function Investment() {
       </div>
     )
   }
-
-  // Count-up animated values for stat cards
-  const animNLV = useCountUp(Math.round((summary?.netLiquidationValue || 0) * 10) / 10, 900, 1)
-  const animPnL = useCountUp(Math.round(summary.totalPnL), 900, 0)
-  const animDeposited = useCountUp(Math.round(summary?.netDeposited || 0), 900, 0)
-  const animInterest = useCountUp(Math.round((summary?.totalInterest || 0) * 100) / 100, 900, 2)
 
   const CustomTooltip = ({ active, payload }) => {
     if (!active || !payload?.length) return null
