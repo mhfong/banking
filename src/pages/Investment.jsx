@@ -337,7 +337,7 @@ export default function Investment() {
       </div>
 
       {/* PNL Calendar Section */}
-      <div className="calendar-section">
+      <div className="calendar-section chart-animated" style={{ animationDelay: '0.4s' }}>
         <div className="calendar-header-row">
           <h3><i className="fas fa-calendar-alt"></i> PNL Calendar</h3>
         </div>
