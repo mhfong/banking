@@ -293,6 +293,27 @@ function processData(sections) {
   result.monthlyInterestAccrued = monthlyIntAccrued
   console.log(`[ETL] Total Interest: $${result.summary.totalInterest.toFixed(2)}`)
   
+  // === Daily Interest (for granular tracking) ===
+  const dailyInterest = {}
+  for (const r of (sections.CTRN || [])) {
+    const type = (r.Type || '').toLowerCase()
+    if (!type.includes('interest')) continue
+    
+    const raw = (r['Date/Time'] || '')
+    const date = formatDate(raw)
+    if (!date) continue
+    
+    let amount = parseFloat(r.Amount || 0)
+    if (r.CurrencyPrimary === 'USD') {
+      amount = Math.round(amount * 7.78 * 100) / 100
+    }
+    
+    dailyInterest[date] = Math.round(((dailyInterest[date] || 0) + amount) * 100) / 100
+  }
+  result.dailyInterest = Object.entries(dailyInterest)
+    .map(([date, amount]) => ({ date, amount }))
+    .sort((a, b) => a.date.localeCompare(b.date))
+  
   // === Trades ===
   const tradesByDate = {}
   for (const r of (sections.TRNT || [])) {
@@ -366,12 +387,34 @@ function processData(sections) {
     result.deposits.push({ date, amount })
   }
   
+  // === Daily Commission (aggregated from trades — must be AFTER trades parsing) ===
+  const dailyCommission = {}
+  for (const t of result.trades) {
+    if (t.commission > 0) {
+      dailyCommission[t.date] = Math.round(((dailyCommission[t.date] || 0) + t.commission) * 100) / 100
+    }
+  }
+  result.dailyCommission = Object.entries(dailyCommission)
+    .map(([date, amount]) => ({ date, amount }))
+    .sort((a, b) => a.date.localeCompare(b.date))
+  
+  // === Monthly Commission (aggregated) ===
+  const monthlyComm = {}
+  for (const [date, amount] of Object.entries(dailyCommission)) {
+    const month = date.substring(0, 7)
+    monthlyComm[month] = Math.round(((monthlyComm[month] || 0) + amount) * 100) / 100
+  }
+  result.monthlyCommission = monthlyComm
+  result.summary.totalCommission = Math.round(Object.values(dailyCommission).reduce((s, v) => s + v, 0) * 100) / 100
+  
   console.log(`[ETL] Summary:`)
   console.log(`  NLV: $${result.summary.netLiquidationValue.toFixed(2)}`)
   console.log(`  Total PnL: $${result.summary.totalPnL.toFixed(2)}`)
   console.log(`  Net Deposited: $${result.summary.netDeposited.toFixed(2)}`)
   console.log(`  Interest: $${result.summary.totalInterest.toFixed(2)}`)
+  console.log(`  Commission: $${result.summary.totalCommission.toFixed(2)}`)
   console.log(`  TWR: ${result.summary.twr.toFixed(4)}%`)
+  console.log(`  Daily Interest entries: ${result.dailyInterest.length}, Daily Commission entries: ${result.dailyCommission.length}`)
   
   return result
 }
