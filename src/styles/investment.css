@@ -166,7 +166,8 @@
   font-size: 32px;
   font-weight: 800;
   font-variant-numeric: tabular-nums;
-  margin-bottom: 16px;
+  margin-top: 20px;
+  margin-bottom: 0;
 }
 
 .chart-return.positive { color: var(--green); }
