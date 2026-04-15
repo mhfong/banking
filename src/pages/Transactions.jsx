@@ -128,8 +128,49 @@ export default function Transactions() {
   const [formLoading, setFormLoading] = useState(false)
   const [formExcludeChart, setFormExcludeChart] = useState(false)
   const [editingId, setEditingId] = useState(null)
+  const [descSuggestions, setDescSuggestions] = useState([])
+  const [showDescSuggestions, setShowDescSuggestions] = useState(false)
+  const [selectedSuggestionIdx, setSelectedSuggestionIdx] = useState(-1)
+  const descInputRef = useRef(null)
+  const suggestionsRef = useRef(null)
 
   const periodRef = useRef(null)
+
+  // Build unique description history for autocomplete
+  const descriptionHistory = useMemo(() => {
+    const descMap = {}  // description → { count, lastDate }
+    transactions.forEach(t => {
+      if (!t.description || t.description.trim() === '') return
+      const desc = t.description.trim()
+      if (!descMap[desc]) {
+        descMap[desc] = { count: 0, lastDate: '' }
+      }
+      descMap[desc].count++
+      if (t._dateStr > descMap[desc].lastDate) {
+        descMap[desc].lastDate = t._dateStr
+      }
+    })
+    // Sort by frequency (most used first), then by recent
+    return Object.entries(descMap)
+      .map(([desc, info]) => ({ desc, ...info }))
+      .sort((a, b) => b.count - a.count || b.lastDate.localeCompare(a.lastDate))
+  }, [transactions])
+
+  // Filter suggestions based on current input
+  function updateDescSuggestions(value) {
+    if (!value || value.trim().length === 0) {
+      setDescSuggestions([])
+      setShowDescSuggestions(false)
+      return
+    }
+    const q = value.toLowerCase()
+    const matches = descriptionHistory
+      .filter(d => d.desc.toLowerCase().includes(q) && d.desc.toLowerCase() !== q)
+      .slice(0, 8)
+    setDescSuggestions(matches)
+    setShowDescSuggestions(matches.length > 0)
+    setSelectedSuggestionIdx(-1)
+  }
 
   // Fetch transactions
   useEffect(() => {
@@ -580,10 +621,52 @@ export default function Transactions() {
                 <input type="number" step="0.01" min="0" value={formAmount}
                   onChange={e => setFormAmount(e.target.value)} placeholder="0.00" required />
               </div>
-              <div className="txn-form-group">
+              <div className="txn-form-group txn-desc-autocomplete">
                 <label>Description</label>
                 <input type="text" value={formDesc}
-                  onChange={e => setFormDesc(e.target.value)} placeholder="What was this for?" required />
+                  ref={descInputRef}
+                  onChange={e => { setFormDesc(e.target.value); updateDescSuggestions(e.target.value) }}
+                  onFocus={() => { if (formDesc.trim()) updateDescSuggestions(formDesc) }}
+                  onBlur={() => { setTimeout(() => setShowDescSuggestions(false), 150) }}
+                  onKeyDown={e => {
+                    if (!showDescSuggestions || descSuggestions.length === 0) return
+                    if (e.key === 'ArrowDown') {
+                      e.preventDefault()
+                      setSelectedSuggestionIdx(i => Math.min(i + 1, descSuggestions.length - 1))
+                    } else if (e.key === 'ArrowUp') {
+                      e.preventDefault()
+                      setSelectedSuggestionIdx(i => Math.max(i - 1, -1))
+                    } else if (e.key === 'Enter' && selectedSuggestionIdx >= 0) {
+                      e.preventDefault()
+                      const selected = descSuggestions[selectedSuggestionIdx]
+                      setFormDesc(selected.desc)
+                      setShowDescSuggestions(false)
+                      setSelectedSuggestionIdx(-1)
+                    } else if (e.key === 'Escape') {
+                      setShowDescSuggestions(false)
+                    }
+                  }}
+                  placeholder="What was this for?" required autoComplete="off" />
+                {showDescSuggestions && descSuggestions.length > 0 && (
+                  <div className="desc-suggestions" ref={suggestionsRef}>
+                    {descSuggestions.map((s, idx) => (
+                      <button
+                        key={s.desc}
+                        type="button"
+                        className={`desc-suggestion-item ${idx === selectedSuggestionIdx ? 'selected' : ''}`}
+                        onMouseDown={(e) => {
+                          e.preventDefault()
+                          setFormDesc(s.desc)
+                          setShowDescSuggestions(false)
+                          setSelectedSuggestionIdx(-1)
+                        }}
+                      >
+                        <span className="desc-suggestion-text">{s.desc}</span>
+                        <span className="desc-suggestion-count">{s.count}x</span>
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
               <div className="txn-form-row">
                 <div className="txn-form-group">
