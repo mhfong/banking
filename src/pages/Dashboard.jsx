@@ -343,7 +343,7 @@ export default function Dashboard() {
   return (
     <div className="dashboard">
       <div className="dashboard-header">
-        <h1><i className="fas fa-tachometer-alt"></i> Dashboard</h1>
+        <h1><i className="fas fa-chart-pie"></i> Dashboard</h1>
         <MaskToggle />
       </div>
       {lastUpdated && <div className="dash-last-updated">Last Updated: {lastUpdated.toLocaleString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false })}</div>}
