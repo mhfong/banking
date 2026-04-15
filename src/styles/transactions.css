@@ -823,7 +823,7 @@
   }
 
   .txn-back-top {
-    bottom: calc(140px + env(safe-area-inset-bottom));
+    bottom: calc(160px + env(safe-area-inset-bottom));
     right: 20px;
   }
 
