@@ -375,7 +375,6 @@ export default function Dashboard() {
 
 
           {/* Charts Row */}
-          <div className="charts-grid">
           {/* Net Balance Projection */}
           <div className="chart-card chart-animated proj-fintech-card" style={{ animationDelay: '0.2s' }}>
             <div className="proj-fintech-header">
@@ -802,6 +801,8 @@ export default function Dashboard() {
               )
             })()}
           </div>
+
+          <div className="charts-grid">
           {/* Monthly Income vs Expense Chart */}
           <div className="chart-card chart-animated">
             <h3><i className="fas fa-chart-bar"></i> Monthly Income vs Expenses</h3>
