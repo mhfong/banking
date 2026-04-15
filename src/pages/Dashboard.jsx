@@ -726,7 +726,7 @@ export default function Dashboard() {
                       {goalMilestones.map((gm, i) => {
                         if (gm.reached) return null
                         return (
-                          <ReferenceLine key={`goal-${i}`} y={gm.value} stroke={gm.color} strokeDasharray="8 4" strokeWidth={1.5}
+                          <ReferenceLine key={`goal-${i}`} y={gm.value} stroke={gm.color} strokeWidth={1.5}
                             label={({ viewBox }) => {
                               const labelText = `Goal ${i + 1}`
                               const textW = labelText.length * 6.5 + 12
