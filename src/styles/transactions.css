@@ -341,6 +341,10 @@
   background: var(--bg-primary);
   border-top: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
+  opacity: 0;
+  transform: translateY(-6px);
+  animation: txnCardIn 0.35s ease forwards;
+  animation-delay: var(--header-delay, 0s);
 }
 
 .txn-day-date {
@@ -370,6 +374,10 @@
   transition: background 0.15s;
   user-select: none;
   -webkit-user-select: none;
+  opacity: 0;
+  transform: translate(-20px, -8px);
+  animation: txnRowIn 0.4s ease forwards;
+  animation-delay: var(--row-delay, 0s);
 }
 
 .txn-item:hover {

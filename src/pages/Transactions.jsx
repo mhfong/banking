@@ -575,14 +575,14 @@ export default function Transactions() {
           const prevCount = visibleGroups.slice(0, gi).reduce((s, g) => s + g.txns.length, 0)
           return (
           <div key={group.date} className="txn-day-group">
-            <div className="txn-day-header" style={{ animationDelay: `${0.1 + gi * 0.04}s`, opacity: 0, animation: 'txnCardIn 0.4s ease forwards' }}>
+            <div className="txn-day-header" style={{ '--header-delay': `${0.1 + gi * 0.04}s` }}>
               <span className="txn-day-date">{formatDateLong(group.date)}</span>
               <span className={`txn-day-total ${sortBy === 'expense' ? 'negative' : group.dailyTotal >= 0 ? 'positive' : 'negative'}`}>
                 {sortBy === 'expense' ? mask('-' + fmtAmount(group.dailyExpense)) : mask((group.dailyTotal >= 0 ? '+' : '-') + fmtAmount(Math.abs(group.dailyTotal)))}
               </span>
             </div>
             {group.txns.map((t, ti) => (
-              <div key={t.id} className="txn-item" style={{ animationDelay: `${0.14 + (prevCount + ti) * 0.04}s`, opacity: 0, animation: 'txnRowIn 0.4s ease forwards' }} onClick={() => handleEdit(t)}>
+              <div key={t.id} className="txn-item" style={{ '--row-delay': `${0.14 + (prevCount + ti) * 0.04}s` }} onClick={() => handleEdit(t)}>
                 <div className="txn-item-left">
                   <div className="txn-icon" style={{ background: getCategoryColor(t.category) + '20', color: getCategoryColor(t.category) }}>
                     <i className={`fas ${getCategoryIcon(t.category)}`}></i>
