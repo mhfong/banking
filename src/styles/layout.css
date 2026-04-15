@@ -122,7 +122,7 @@
     border-right: none;
     border-top: 1px solid var(--border);
     border-bottom: none;
-    height: calc(64px + env(safe-area-inset-bottom));
+    height: calc(48px + env(safe-area-inset-bottom));
     z-index: 100;
     background: var(--bg-card);
     backdrop-filter: blur(12px);
@@ -140,8 +140,8 @@
   .sidebar-nav {
     flex-direction: row;
     padding: 0;
-    flex: 1;
-    justify-content: space-around;
+    flex: none;
+    justify-content: flex-start;
     gap: 0;
     overflow: visible;
   }
@@ -151,21 +151,21 @@
   }
 
   .nav-item {
-    flex: 1;
+    flex: none;
     flex-direction: column;
-    padding: 8px 4px 10px;
-    gap: 4px;
+    padding: 5px 16px 6px;
+    gap: 2px;
     justify-content: center;
     align-items: center;
     border-radius: 0;
   }
 
   .nav-item i {
-    font-size: 20px;
+    font-size: 16px;
   }
 
   .nav-item span {
-    font-size: 10px;
+    font-size: 9px;
     font-weight: 500;
   }
 
@@ -175,20 +175,21 @@
     top: 0;
     bottom: auto;
     width: auto;
-    height: 3px;
-    border-radius: 0 0 3px 3px;
+    height: 2px;
+    border-radius: 0 0 2px 2px;
   }
 
   .sidebar-bottom {
     flex-direction: row;
     padding: 0;
     border-top: none;
-    border-left: 1px solid var(--border);
+    border-left: none;
+    margin-left: auto;
   }
 
   .main-content {
     margin-left: 0;
     padding: 16px;
-    padding-bottom: calc(80px + env(safe-area-inset-bottom)); /* space for fixed bottom nav + iPhone home bar */
+    padding-bottom: calc(64px + env(safe-area-inset-bottom));
   }
 }
