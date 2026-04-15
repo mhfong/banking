@@ -15,7 +15,7 @@
 .dash-last-updated {
   font-size: 12px;
   color: var(--text-secondary);
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 .dashboard-header .header-top {
@@ -61,7 +61,7 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 16px;
-  margin-top: 24px;
+  margin-top: 12px;
 }
 
 .stat-card {
