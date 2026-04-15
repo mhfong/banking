@@ -117,10 +117,11 @@
     flex-direction: row;
     align-items: stretch;
     padding: 0;
+    padding-bottom: env(safe-area-inset-bottom);
     border-right: none;
     border-top: 1px solid var(--border);
     border-bottom: none;
-    height: 64px;
+    height: calc(64px + env(safe-area-inset-bottom));
     z-index: 100;
     background: var(--bg-card);
     backdrop-filter: blur(12px);
@@ -187,6 +188,6 @@
   .main-content {
     margin-left: 0;
     padding: 16px;
-    padding-bottom: 80px; /* space for fixed bottom nav */
+    padding-bottom: calc(80px + env(safe-area-inset-bottom)); /* space for fixed bottom nav + iPhone home bar */
   }
 }
