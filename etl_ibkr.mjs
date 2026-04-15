@@ -236,7 +236,23 @@ function processData(sections) {
   }
   
   result.summary.twr = Math.round((twrProduct - 1) * 10000) / 100
-  console.log(`[ETL] TWR: ${result.summary.twr.toFixed(4)}%`)
+  
+  // Log latest TWR data point for monitoring
+  const latestTWR = result.dailyTWR[result.dailyTWR.length - 1]
+  if (latestTWR) {
+    console.log(`[ETL] TWR: ${result.summary.twr.toFixed(4)}% (latest data point: ${latestTWR.date})`)
+    
+    // Warn if latest data point is more than 2 calendar days old
+    const latestDate = new Date(latestTWR.date + 'T00:00:00Z')
+    const now = new Date()
+    const daysDiff = Math.floor((now - latestDate) / (1000 * 60 * 60 * 24))
+    if (daysDiff > 3) {
+      console.warn(`[ETL] ⚠️ Latest TWR data is ${daysDiff} days old (${latestTWR.date}) — check Flex Query date range`)
+    }
+  } else {
+    console.log(`[ETL] TWR: ${result.summary.twr.toFixed(4)}%`)
+    console.warn('[ETL] ⚠️ No daily TWR data points generated — check EQUT section')
+  }
   
   // === Total PnL = NLV - NetDeposited ===
   result.summary.totalPnL = Math.round((result.summary.netLiquidationValue - result.summary.netDeposited) * 100) / 100
@@ -367,16 +383,21 @@ async function pushToFirebase(data) {
   const docRef = doc(fireDb, 'investment_data', 'latest')
   
   try {
-    // Merge daily TWR (keep all historical)
-    const existingDailyTWR = (await (await import('firebase/firestore')).getDoc(docRef)).data()?.dailyTWR || []
+    // Merge daily TWR (keep all historical, new data overwrites same-date entries)
+    const existingDoc = await (await import('firebase/firestore')).getDoc(docRef)
+    const existingData = existingDoc.exists() ? existingDoc.data() : {}
+    
+    const existingDailyTWR = existingData.dailyTWR || []
     const twr_map = new Map()
-    existingDailyTWR.forEach(d => twr_map.set(d.date, d))
-    data.dailyTWR.forEach(d => twr_map.set(d.date, d))
+    existingDailyTWR.forEach(d => twr_map.set(d.date, d))  // existing first
+    data.dailyTWR.forEach(d => twr_map.set(d.date, d))     // new data overwrites
     data.dailyTWR = Array.from(twr_map.values()).sort((a, b) => a.date.localeCompare(b.date))
+    
+    console.log(`[ETL] TWR merge: ${existingDailyTWR.length} existing + ${data.dailyTWR.length - existingDailyTWR.length} new = ${data.dailyTWR.length} total`)
     
     // Merge trades (dedup by date, symbol, type, price)
     const tradeKey = t => `${t.date}-${t.symbol}-${t.type}-${t.price}`
-    const existingTrades = (await (await import('firebase/firestore')).getDoc(docRef)).data()?.trades || []
+    const existingTrades = existingData.trades || []
     const trade_map = new Map()
     existingTrades.forEach(t => trade_map.set(tradeKey(t), t))
     data.trades.forEach(t => trade_map.set(tradeKey(t), t))
