@@ -687,6 +687,11 @@
   cursor: default;
 }
 
+.cat-month-reset {
+  margin-left: 2px;
+  font-size: 10px;
+}
+
 .cat-month-label {
   font-size: 14px;
   font-weight: 700;
@@ -753,6 +758,15 @@
   opacity: 0;
   transform: translateY(10px);
   animation: catRowIn 0.4s ease forwards;
+  cursor: pointer;
+  padding: 6px 8px;
+  border-radius: 8px;
+  margin: 0 -8px;
+  transition: background 0.15s;
+}
+
+.cat-bar-row:hover {
+  background: var(--bg-secondary);
 }
 
 .cat-bar-row:nth-child(1) { animation-delay: 0s; }

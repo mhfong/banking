@@ -46,6 +46,7 @@ const PERIOD_OPTIONS = [
   { label: '90 Days', days: 90 },
   { label: '1 Year', days: 365 },
   { label: 'All', days: null },
+  { label: 'Custom', days: 'custom' },
 ]
 
 const SORT_OPTIONS = [
@@ -104,12 +105,12 @@ export default function Transactions() {
   const [searchPrevPeriod, setSearchPrevPeriod] = useState(null)
 
   // Controls
-  const [period, setPeriod] = useState(() => searchParams.get('from') ? PERIOD_OPTIONS[4] : PERIOD_OPTIONS[1]) // All if URL params, else 30 Days
+  const [period, setPeriod] = useState(() => searchParams.get('from') ? PERIOD_OPTIONS[5] : PERIOD_OPTIONS[1]) // Custom if URL params, else 30 Days
   const [showPeriod, setShowPeriod] = useState(false)
   const [showFilter, setShowFilter] = useState(false)
   const [sortBy, setSortBy] = useState('date') // date | expense
-  const [customDateFrom, setCustomDateFrom] = useState('')
-  const [customDateTo, setCustomDateTo] = useState('')
+  const [customDateFrom, setCustomDateFrom] = useState(() => searchParams.get('from') || '')
+  const [customDateTo, setCustomDateTo] = useState(() => searchParams.get('to') || '')
   const [dateFrom, setDateFrom] = useState(() => searchParams.get('from') || (() => { const d = new Date(); d.setDate(d.getDate() - 29); return toDateStr(d) })())
   const [dateTo, setDateTo] = useState(() => searchParams.get('to') || toDateStr(new Date()))
 
@@ -265,8 +266,9 @@ export default function Transactions() {
   // Init filters when data loads
   useEffect(() => {
     if (allCategories.length > 0 && Object.keys(categoryFilter).length === 0) {
+      const urlCat = searchParams.get('category')
       const init = {}
-      allCategories.forEach(c => { init[c] = true })
+      allCategories.forEach(c => { init[c] = urlCat ? c === urlCat : true })
       setCategoryFilter(init)
     }
   }, [allCategories])

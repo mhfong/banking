@@ -875,6 +875,7 @@ export default function Dashboard() {
                   <button className="cat-month-btn" onClick={() => shiftCatMonth(-1)}><i className="fas fa-chevron-left"></i></button>
                   <span className="cat-month-label">{catMonthLabel}</span>
                   <button className="cat-month-btn" onClick={() => shiftCatMonth(1)}><i className="fas fa-chevron-right"></i></button>
+                  <button className="cat-month-btn cat-month-reset" onClick={() => { const now = new Date(); setCatMonth(`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`) }} title="Back to current month"><i className="fas fa-undo"></i></button>
                 </div>
                 <div className="cat-total-stat cat-total-right">
                   <span className="cat-total-label">MONTH TOTAL / AVERAGE</span>
@@ -898,7 +899,16 @@ export default function Dashboard() {
                   const icon = CAT_ICONS[entry.name] || 'fa-star'
                   const barPct = Math.min(spendPct, 100)
                   return (
-                    <div key={entry.name} className={`cat-bar-row ${isWarning ? 'cat-warning' : ''} ${isOver ? 'cat-over' : ''}`}>
+                    <div key={entry.name} className={`cat-bar-row ${isWarning ? 'cat-warning' : ''} ${isOver ? 'cat-over' : ''}`}
+                      style={{ cursor: 'pointer' }}
+                      onClick={() => {
+                        const [y, m] = catMonth.split('-').map(Number)
+                        const from = `${y}-${String(m).padStart(2,'0')}-01`
+                        const last = new Date(y, m, 0).getDate()
+                        const to = `${y}-${String(m).padStart(2,'0')}-${String(last).padStart(2,'0')}`
+                        navigate(`/transactions?from=${from}&to=${to}&category=${encodeURIComponent(entry.name)}`)
+                      }}
+                    >
                       <div className="cat-bar-icon" style={{ background: color + '20', color }}>
                         <i className={`fas ${icon}`}></i>
                       </div>
