@@ -503,6 +503,7 @@ export default function Dashboard() {
                     actual: Math.round(pastNB),
                     saving: null,
                     trading: null,
+                    _anchor: Math.round(pastNB),
                     isHistory: true
                   })
                 }
@@ -515,6 +516,7 @@ export default function Dashboard() {
                 actual: Math.round(currentNet),
                 saving: Math.round(currentNet),
                 trading: Math.round(currentNet),
+                _anchor: Math.round(currentNet),
                 isHistory: false,
                 isNow: true
               })
@@ -536,6 +538,7 @@ export default function Dashboard() {
                   actual: null,
                   saving: Math.round(balSave),
                   trading: Math.round(balTrade),
+                  _anchor: Math.round(balSave),
                   isHistory: false,
                   isNow: false
                 })
@@ -657,7 +660,7 @@ export default function Dashboard() {
                     </div>
                   </div>
                   <ResponsiveContainer width="100%" height={350}>
-                    <AreaChart data={monthsWithGoals} margin={{ top: 20, right: 30, left: -10, bottom: 5 }}>
+                    <ComposedChart data={monthsWithGoals} margin={{ top: 20, right: 30, left: -10, bottom: 5 }}>
                       <defs>
                         <linearGradient id="projHistGrad" x1="0" y1="0" x2="0" y2="1">
                           <stop offset="0%" stopColor="#539bf5" stopOpacity={0.35} />
@@ -675,11 +678,13 @@ export default function Dashboard() {
                       <CartesianGrid strokeDasharray="3 3" stroke="#444c56" opacity={0.15} vertical={false} />
                       <XAxis dataKey="month" tick={{ fontSize: 10, fill: '#768390' }} axisLine={{ stroke: '#444c56' }} tickLine={false} interval="preserveStartEnd" />
                       <YAxis tick={{ fontSize: 10, fill: '#768390' }} tickFormatter={v => `${(v/1000).toFixed(0)}k`} axisLine={false} tickLine={false} domain={['dataMin - 50000', 'dataMax + 100000']} />
-                      <Tooltip content={<ProjectionTooltip />} />
+                      <Tooltip content={<ProjectionTooltip />} cursor={{ stroke: '#768390', strokeWidth: 1, strokeDasharray: '3 3' }} />
+                      {/* Hidden anchor line for cursor alignment — ensures valid coordinates at every x position */}
+                      <Line type="monotone" dataKey="_anchor" stroke="transparent" strokeWidth={0} dot={false} activeDot={false} legendType="none" isAnimationActive={false} />
                       {/* Historical data area - solid line */}
-                      <Area type="monotone" dataKey="actual" name="Actual" fill="url(#projHistGrad)" stroke="#539bf5" strokeWidth={2.5} dot={false} isAnimationActive={true} animationDuration={1200} />
+                      <Area type="monotone" dataKey="actual" name="Actual" fill="url(#projHistGrad)" stroke="#539bf5" strokeWidth={2.5} dot={false} activeDot={{ r: 4, stroke: '#22272e', strokeWidth: 2, fill: '#539bf5' }} connectNulls={false} isAnimationActive={true} animationDuration={1200} />
                       {/* Future saving area - dashed line for prediction */}
-                      <Area type="monotone" dataKey="saving" name="Saving" fill="url(#projSaveGrad)" stroke="#539bf5" strokeWidth={2} strokeDasharray="6 3" dot={false} isAnimationActive={true} animationDuration={1200} />
+                      <Area type="monotone" dataKey="saving" name="Saving" fill="url(#projSaveGrad)" stroke="#539bf5" strokeWidth={2} strokeDasharray="6 3" dot={false} activeDot={{ r: 4, stroke: '#22272e', strokeWidth: 2, fill: '#539bf5' }} connectNulls={false} isAnimationActive={true} animationDuration={1200} />
                       {/* Future trading area */}
                       <Area type="monotone" dataKey="trading" name="+ Trading" fill="url(#projTradeGrad)" stroke="#57ab5a" strokeWidth={2.5} strokeDasharray="6 3" dot={(props) => {
                         const { payload, cx, cy } = props
@@ -723,7 +728,7 @@ export default function Dashboard() {
                           />
                         )
                       })}
-                    </AreaChart>
+                    </ComposedChart>
                   </ResponsiveContainer>
 
                   {/* Period Controls - below graph */}
