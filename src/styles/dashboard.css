@@ -108,7 +108,7 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(400px, 100%), 1fr));
   gap: 24px;
-  margin-top: 12px;
+  margin-top: 6px;
   margin-bottom: 0;
 }
 
