@@ -152,6 +152,10 @@ export default function Investment() {
   const prevMonth = () => { if (calMonth === 0) { setCalMonth(11); setCalYear(y => y-1) } else setCalMonth(m => m-1) }
   const nextMonth = () => { if (calMonth === 11) { setCalMonth(0); setCalYear(y => y+1) } else setCalMonth(m => m+1) }
 
+  // Increment key on month change to retrigger cell animations
+  const [calAnimKey, setCalAnimKey] = useState(0)
+  useEffect(() => { setCalAnimKey(k => k + 1) }, [calMonth, calYear])
+
   // US market holidays 2025-2026
   const marketHolidays = useMemo(() => new Set([
     // 2025
@@ -358,12 +362,17 @@ export default function Investment() {
           <button className="today-btn" onClick={() => { setCalYear(new Date().getFullYear()); setCalMonth(new Date().getMonth()) }}>Today</button>
         </div>
 
-        <div className="calendar-grid">
+        <div className="calendar-grid" key={calAnimKey}>
           {DAYS.map(d => <div key={d} className="cal-day-header">{d}</div>)}
-          {cells.map((c, i) => c === null ? (
-            <div key={`e${i}`} className="cal-cell empty" />
-          ) : (
-            <div key={c.day} className={`cal-cell ${c.pnl === null ? (c.closed ? 'closed' : '') : c.pnl > 0 ? 'profit' : c.pnl < 0 ? 'loss' : ''} ${c.hasTrades ? 'clickable' : ''} ${`${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(c.day).padStart(2,'0')}` === todayStr ? 'today' : ''} ${c.day === calStats.bestDay && c.pnl > 0 ? 'best-day' : ''} ${c.day === calStats.worstDay && c.pnl < 0 ? 'worst-day' : ''}`}
+          {cells.map((c, i) => {
+            if (c === null) return <div key={`e${i}`} className="cal-cell empty" style={{ opacity: 1, transform: 'none', animation: 'none' }} />
+            // Wave delay: stagger left→right, row by row (15ms per cell)
+            const delay = `${i * 15}ms`
+            return (
+            <div
+              key={c.day}
+              style={{ animationDelay: delay }}
+              className={`cal-cell ${c.pnl === null ? (c.closed ? 'closed' : '') : c.pnl > 0 ? 'profit' : c.pnl < 0 ? 'loss' : ''} ${c.hasTrades ? 'clickable' : ''} ${`${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(c.day).padStart(2,'0')}` === todayStr ? 'today' : ''} ${c.day === calStats.bestDay && c.pnl > 0 ? 'best-day' : ''} ${c.day === calStats.worstDay && c.pnl < 0 ? 'worst-day' : ''}`}
             onClick={() => {
               if (c.hasTrades) {
                 const dateStr = `${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(c.day).padStart(2,'0')}`
@@ -383,7 +392,8 @@ export default function Investment() {
                 </div>
               ) : null}
             </div>
-          ))}
+            )
+          })}
         </div>
 
         {/* Monthly Target Bar */}

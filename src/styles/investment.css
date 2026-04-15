@@ -498,6 +498,35 @@
   min-height: 0;
   position: relative;
   overflow: hidden;
+  opacity: 0;
+  transform: scale(0.85);
+  animation: calCellReveal 0.35s ease forwards;
+}
+
+@keyframes calCellReveal {
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Heat build-up: color transition fires after cell reveals */
+.cal-cell.profit {
+  animation: calCellReveal 0.35s ease forwards, calHeatGreen 0.4s ease forwards;
+}
+
+.cal-cell.loss {
+  animation: calCellReveal 0.35s ease forwards, calHeatRed 0.4s ease forwards;
+}
+
+@keyframes calHeatGreen {
+  0% { background: var(--bg-primary); border-color: transparent; }
+  100% { background: rgba(87, 171, 90, 0.12); border-color: rgba(87, 171, 90, 0.25); }
+}
+
+@keyframes calHeatRed {
+  0% { background: var(--bg-primary); border-color: transparent; }
+  100% { background: rgba(229, 83, 75, 0.12); border-color: rgba(229, 83, 75, 0.25); }
 }
 
 .cal-cell.empty {
@@ -550,14 +579,16 @@
   line-height: 1.3;
 }
 
+/* profit/loss colors handled by calHeatGreen/calHeatRed animations above */
+/* Heat animations use animation-delay from inline style — applied via CSS custom property trick */
 .cal-cell.profit {
-  background: rgba(87, 171, 90, 0.12);
-  border-color: rgba(87, 171, 90, 0.25);
+  animation: calCellReveal 0.35s ease forwards, calHeatGreen 0.4s ease forwards;
+  animation-delay: inherit, inherit;
 }
 
 .cal-cell.loss {
-  background: rgba(229, 83, 75, 0.12);
-  border-color: rgba(229, 83, 75, 0.25);
+  animation: calCellReveal 0.35s ease forwards, calHeatRed 0.4s ease forwards;
+  animation-delay: inherit, inherit;
 }
 
 .cal-day-num {
