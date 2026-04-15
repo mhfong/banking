@@ -5,7 +5,7 @@
 import { readFileSync, writeFileSync } from 'fs'
 import { execSync } from 'child_process'
 import { initializeApp } from 'firebase/app'
-import { getFirestore, collection, getDocs, doc, setDoc, writeBatch } from 'firebase/firestore'
+import { getFirestore, collection, getDocs, doc, setDoc, writeBatch, deleteDoc } from 'firebase/firestore'
 
 const FLEX_TOKEN = process.env.IBKR_TOKEN
 const QUERY_ID = process.env.IBKR_QUERY_ID
@@ -392,56 +392,183 @@ async function pushToFirebase(data) {
   }
 }
 
+// ============================================================
+// DEPOSIT RECONCILIATION — Full history check every run
+// Source of truth: ETL deposits (from IBKR Flex Query)
+// Strategy: Compare per-date totals, only add truly new ones,
+//           remove orphaned records, fix mismatches
+// ============================================================
+
 async function syncDepositsToTransactions(data) {
-  console.log('[ETL] Syncing deposits to transactions collection...')
+  console.log('[ETL] === Deposit Reconciliation Start ===')
+  const { Timestamp, deleteDoc: fbDeleteDoc } = await import('firebase/firestore')
   
   try {
+    // Step 1: Load ALL existing IBKR transactions from Firebase
     const snap = await getDocs(collection(fireDb, 'transactions'))
-    const existingCounts = {}
-    snap.docs.forEach(d => {
-      const txn = d.data()
-      if (txn.paymentMethod === 'IBKR') {
-        const dateStr = typeof txn.date === 'string' ? txn.date : (txn.date?.toDate ? txn.date.toDate().toISOString().slice(0, 10) : String(txn.date))
-        const key = `${dateStr}|${Math.round(txn.amount * 100) / 100}|${txn.type}`
-        existingCounts[key] = (existingCounts[key] || 0) + 1
-      }
+    const existingByDate = {}  // date → [{ id, amount, type }]
+    
+    snap.docs.forEach(docSnap => {
+      const txn = docSnap.data()
+      if (txn.paymentMethod !== 'IBKR') return
+      
+      const dateStr = typeof txn.date === 'string'
+        ? txn.date
+        : (txn.date?.toDate ? txn.date.toDate().toISOString().slice(0, 10) : String(txn.date))
+      
+      if (!existingByDate[dateStr]) existingByDate[dateStr] = []
+      existingByDate[dateStr].push({
+        id: docSnap.id,
+        amount: txn.amount,
+        type: txn.type,
+        description: txn.description
+      })
     })
     
-    const newTxns = []
-    for (const d of (data.rawDeposits || [])) {
-      // Only sync actual deposits (money into IBKR = expense from bank)
-      if (d.amount <= 0) continue
+    // Step 2: Build ETL source of truth map (date → net amount)
+    const etlByDate = {}  // date → amount (positive = deposit, negative = withdrawal)
+    for (const d of data.deposits) {
+      etlByDate[d.date] = d.amount
+    }
+    
+    const allDates = new Set([...Object.keys(etlByDate), ...Object.keys(existingByDate)])
+    const toAdd = []
+    const toDelete = []
+    const issues = []
+    
+    for (const date of [...allDates].sort()) {
+      const etlAmount = etlByDate[date]       // undefined if not in ETL
+      const fbTxns = existingByDate[date] || []
+      const fbNet = fbTxns.reduce((s, t) => s + (t.type === 'expense' ? t.amount : -t.amount), 0)
       
-      const type = 'expense'
-      const key = `${d.date}|${Math.round(d.amount * 100) / 100}|${type}`
-      const fbCount = existingCounts[key] || 0
-      
-      if (fbCount === 0) {
-        const { Timestamp } = await import('firebase/firestore')
-        newTxns.push({
-          date: d.date,
-          description: 'IBKR Deposit',
-          amount: Math.abs(d.amount),
-          type: type,
+      // Case 1: ETL has it, Firebase doesn't → add new transaction
+      if (etlAmount !== undefined && fbTxns.length === 0) {
+        const type = etlAmount > 0 ? 'expense' : 'income'
+        toAdd.push({
+          date,
+          description: etlAmount > 0 ? 'IBKR Deposit' : 'IBKR Withdrawal',
+          amount: Math.abs(etlAmount),
+          type,
           category: 'Investment',
           paymentMethod: 'IBKR',
-          createdAt: Timestamp.fromDate(new Date(d.date + 'T00:00:00')),
+          createdAt: Timestamp.fromDate(new Date(date + 'T00:00:00')),
           userId: OWNER_UID,
           excludeFromChart: true
         })
+        console.log(`[ETL] + NEW: ${date} $${etlAmount} (not in Firebase)`)
+        continue
       }
+      
+      // Case 2: Firebase has it, ETL doesn't → orphaned, delete all
+      if (etlAmount === undefined && fbTxns.length > 0) {
+        for (const t of fbTxns) {
+          toDelete.push(t.id)
+          console.log(`[ETL] - ORPHAN: ${date} $${t.amount} ${t.type} (not in IBKR, deleting ${t.id})`)
+        }
+        continue
+      }
+      
+      // Case 3: Both exist — check if totals match
+      if (Math.abs(fbNet - etlAmount) < 0.02) {
+        // Totals match — check for duplicates within this date
+        // (e.g. two $5k records when there should be one $10k)
+        const seenKeys = {}
+        for (const t of fbTxns) {
+          const key = `${t.amount}|${t.type}`
+          seenKeys[key] = (seenKeys[key] || 0) + 1
+          if (seenKeys[key] > 1) {
+            // Duplicate record — but total still matches, so it's fine
+            // (could be two separate deposits of same amount on same day)
+            // Only flag if count > 2
+            if (seenKeys[key] > 2) {
+              issues.push(`⚠️ ${date}: ${seenKeys[key]}x same record ($${t.amount} ${t.type})`)
+            }
+          }
+        }
+        continue  // All good
+      }
+      
+      // Case 4: Both exist but totals DON'T match → reconcile
+      console.warn(`[ETL] ⚠️ MISMATCH ${date}: ETL=$${etlAmount.toFixed(2)} vs FB=$${fbNet.toFixed(2)}`)
+      
+      // Delete all existing IBKR txns for this date and re-add the correct one
+      for (const t of fbTxns) {
+        toDelete.push(t.id)
+        console.log(`[ETL] - REMOVE (mismatch): ${date} $${t.amount} ${t.type} (${t.id})`)
+      }
+      
+      const type = etlAmount > 0 ? 'expense' : 'income'
+      toAdd.push({
+        date,
+        description: etlAmount > 0 ? 'IBKR Deposit' : 'IBKR Withdrawal',
+        amount: Math.abs(etlAmount),
+        type,
+        category: 'Investment',
+        paymentMethod: 'IBKR',
+        createdAt: Timestamp.fromDate(new Date(date + 'T00:00:00')),
+        userId: OWNER_UID,
+        excludeFromChart: true
+      })
+      console.log(`[ETL] + RE-ADD (mismatch): ${date} $${etlAmount}`)
     }
     
-    if (newTxns.length > 0) {
+    // Step 3: Execute deletions
+    if (toDelete.length > 0) {
+      console.log(`[ETL] Deleting ${toDelete.length} orphaned/mismatched transactions...`)
+      for (const id of toDelete) {
+        await fbDeleteDoc(doc(fireDb, 'transactions', id))
+      }
+      console.log(`[ETL] ✅ Deleted ${toDelete.length} records`)
+    }
+    
+    // Step 4: Execute additions
+    if (toAdd.length > 0) {
+      console.log(`[ETL] Adding ${toAdd.length} new transactions...`)
       const batch = writeBatch(fireDb)
-      for (const t of newTxns) {
+      for (const t of toAdd) {
         batch.set(doc(collection(fireDb, 'transactions')), t)
       }
       await batch.commit()
-      console.log(`[ETL] Added ${newTxns.length} deposits to transactions`)
+      console.log(`[ETL] ✅ Added ${toAdd.length} records`)
     }
+    
+    // Step 5: Final verification
+    if (toDelete.length === 0 && toAdd.length === 0) {
+      console.log('[ETL] ✅ All IBKR transactions already in sync — no changes needed')
+    }
+    
+    // Step 6: Net balance verification
+    const snap2 = await getDocs(collection(fireDb, 'transactions'))
+    let verifyNet = 0, verifyCount = 0
+    snap2.docs.forEach(docSnap => {
+      const txn = docSnap.data()
+      if (txn.paymentMethod === 'IBKR') {
+        verifyCount++
+        verifyNet += (txn.type === 'expense' ? txn.amount : -txn.amount)
+      }
+    })
+    
+    const etlNet = data.deposits.reduce((s, d) => s + d.amount, 0)
+    const balanceMatch = Math.abs(verifyNet - etlNet) < 1
+    
+    console.log(`[ETL] Post-sync verification:`)  
+    console.log(`  IBKR txn count: ${verifyCount}`)
+    console.log(`  Firebase net: $${verifyNet.toFixed(2)}`)
+    console.log(`  ETL net:      $${etlNet.toFixed(2)}`)
+    console.log(`  Match: ${balanceMatch ? '✅ YES' : '❌ NO — MANUAL REVIEW REQUIRED'}`)
+    
+    if (!balanceMatch) {
+      throw new Error(`Net balance mismatch after sync! Firebase=$${verifyNet.toFixed(2)} vs ETL=$${etlNet.toFixed(2)}`)
+    }
+    
+    if (issues.length > 0) {
+      console.warn('[ETL] Issues found (non-fatal):', issues)
+    }
+    
+    console.log('[ETL] === Deposit Reconciliation Complete ===')
   } catch (e) {
     console.error('[ETL] Deposit sync error:', e.message)
+    throw e  // Fail the pipeline if sync is broken
   }
 }
 
@@ -462,8 +589,10 @@ async function main() {
     // Process
     const data = processData(sections)
     
-    // Push
+    // Push investment data
     await pushToFirebase(data)
+    
+    // Reconcile deposits (full history check, dedup, add new only)
     await syncDepositsToTransactions(data)
     
     console.log('=== ETL Complete ===')
