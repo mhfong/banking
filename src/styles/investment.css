@@ -703,7 +703,7 @@
   }
 
   .calendar-grid {
-    gap: 2px;
+    gap: 1px;
   }
 }
 
@@ -713,6 +713,10 @@
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
+  }
+
+  .calendar-grid {
+    gap: 1px;
   }
 
   .period-toggles::-webkit-scrollbar {
