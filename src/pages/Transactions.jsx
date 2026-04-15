@@ -582,7 +582,7 @@ export default function Transactions() {
               </span>
             </div>
             {group.txns.map((t, ti) => (
-              <div key={t.id} className="txn-item" style={{ animationDelay: `${0.14 + (prevCount + ti) * 0.04}s`, opacity: 0, animation: 'txnCardIn 0.4s ease forwards' }} onClick={() => handleEdit(t)}>
+              <div key={t.id} className="txn-item" style={{ animationDelay: `${0.14 + (prevCount + ti) * 0.04}s`, opacity: 0, animation: 'txnRowIn 0.4s ease forwards' }} onClick={() => handleEdit(t)}>
                 <div className="txn-item-left">
                   <div className="txn-icon" style={{ background: getCategoryColor(t.category) + '20', color: getCategoryColor(t.category) }}>
                     <i className={`fas ${getCategoryIcon(t.category)}`}></i>
