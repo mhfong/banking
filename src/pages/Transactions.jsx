@@ -187,13 +187,19 @@ export default function Transactions() {
     return unsub
   }, [user])
 
-  // Load last updated timestamp from Firestore
+  // Load last updated timestamp from Firestore (with localStorage cache for instant display)
   useEffect(() => {
     if (!user) return
+    // Show cached value immediately
+    const cached = localStorage.getItem(`txn_lastUpdated_${user.uid}`)
+    if (cached) setLastUpdated(new Date(cached))
+    // Then fetch fresh from Firestore
     async function loadLastUpdated() {
       const snap = await getDoc(doc(db, 'userSettings', user.uid))
       if (snap.exists() && snap.data().transactionsLastUpdated) {
-        setLastUpdated(new Date(snap.data().transactionsLastUpdated))
+        const ts = snap.data().transactionsLastUpdated
+        setLastUpdated(new Date(ts))
+        localStorage.setItem(`txn_lastUpdated_${user.uid}`, ts)
       }
     }
     loadLastUpdated()
@@ -202,7 +208,9 @@ export default function Transactions() {
   async function saveLastUpdated() {
     const now = new Date()
     setLastUpdated(now)
-    await setDoc(doc(db, 'userSettings', user.uid), { transactionsLastUpdated: now.toISOString() }, { merge: true })
+    const iso = now.toISOString()
+    localStorage.setItem(`txn_lastUpdated_${user.uid}`, iso)
+    await setDoc(doc(db, 'userSettings', user.uid), { transactionsLastUpdated: iso }, { merge: true })
   }
 
   // Close dropdowns on outside click
@@ -560,16 +568,19 @@ export default function Transactions() {
             <p>No transactions found</p>
           </div>
         )}
-        {visibleGroups.map((group, i) => (
-          <div key={group.date} className="txn-day-group" style={{ animationDelay: `${0.24 + i * 0.05}s`, opacity: 0, animation: 'txnCardIn 0.5s ease forwards' }}>
-            <div className="txn-day-header">
+        {visibleGroups.map((group, gi) => {
+          // count items before this group for global stagger index
+          const prevCount = visibleGroups.slice(0, gi).reduce((s, g) => s + g.txns.length, 0)
+          return (
+          <div key={group.date} className="txn-day-group">
+            <div className="txn-day-header" style={{ animationDelay: `${0.1 + gi * 0.04}s`, opacity: 0, animation: 'txnCardIn 0.4s ease forwards' }}>
               <span className="txn-day-date">{formatDateLong(group.date)}</span>
               <span className={`txn-day-total ${sortBy === 'expense' ? 'negative' : group.dailyTotal >= 0 ? 'positive' : 'negative'}`}>
                 {sortBy === 'expense' ? mask('-' + fmtAmount(group.dailyExpense)) : mask((group.dailyTotal >= 0 ? '+' : '-') + fmtAmount(Math.abs(group.dailyTotal)))}
               </span>
             </div>
-            {group.txns.map(t => (
-              <div key={t.id} className="txn-item" onClick={() => handleEdit(t)}>
+            {group.txns.map((t, ti) => (
+              <div key={t.id} className="txn-item" style={{ animationDelay: `${0.14 + (prevCount + ti) * 0.04}s`, opacity: 0, animation: 'txnCardIn 0.4s ease forwards' }} onClick={() => handleEdit(t)}>
                 <div className="txn-item-left">
                   <div className="txn-icon" style={{ background: getCategoryColor(t.category) + '20', color: getCategoryColor(t.category) }}>
                     <i className={`fas ${getCategoryIcon(t.category)}`}></i>
@@ -591,7 +602,8 @@ export default function Transactions() {
               </div>
             ))}
           </div>
-        ))}
+          )
+        })}
       </div>
 
       {/* Infinite Scroll */}
