@@ -730,10 +730,17 @@ export default function Dashboard() {
                             label={({ viewBox }) => {
                               const labelText = `Goal ${i + 1}`
                               const textW = labelText.length * 6.5 + 12
+                              const boxH = 18
+                              const boxY = viewBox.y - 24
+                              const flagPoleX = viewBox.x + 4 + textW / 2
                               return (
                                 <g>
-                                  <rect x={viewBox.x + 4} y={viewBox.y - 18} width={textW} height={16} rx={3} fill={gm.color} />
-                                  <text x={viewBox.x + 4 + textW / 2} y={viewBox.y - 7} textAnchor="middle" fill="#fff" fontSize={10} fontWeight={600}>{labelText}</text>
+                                  {/* Flag box */}
+                                  <rect x={viewBox.x + 4} y={boxY} width={textW} height={boxH} rx={3} fill={gm.color} />
+                                  {/* Flag pointer triangle pointing down to line */}
+                                  <polygon points={`${flagPoleX},${boxY + boxH} ${flagPoleX - 4},${viewBox.y - 1} ${flagPoleX + 4},${viewBox.y - 1}`} fill={gm.color} />
+                                  {/* Text */}
+                                  <text x={flagPoleX} y={boxY + 12} textAnchor="middle" fill="#fff" fontSize={10} fontWeight={600}>{labelText}</text>
                                 </g>
                               )
                             }}
