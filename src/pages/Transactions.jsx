@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo, useRef } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { useSearchParams, useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import { useMask } from '../contexts/MaskContext'
 import { useHotkeys } from '../hooks/useHotkeys'
@@ -99,6 +99,8 @@ export default function Transactions() {
   const { user } = useAuth()
   const { mask } = useMask()
   const [searchParams] = useSearchParams()
+  const navigate = useNavigate()
+  const cameFromDashboard = searchParams.get('category')
   const [transactions, setTransactions] = useState([])
   const [lastUpdated, setLastUpdated] = useState(null)
   const [searchQuery, setSearchQuery] = useState('')
@@ -464,7 +466,10 @@ export default function Transactions() {
     <div className="txn-page">
       {/* Top bar */}
       <div className="txn-top-bar">
-        <h1><i className="fas fa-exchange-alt"></i> Transactions</h1>
+        <div className="txn-title-row">
+          {cameFromDashboard && <button className="txn-back-btn" onClick={() => navigate('/dashboard')}><i className="fas fa-arrow-left"></i></button>}
+          <h1><i className="fas fa-exchange-alt"></i> Transactions</h1>
+        </div>
         <MaskToggle />
       </div>
       {lastUpdated && <div className="txn-last-updated">Last Updated: {lastUpdated.toLocaleString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false })}</div>}
