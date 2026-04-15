@@ -284,10 +284,10 @@ export default function Investment() {
       </div>
 
       <div className="chart-section" style={{ animationDelay: '0.32s' }}>
+        <h3 className="chart-section-title"><i className="fas fa-chart-area"></i> Time-Weighted Return</h3>
         <div className={`chart-return ${(summary.twr || 0) >= 0 ? 'positive' : 'negative'}`}>
           {masked ? '***' : fmtPct(summary.twr || 0)}
         </div>
-        <div className="chart-subtitle">Time-weighted return</div>
 
         <div className="chart-container">
           <ResponsiveContainer width="100%" height={300}>

@@ -150,16 +150,29 @@
   animation: statCardIn 0.5s ease forwards;
 }
 
+.chart-section-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.chart-section-title i {
+  margin-right: 8px;
+  color: var(--text-secondary);
+}
+
 .chart-return {
   font-size: 32px;
   font-weight: 800;
   font-variant-numeric: tabular-nums;
-  margin-bottom: 4px;
+  margin-bottom: 16px;
 }
 
 .chart-return.positive { color: var(--green); }
 .chart-return.negative { color: var(--red); }
 
+/* chart-subtitle kept for backwards compat */
 .chart-subtitle {
   font-size: 14px;
   color: var(--text-secondary);
