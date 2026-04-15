@@ -295,8 +295,13 @@ export default function Transactions() {
     let filtered = transactions
 
     // Period filter
-    if (dateFrom) filtered = filtered.filter(t => t._dateStr >= dateFrom)
-    if (dateTo) filtered = filtered.filter(t => t._dateStr <= dateTo)
+    if (period.days === 'custom') {
+      if (customDateFrom) filtered = filtered.filter(t => t._dateStr >= customDateFrom)
+      if (customDateTo) filtered = filtered.filter(t => t._dateStr <= customDateTo)
+    } else if (dateCutoff) {
+      filtered = filtered.filter(t => t._dateStr >= dateCutoff)
+    }
+    // period.days === null → All, no date filter applied
 
     // Type filter
     if (!typeFilter.income) filtered = filtered.filter(t => t.type !== 'income')
