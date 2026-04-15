@@ -376,68 +376,6 @@ export default function Dashboard() {
 
           {/* Charts Row */}
           <div className="charts-grid">
-          {/* Monthly Income vs Expense Chart */}
-          <div className="chart-card chart-animated">
-            <h3><i className="fas fa-chart-bar"></i> Monthly Income vs Expenses</h3>
-            <ResponsiveContainer width="100%" height={300}>
-              <ComposedChart data={stats.monthlyData} margin={{ top: 10, right: 10, left: -30, bottom: 5 }}>
-                <defs>
-                  <linearGradient id="expenseGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#e5534b" stopOpacity={0.9} />
-                    <stop offset="100%" stopColor="#e5534b" stopOpacity={0.4} />
-                  </linearGradient>
-                  <linearGradient id="incomeGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#57ab5a" stopOpacity={0.3} />
-                    <stop offset="100%" stopColor="#57ab5a" stopOpacity={0.02} />
-                  </linearGradient>
-                </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#444c56" opacity={0.15} vertical={false} />
-                <XAxis dataKey="monthLabel" tick={{ fontSize: 11, fill: '#768390' }} axisLine={{ stroke: '#444c56' }} tickLine={false} />
-                <YAxis tick={{ fontSize: 11, fill: '#768390' }} tickFormatter={v => `${(v/1000).toFixed(0)}k`} axisLine={false} tickLine={false} />
-                <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(83, 155, 245, 0.06)' }} />
-                <Area type="monotone" dataKey="income" name="Income" fill="url(#incomeGrad)" stroke="none" />
-                <Bar dataKey="expense" name="Expense" fill="url(#expenseGrad)" radius={[6, 6, 0, 0]} cursor="pointer" onClick={(data) => setSelectedMonth(prev => prev === data.month ? null : data.month)} animationDuration={800} animationEasing="ease-out" />
-                <Line type="monotone" dataKey="income" name="Income" stroke="#57ab5a" strokeWidth={2.5} dot={{ r: 3, fill: '#57ab5a', strokeWidth: 0 }} activeDot={{ r: 5, stroke: '#22272e', strokeWidth: 2 }} animationDuration={1000} />
-                <ReferenceLine y={stats.avgExpense} stroke="#e5534b" strokeDasharray="4 4" strokeWidth={1} label={{ value: 'Avg', fill: '#e5534b', fontSize: 10, position: 'right' }} />
-              </ComposedChart>
-            </ResponsiveContainer>
-            {monthBreakdown && (
-              <div className="month-breakdown">
-                <div className="breakdown-header">
-                  <h3><i className="fas fa-calendar-alt"></i> {monthBreakdown.month} Breakdown</h3>
-                  <button className="breakdown-close" onClick={() => setSelectedMonth(null)}><i className="fas fa-times"></i></button>
-                </div>
-                <div className="breakdown-summary">
-                  <div className="breakdown-stat"><span className="breakdown-label">Income</span><span className="breakdown-value positive">{mask(fmt(monthBreakdown.totalIncome))}</span></div>
-                  <div className="breakdown-stat"><span className="breakdown-label">Expenses</span><span className="breakdown-value negative">{mask(fmt(monthBreakdown.totalExpense))}</span></div>
-                  <div className="breakdown-stat"><span className="breakdown-label">Net</span><span className="breakdown-value" style={{ color: monthBreakdown.totalIncome - monthBreakdown.totalExpense >= 0 ? 'var(--green)' : 'var(--red)' }}>{mask((monthBreakdown.totalIncome - monthBreakdown.totalExpense >= 0 ? '+' : '-') + fmt(monthBreakdown.totalIncome - monthBreakdown.totalExpense))}</span></div>
-                </div>
-                <div className="breakdown-cats">
-                  {monthBreakdown.categories.map((c, i) => (
-                    <div key={c.name} className="breakdown-cat-row">
-                      <div className="breakdown-cat-bar-wrap">
-                        <span className="breakdown-cat-name">{c.name}</span>
-                        <div className="breakdown-cat-bar" style={{ width: `${Math.max(5, Math.round(c.value / monthBreakdown.totalExpense * 100))}%`, background: CAT_COLORS[c.name] || '#768390' }} />
-                      </div>
-                      <span className="breakdown-cat-amount">{mask(fmt(c.value))}</span>
-                    </div>
-                  ))}
-                </div>
-                <button className="breakdown-details-btn" onClick={() => {
-                  const fullMonth = '20' + selectedMonth
-                  const [y, m] = fullMonth.split('-')
-                  const from = `${y}-${m}-01`
-                  const lastDay = new Date(parseInt(y), parseInt(m), 0).getDate()
-                  const to = `${y}-${m}-${String(lastDay).padStart(2, '0')}`
-                  navigate(`/transactions?from=${from}&to=${to}`)
-                }}>
-                  <i className="fas fa-external-link-alt"></i> View Details
-                </button>
-              </div>
-            )}
-          </div>
-          </div>
-
           {/* Net Balance Projection */}
           <div className="chart-card chart-animated proj-fintech-card" style={{ animationDelay: '0.2s' }}>
             <div className="proj-fintech-header">
@@ -864,6 +802,68 @@ export default function Dashboard() {
               )
             })()}
           </div>
+          {/* Monthly Income vs Expense Chart */}
+          <div className="chart-card chart-animated">
+            <h3><i className="fas fa-chart-bar"></i> Monthly Income vs Expenses</h3>
+            <ResponsiveContainer width="100%" height={300}>
+              <ComposedChart data={stats.monthlyData} margin={{ top: 10, right: 10, left: -30, bottom: 5 }}>
+                <defs>
+                  <linearGradient id="expenseGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#e5534b" stopOpacity={0.9} />
+                    <stop offset="100%" stopColor="#e5534b" stopOpacity={0.4} />
+                  </linearGradient>
+                  <linearGradient id="incomeGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#57ab5a" stopOpacity={0.3} />
+                    <stop offset="100%" stopColor="#57ab5a" stopOpacity={0.02} />
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" stroke="#444c56" opacity={0.15} vertical={false} />
+                <XAxis dataKey="monthLabel" tick={{ fontSize: 11, fill: '#768390' }} axisLine={{ stroke: '#444c56' }} tickLine={false} />
+                <YAxis tick={{ fontSize: 11, fill: '#768390' }} tickFormatter={v => `${(v/1000).toFixed(0)}k`} axisLine={false} tickLine={false} />
+                <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(83, 155, 245, 0.06)' }} />
+                <Area type="monotone" dataKey="income" name="Income" fill="url(#incomeGrad)" stroke="none" />
+                <Bar dataKey="expense" name="Expense" fill="url(#expenseGrad)" radius={[6, 6, 0, 0]} cursor="pointer" onClick={(data) => setSelectedMonth(prev => prev === data.month ? null : data.month)} animationDuration={800} animationEasing="ease-out" />
+                <Line type="monotone" dataKey="income" name="Income" stroke="#57ab5a" strokeWidth={2.5} dot={{ r: 3, fill: '#57ab5a', strokeWidth: 0 }} activeDot={{ r: 5, stroke: '#22272e', strokeWidth: 2 }} animationDuration={1000} />
+                <ReferenceLine y={stats.avgExpense} stroke="#e5534b" strokeDasharray="4 4" strokeWidth={1} label={{ value: 'Avg', fill: '#e5534b', fontSize: 10, position: 'right' }} />
+              </ComposedChart>
+            </ResponsiveContainer>
+            {monthBreakdown && (
+              <div className="month-breakdown">
+                <div className="breakdown-header">
+                  <h3><i className="fas fa-calendar-alt"></i> {monthBreakdown.month} Breakdown</h3>
+                  <button className="breakdown-close" onClick={() => setSelectedMonth(null)}><i className="fas fa-times"></i></button>
+                </div>
+                <div className="breakdown-summary">
+                  <div className="breakdown-stat"><span className="breakdown-label">Income</span><span className="breakdown-value positive">{mask(fmt(monthBreakdown.totalIncome))}</span></div>
+                  <div className="breakdown-stat"><span className="breakdown-label">Expenses</span><span className="breakdown-value negative">{mask(fmt(monthBreakdown.totalExpense))}</span></div>
+                  <div className="breakdown-stat"><span className="breakdown-label">Net</span><span className="breakdown-value" style={{ color: monthBreakdown.totalIncome - monthBreakdown.totalExpense >= 0 ? 'var(--green)' : 'var(--red)' }}>{mask((monthBreakdown.totalIncome - monthBreakdown.totalExpense >= 0 ? '+' : '-') + fmt(monthBreakdown.totalIncome - monthBreakdown.totalExpense))}</span></div>
+                </div>
+                <div className="breakdown-cats">
+                  {monthBreakdown.categories.map((c, i) => (
+                    <div key={c.name} className="breakdown-cat-row">
+                      <div className="breakdown-cat-bar-wrap">
+                        <span className="breakdown-cat-name">{c.name}</span>
+                        <div className="breakdown-cat-bar" style={{ width: `${Math.max(5, Math.round(c.value / monthBreakdown.totalExpense * 100))}%`, background: CAT_COLORS[c.name] || '#768390' }} />
+                      </div>
+                      <span className="breakdown-cat-amount">{mask(fmt(c.value))}</span>
+                    </div>
+                  ))}
+                </div>
+                <button className="breakdown-details-btn" onClick={() => {
+                  const fullMonth = '20' + selectedMonth
+                  const [y, m] = fullMonth.split('-')
+                  const from = `${y}-${m}-01`
+                  const lastDay = new Date(parseInt(y), parseInt(m), 0).getDate()
+                  const to = `${y}-${m}-${String(lastDay).padStart(2, '0')}`
+                  navigate(`/transactions?from=${from}&to=${to}`)
+                }}>
+                  <i className="fas fa-external-link-alt"></i> View Details
+                </button>
+              </div>
+            )}
+          </div>
+          </div>
+
 
 
             {/* Expense by Category */}
