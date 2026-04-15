@@ -101,6 +101,7 @@ export default function Transactions() {
   const [transactions, setTransactions] = useState([])
   const [lastUpdated, setLastUpdated] = useState(null)
   const [searchQuery, setSearchQuery] = useState('')
+  const [searchPrevPeriod, setSearchPrevPeriod] = useState(null)
 
   // Controls
   const [period, setPeriod] = useState(() => searchParams.get('from') ? PERIOD_OPTIONS[4] : PERIOD_OPTIONS[1]) // All if URL params, else 30 Days
@@ -527,9 +528,22 @@ export default function Transactions() {
             type="text"
             placeholder="Search transactions..."
             value={searchQuery}
-            onChange={e => { setSearchQuery(e.target.value); setVisibleCount(PAGE_SIZE) }}
+            onChange={e => {
+              const val = e.target.value
+              setSearchQuery(val)
+              setVisibleCount(PAGE_SIZE)
+              if (val.length === 1 && searchQuery.length === 0) {
+                // First character typed — switch to All and save current period
+                setSearchPrevPeriod(period)
+                setPeriod(PERIOD_OPTIONS[4])
+              } else if (val.length === 0 && searchQuery.length > 0 && searchPrevPeriod) {
+                // Cleared — restore previous period
+                setPeriod(searchPrevPeriod)
+                setSearchPrevPeriod(null)
+              }
+            }}
           />
-          {searchQuery && <button className="txn-search-clear" onClick={() => setSearchQuery('')}><i className="fas fa-times"></i></button>}
+          {searchQuery && <button className="txn-search-clear" onClick={() => { setSearchQuery(''); if (searchPrevPeriod) { setPeriod(searchPrevPeriod); setSearchPrevPeriod(null) } }}><i className="fas fa-times"></i></button>}
         </div>
       </div>
 
