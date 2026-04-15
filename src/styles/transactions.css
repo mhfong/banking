@@ -160,6 +160,9 @@
   border-radius: 16px;
   overflow: hidden;
   margin-bottom: 16px;
+  opacity: 0;
+  transform: translateY(15px);
+  animation: txnCardIn 0.5s ease forwards;
 }
 
 .txn-date-row {
@@ -228,6 +231,8 @@
   flex-direction: column;
   gap: 2px;
   align-items: flex-start;
+  opacity: 0;
+  animation: txnCardIn 0.5s ease forwards;
 }
 
 .txn-stat-item.txn-stat-right {
@@ -655,6 +660,13 @@
 @keyframes txnFadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
+}
+
+@keyframes txnCardIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .txn-page .filter-panel-header {

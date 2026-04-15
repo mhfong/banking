@@ -497,7 +497,7 @@ export default function Transactions() {
       </div>
 
       {/* Summary bar */}
-      <div className="txn-filter-card">
+      <div className="txn-filter-card" style={{ animationDelay: '0s' }}>
         {/* Date range row */}
         <div className="txn-date-row">
           <i className="fas fa-calendar-alt txn-cal-icon"></i>
@@ -513,12 +513,12 @@ export default function Transactions() {
 
         {/* Stats row */}
         <div className="txn-stats-row">
-          <div className="txn-stat-item">
+          <div className="txn-stat-item" style={{ animationDelay: '0.08s' }}>
             <span className="txn-stat-num">{totalCount}</span>
             <span className="txn-stat-label">transactions</span>
           </div>
           <div className="txn-stat-sep" />
-          <div className="txn-stat-item txn-stat-right">
+          <div className="txn-stat-item txn-stat-right" style={{ animationDelay: '0.16s' }}>
             <span className="txn-stat-label">NET FLOW</span>
             <span className={`txn-stat-amount ${netTotal >= 0 ? 'positive' : 'negative'}`}>{mask((netTotal >= 0 ? '+' : '') + fmtAmount(netTotal))}</span>
           </div>
@@ -560,8 +560,8 @@ export default function Transactions() {
             <p>No transactions found</p>
           </div>
         )}
-        {visibleGroups.map(group => (
-          <div key={group.date} className="txn-day-group">
+        {visibleGroups.map((group, i) => (
+          <div key={group.date} className="txn-day-group" style={{ animationDelay: `${0.24 + i * 0.05}s`, opacity: 0, animation: 'txnCardIn 0.5s ease forwards' }}>
             <div className="txn-day-header">
               <span className="txn-day-date">{formatDateLong(group.date)}</span>
               <span className={`txn-day-total ${sortBy === 'expense' ? 'negative' : group.dailyTotal >= 0 ? 'positive' : 'negative'}`}>
