@@ -143,7 +143,6 @@
     padding: 0;
     flex: none;
     order: 2;
-    margin-left: 0;
     gap: 0;
     overflow: visible;
   }
@@ -155,7 +154,7 @@
   .nav-item {
     flex: none;
     flex-direction: column;
-    padding: 5px 16px 6px;
+    padding: 5px 12px 6px;
     gap: 2px;
     justify-content: center;
     align-items: center;
