@@ -762,16 +762,17 @@
   padding: 6px 8px;
   border-radius: 8px;
   margin: 0 -8px;
-  transition: background 0.15s, transform 0.15s;
+  border: 1px solid transparent;
+  transition: border-color 0.15s, transform 0.15s;
   position: relative;
 }
 
 .cat-bar-row::after {
-  content: '\f061'; /* fa-arrow-right */
+  content: '\f061';
   font-family: 'Font Awesome 6 Free';
   font-weight: 900;
   font-size: 10px;
-  color: var(--text-secondary);
+  color: var(--accent, #539bf5);
   opacity: 0;
   margin-left: auto;
   flex-shrink: 0;
@@ -780,7 +781,7 @@
 }
 
 .cat-bar-row:hover {
-  background: rgba(83, 155, 245, 0.08);
+  border-color: rgba(83, 155, 245, 0.4);
   transform: translateX(3px) translateY(0);
 }
 
@@ -790,7 +791,7 @@
 }
 
 .cat-bar-row:active {
-  background: rgba(83, 155, 245, 0.15);
+  border-color: rgba(83, 155, 245, 0.7);
   transform: translateX(1px) translateY(0);
 }
 
