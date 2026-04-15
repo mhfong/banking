@@ -823,13 +823,13 @@
   }
 
   .txn-back-top {
-    bottom: calc(128px + env(safe-area-inset-bottom));
-    right: 16px;
+    bottom: calc(130px + env(safe-area-inset-bottom));
+    right: 20px;
   }
 
   .txn-back-btn {
-    bottom: calc(178px + env(safe-area-inset-bottom));
-    right: 16px;
+    bottom: calc(182px + env(safe-area-inset-bottom));
+    right: 20px;
   }
 }
 
