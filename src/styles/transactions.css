@@ -20,7 +20,7 @@
 .txn-back-btn {
   position: fixed;
   bottom: 140px;
-  right: 24px;
+  right: 32px;
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -539,7 +539,7 @@
 .txn-back-top {
   position: fixed;
   bottom: 90px;
-  right: 24px;
+  right: 32px;
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -850,12 +850,12 @@
 
   .txn-back-top {
     bottom: calc(130px + env(safe-area-inset-bottom));
-    right: 16px;
+    right: 21px;
   }
 
   .txn-back-btn {
-    bottom: calc(200px + env(safe-area-inset-bottom));
-    right: 20px;
+    bottom: calc(192px + env(safe-area-inset-bottom));
+    right: 21px;
   }
 }
 
