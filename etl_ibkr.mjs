@@ -426,17 +426,27 @@ async function pushToFirebase(data) {
   const docRef = doc(fireDb, 'investment_data', 'latest')
   
   try {
-    // Merge daily TWR (keep all historical, new data overwrites same-date entries)
+    // Merge daily TWR:
+    // New ETL data is the source of truth for all dates it covers.
+    // Only keep Firebase entries for dates BEFORE the earliest new data point
+    // (historical data from previous Flex Query windows).
     const existingDoc = await (await import('firebase/firestore')).getDoc(docRef)
     const existingData = existingDoc.exists() ? existingDoc.data() : {}
     
     const existingDailyTWR = existingData.dailyTWR || []
-    const twr_map = new Map()
-    existingDailyTWR.forEach(d => twr_map.set(d.date, d))  // existing first
-    data.dailyTWR.forEach(d => twr_map.set(d.date, d))     // new data overwrites
-    data.dailyTWR = Array.from(twr_map.values()).sort((a, b) => a.date.localeCompare(b.date))
+    const newDates = new Set(data.dailyTWR.map(d => d.date))
+    const earliestNewDate = data.dailyTWR.length ? data.dailyTWR[0].date : null
     
-    console.log(`[ETL] TWR merge: ${existingDailyTWR.length} existing + ${data.dailyTWR.length - existingDailyTWR.length} new = ${data.dailyTWR.length} total`)
+    // Keep old entries only if they're before our new data range
+    // (they were calculated correctly in their original run)
+    const historicalTWR = earliestNewDate 
+      ? existingDailyTWR.filter(d => d.date < earliestNewDate)
+      : []
+    
+    // Combine: historical (pre-window) + new (full recalculated chain)
+    data.dailyTWR = [...historicalTWR, ...data.dailyTWR]
+    
+    console.log(`[ETL] TWR merge: ${historicalTWR.length} historical + ${data.dailyTWR.length - historicalTWR.length} new = ${data.dailyTWR.length} total`)
     
     // Merge trades (dedup by date, symbol, type, price)
     const tradeKey = t => `${t.date}-${t.symbol}-${t.type}-${t.price}`
@@ -449,6 +459,16 @@ async function pushToFirebase(data) {
     // Push to Firestore (exclude rawDeposits — internal use only)
     const { rawDeposits, ...firebaseData } = data
     await setDoc(docRef, firebaseData)
+    
+    // Post-push verification: ensure dailyTWR has latest data point
+    const verifyDoc = await (await import('firebase/firestore')).getDoc(docRef)
+    const verifyData = verifyDoc.data()
+    const verifyLatest = verifyData?.dailyTWR?.[verifyData.dailyTWR.length - 1]
+    if (verifyLatest) {
+      console.log(`[ETL] ✅ Firebase verified: ${verifyData.dailyTWR.length} TWR points, latest: ${verifyLatest.date} (${verifyLatest.cumulative}%)`)
+    } else {
+      console.error('[ETL] ❌ Firebase verification FAILED: dailyTWR is empty after push!')
+    }
     console.log('[ETL] Pushed to Firestore')
   } catch (e) {
     console.error('[ETL] Firebase error:', e.message)

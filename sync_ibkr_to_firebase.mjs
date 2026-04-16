@@ -24,12 +24,22 @@ async function pushToFirebase() {
     const snap = await getDoc(docRef)
     let remoteData = snap.exists() ? snap.data() : { dailyPnL: [], trades: [], summary: {} }
 
-    // 2. Merge Daily PNL
+    // 2. Merge Daily PNL (legacy field)
     // Use a Map by date to deduplicate and ensure we keep all historical points
     const pnlMap = new Map()
     remoteData.dailyPnL?.forEach(d => pnlMap.set(d.date, d))
     localData.dailyPnL?.forEach(d => pnlMap.set(d.date, d))
     const mergedDailyPnL = Array.from(pnlMap.values()).sort((a,b) => a.date.localeCompare(b.date))
+
+    // 2b. Preserve dailyTWR from remote (etl_ibkr.mjs writes this; do NOT overwrite)
+    // Only merge if local also has dailyTWR; otherwise keep remote's
+    let mergedDailyTWR = remoteData.dailyTWR || []
+    if (localData.dailyTWR?.length) {
+      const twrMap = new Map()
+      mergedDailyTWR.forEach(d => twrMap.set(d.date, d))
+      localData.dailyTWR.forEach(d => twrMap.set(d.date, d))
+      mergedDailyTWR = Array.from(twrMap.values()).sort((a,b) => a.date.localeCompare(b.date))
+    }
 
     // 3. Merge Trades
     const tradeKey = (t) => `${t.date}-${t.symbol}-${t.type}-${t.quantity}-${t.price}`
@@ -38,11 +48,14 @@ async function pushToFirebase() {
     localData.trades?.forEach(t => tradeMap.set(tradeKey(t), t))
     const mergedTrades = Array.from(tradeMap.values()).sort((a,b) => b.date.localeCompare(a.date))
 
-    // 4. Final Merged Object
+    // 4. Final Merged Object — preserve all remote fields (esp. dailyTWR, summary.twr)
     const finalData = {
-      ...localData,
+      ...remoteData,       // start with remote to preserve dailyTWR, summary.twr, etc.
+      ...localData,        // local overwrites (trades, deposits, summary fields)
       dailyPnL: mergedDailyPnL,
+      dailyTWR: mergedDailyTWR,
       trades: mergedTrades,
+      summary: { ...remoteData.summary, ...localData.summary },  // merge summaries
       lastSyncAt: new Date().toISOString()
     }
 
