@@ -535,6 +535,32 @@
   box-shadow: 0 6px 24px rgba(83, 155, 245, 0.5);
 }
 
+/* Back to Top */
+.txn-back-top {
+  position: fixed;
+  bottom: 90px;
+  right: 24px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  z-index: 90;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.txn-back-top:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
 /* Add form panel */
 .txn-add-panel form {
   display: flex;
@@ -823,8 +849,8 @@
   }
 
   .txn-back-top {
-    bottom: calc(160px + env(safe-area-inset-bottom));
-    right: 20px;
+    bottom: calc(130px + env(safe-area-inset-bottom));
+    right: 16px;
   }
 
   .txn-back-btn {
@@ -998,31 +1024,8 @@
   opacity: 0.5;
 }
 
-/* Back to Top */
-.txn-back-top {
-  position: fixed;
-  bottom: 90px;
-  right: 24px;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  color: var(--text-secondary);
-  font-size: 14px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s;
-  z-index: 90;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-}
-
-.txn-back-top:hover {
-  color: var(--accent);
-  border-color: var(--accent);
-}
+/* Back to Top — moved above @media to avoid cascade override */
+/* (see .txn-fab block above) */
 
 /* Active Sort */
 .pill-btn.active-sort {
