@@ -31,14 +31,14 @@ export default function Layout({ children }) {
           </NavLink>
         </div>
         <div className="sidebar-bottom">
-          <NavLink to="/settings" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} title="Settings">
-            <i className="fas fa-cog"></i>
-            <span>Settings</span>
-          </NavLink>
           <button className="nav-item logout-btn" onClick={handleLogout} title="Sign Out">
             <i className="fas fa-sign-out-alt"></i>
             <span>Sign Out</span>
           </button>
+          <NavLink to="/settings" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} title="Settings">
+            <i className="fas fa-cog"></i>
+            <span>Settings</span>
+          </NavLink>
         </div>
       </nav>
       <main className="main-content">

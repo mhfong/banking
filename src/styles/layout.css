@@ -137,7 +137,7 @@
     display: none;
   }
 
-  /* Mobile order: Sign Out (left) ... Settings | Inv | Txn | Dash (right) */
+  /* Mobile order: Settings (left) ... Sign Out | Inv | Txn | Dash (right) */
   .sidebar-bottom {
     flex-direction: row;
     padding: 0;
