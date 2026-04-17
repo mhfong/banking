@@ -9,7 +9,7 @@ import MaskToggle from '../components/MaskToggle'
 import CountUp from '../components/CountUp'
 import { db } from '../firebase'
 import { collection, query, onSnapshot, getDocs, writeBatch, doc, getDoc, setDoc } from 'firebase/firestore'
-import { BarChart, Bar, LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, ComposedChart, ReferenceLine } from 'recharts'
+import { BarChart, Bar, LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, ComposedChart, ReferenceLine, Customized } from 'recharts'
 import '../styles/dashboard.css'
 
 const COLORS = ['#539bf5','#57ab5a','#e5534b','#c69026','#986ee2','#6cb6ff','#e0823d','#96d0ff','#dcbdfb','#f69d50','#768390','#8ddb8c']
@@ -653,35 +653,46 @@ export default function Dashboard() {
                               const labelText = `Goal ${i + 1}`
                               const textW = labelText.length * 6.5 + 12
                               const boxH = 18
-                              const lineY = viewBox.y  // exact pixel Y of the goal line
+                              const lineY = viewBox.y
                               const boxY = lineY - 24
                               const flagPoleX = viewBox.x + 4 + textW / 2
-                              // dot X: where the trading projection crosses the goal line
-                              // Use the crossing month's x position from viewBox + a small offset
-                              const dotX = gm.months !== null
-                                ? viewBox.x + (viewBox.width * (gm.months / Math.max(monthsWithGoals.length - 1, 1)))
-                                : null
                               return (
                                 <g>
-                                  {/* Flag box */}
                                   <rect x={viewBox.x + 4} y={boxY} width={textW} height={boxH} rx={3} fill={gm.color} />
-                                  {/* Flag pointer triangle pointing down to line */}
                                   <polygon points={`${flagPoleX},${boxY + boxH} ${flagPoleX - 4},${lineY - 1} ${flagPoleX + 4},${lineY - 1}`} fill={gm.color} />
-                                  {/* Text */}
                                   <text x={flagPoleX} y={boxY + 12} textAnchor="middle" fill="#fff" fontSize={10} fontWeight={600}>{labelText}</text>
-                                  {/* Milestone dot — centered exactly on the goal line */}
-                                  {dotX !== null && (
-                                    <g>
-                                      <circle cx={dotX} cy={lineY} r={10} fill={gm.color} fillOpacity={0.18} stroke={gm.color} strokeWidth={1.5} />
-                                      <circle cx={dotX} cy={lineY} r={5} fill={gm.color} stroke="#22272e" strokeWidth={2} />
-                                    </g>
-                                  )}
                                 </g>
                               )
                             }}
                           />
                         )
                       })}
+                      {/* Milestone dots — pixel-perfect via Recharts axis scales */}
+                      <Customized component={({ xAxisMap, yAxisMap }) => {
+                        const xAxis = xAxisMap && Object.values(xAxisMap)[0]
+                        const yAxis = yAxisMap && Object.values(yAxisMap)[0]
+                        if (!xAxis?.scale || !yAxis?.scale) return null
+                        return (
+                          <g>
+                            {goalMilestones.map((gm, i) => {
+                              if (gm.reached || gm.months === null) return null
+                              const crossIdx = (monthsWithGoals.findIndex(m => m.isNow) || 0) + gm.months
+                              if (crossIdx < 0 || crossIdx >= monthsWithGoals.length) return null
+                              const crossMonth = monthsWithGoals[crossIdx]?.month
+                              if (!crossMonth) return null
+                              const cx = xAxis.scale(crossMonth) + (xAxis.bandSize || 0) / 2
+                              const cy = yAxis.scale(gm.value)
+                              if (!isFinite(cx) || !isFinite(cy)) return null
+                              return (
+                                <g key={`dot-${i}`}>
+                                  <circle cx={cx} cy={cy} r={10} fill={gm.color} fillOpacity={0.18} stroke={gm.color} strokeWidth={1.5} />
+                                  <circle cx={cx} cy={cy} r={5} fill={gm.color} stroke="#22272e" strokeWidth={2} />
+                                </g>
+                              )
+                            })}
+                          </g>
+                        )
+                      }} />
                     </ComposedChart>
                   </ResponsiveContainer>
 
