@@ -2,7 +2,7 @@ name: IBKR Daily ETL
 
 on:
   schedule:
-    - cron: '0 */21 * * *'  # Every 21 hours (approx 3 times per day)
+    - cron: '0 10,22 * * *'  # UTC 10:00 (HKT 18:00) & UTC 22:00 (HKT 06:00 next day)
   workflow_dispatch:  # Manual trigger
 
 permissions:
