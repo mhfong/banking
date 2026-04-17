@@ -635,22 +635,7 @@ export default function Dashboard() {
                       {/* Future saving area - dashed line for prediction */}
                       <Area type="monotone" dataKey="saving" name="Saving" fill="url(#projSaveGrad)" stroke="#539bf5" strokeWidth={2} strokeDasharray="6 3" dot={false} activeDot={{ r: 4, stroke: '#22272e', strokeWidth: 2, fill: '#539bf5' }} connectNulls={false} isAnimationActive={true} animationDuration={1200} />
                       {/* Future trading area */}
-                      <Area type="monotone" dataKey="trading" name="+ Trading" fill="url(#projTradeGrad)" stroke="#57ab5a" strokeWidth={2.5} strokeDasharray="6 3" dot={(props) => {
-                        const { payload, cx, cy } = props
-                        if (!payload || !cx || !cy) return null
-                        const dots = []
-                        goalMilestones.forEach(gm => {
-                          if (payload[`goal_${gm.index}`]) {
-                            dots.push(
-                              <g key={`ms-${gm.index}`}>
-                                <circle cx={cx} cy={cy} r={10} fill={gm.color} fillOpacity={0.15} stroke={gm.color} strokeWidth={1.5} />
-                                <circle cx={cx} cy={cy} r={5} fill={gm.color} stroke="#22272e" strokeWidth={1.5} />
-                              </g>
-                            )
-                          }
-                        })
-                        return dots.length > 0 ? <>{dots}</> : null
-                      }} activeDot={{ r: 4, stroke: '#22272e', strokeWidth: 2 }} animationDuration={1500} />
+                      <Area type="monotone" dataKey="trading" name="+ Trading" fill="url(#projTradeGrad)" stroke="#57ab5a" strokeWidth={2.5} strokeDasharray="6 3" dot={false} activeDot={{ r: 4, stroke: '#22272e', strokeWidth: 2 }} animationDuration={1500} />
                       {monthsWithGoals.length > 0 && monthsWithGoals.some(m => m.isNow) && (
                         <ReferenceLine 
                           x={monthsWithGoals.find(m => m.isNow)?.month}
@@ -663,21 +648,34 @@ export default function Dashboard() {
                       {goalMilestones.map((gm, i) => {
                         if (gm.reached) return null
                         return (
-                          <ReferenceLine key={`goal-${i}`} y={gm.value} stroke={gm.color} strokeWidth={1.5}
+                          <ReferenceLine key={`goal-${i}`} y={gm.value} stroke={gm.color} strokeWidth={1.5} strokeDasharray="5 4"
                             label={({ viewBox }) => {
                               const labelText = `Goal ${i + 1}`
                               const textW = labelText.length * 6.5 + 12
                               const boxH = 18
-                              const boxY = viewBox.y - 24
+                              const lineY = viewBox.y  // exact pixel Y of the goal line
+                              const boxY = lineY - 24
                               const flagPoleX = viewBox.x + 4 + textW / 2
+                              // dot X: where the trading projection crosses the goal line
+                              // Use the crossing month's x position from viewBox + a small offset
+                              const dotX = gm.months !== null
+                                ? viewBox.x + (viewBox.width * (gm.months / Math.max(monthsWithGoals.length - 1, 1)))
+                                : null
                               return (
                                 <g>
                                   {/* Flag box */}
                                   <rect x={viewBox.x + 4} y={boxY} width={textW} height={boxH} rx={3} fill={gm.color} />
                                   {/* Flag pointer triangle pointing down to line */}
-                                  <polygon points={`${flagPoleX},${boxY + boxH} ${flagPoleX - 4},${viewBox.y - 1} ${flagPoleX + 4},${viewBox.y - 1}`} fill={gm.color} />
+                                  <polygon points={`${flagPoleX},${boxY + boxH} ${flagPoleX - 4},${lineY - 1} ${flagPoleX + 4},${lineY - 1}`} fill={gm.color} />
                                   {/* Text */}
                                   <text x={flagPoleX} y={boxY + 12} textAnchor="middle" fill="#fff" fontSize={10} fontWeight={600}>{labelText}</text>
+                                  {/* Milestone dot — centered exactly on the goal line */}
+                                  {dotX !== null && (
+                                    <g>
+                                      <circle cx={dotX} cy={lineY} r={10} fill={gm.color} fillOpacity={0.18} stroke={gm.color} strokeWidth={1.5} />
+                                      <circle cx={dotX} cy={lineY} r={5} fill={gm.color} stroke="#22272e" strokeWidth={2} />
+                                    </g>
+                                  )}
                                 </g>
                               )
                             }}
