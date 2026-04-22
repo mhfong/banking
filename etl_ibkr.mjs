@@ -346,11 +346,11 @@ function processData(sections) {
       fifoPnlHKD: Math.round(fifoPnl * fxRate * 100) / 100
     })
     
-    // Aggregate FIFO PnL by date (only sells)
+    // Aggregate FIFO PnL by date (only sells), but aggregate commission for ALL trades
+    if (!tradesByDate[date]) tradesByDate[date] = { pnl: 0, commission: 0 }
+    tradesByDate[date].commission += Math.round(Math.abs(comm) * fxRate * 100) / 100
     if (r['Buy/Sell'] === 'SELL' && fifoPnl !== 0) {
-      if (!tradesByDate[date]) tradesByDate[date] = { pnl: 0, commission: 0 }
       tradesByDate[date].pnl += Math.round(fifoPnl * fxRate * 100) / 100
-      tradesByDate[date].commission += Math.round(Math.abs(comm) * fxRate * 100) / 100
     }
   }
   

@@ -413,9 +413,9 @@ export default function Investment() {
           const monthInterest = Math.round((paidInterest || accruedInterest) * 100) / 100
           const isAccrued = !paidInterest && accruedInterest !== 0
           
-          // Commission from trades this month
-          const monthTrades = (data.fifoDailyPnL || []).filter(d => d.date.startsWith(monthKey))
-          const totalCommission = monthTrades.reduce((s, t) => s + Math.abs(t.commission || 0), 0)
+          // Commission from trades this month — use monthlyCommission (includes both buy + sell sides)
+          // Note: fifoDailyPnL.commission only captures sell-side commission, so we use the dedicated field
+          const totalCommission = Math.abs(data.monthlyCommission?.[monthKey] || 0)
           
           const totalPNL = realizedPNL + monthInterest
           const pct = target > 0 ? Math.min(Math.max(totalPNL / target * 100, 0), 100) : 0
