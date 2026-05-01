@@ -171,9 +171,14 @@ export default function Dashboard() {
     transactions.forEach(t => {
       const m = t.date?.substring(0, 7)
       if (!m) return
-      if (!monthly[m]) monthly[m] = { income: 0, expense: 0 }
-      if (t.type === 'income' && !EXCLUDED_FROM_INCOME.includes(t.category) && !t.excludeFromChart) monthly[m].income += t.amount
-      else if (t.type === 'expense' && !EXCLUDED_FROM_EXPENSE.includes(t.category) && !t.excludeFromChart) monthly[m].expense += t.amount
+      if (!monthly[m]) monthly[m] = { income: 0, expense: 0, transactionCount: 0 }
+      if (t.type === 'income' && !EXCLUDED_FROM_INCOME.includes(t.category) && !t.excludeFromChart) {
+        monthly[m].income += t.amount
+        monthly[m].transactionCount += 1
+      } else if (t.type === 'expense' && !EXCLUDED_FROM_EXPENSE.includes(t.category) && !t.excludeFromChart) {
+        monthly[m].expense += t.amount
+        monthly[m].transactionCount += 1
+      }
     })
 
     const monthlyData = Object.entries(monthly)
@@ -187,13 +192,23 @@ export default function Dashboard() {
         })(),
         income: Math.round(d.income),
         expense: Math.round(d.expense),
+        transactionCount: d.transactionCount,
         net: Math.round(d.income - d.expense),
       }))
 
-    // Exclude months with only partial data (first and current month)
-    const fullMonths = monthlyData.filter(m => m.income > 0 || m.expense > 5000)
-    const numMonths = Math.max(1, fullMonths.length)
-    const avgExpense = Math.round(fullMonths.reduce((s, m) => s + m.expense, 0) / numMonths)
+    // Treat any month with at least one qualifying income/expense transaction as full.
+    const expenseStartMonth = '2025-01'
+    const expenseMonths = new Set()
+    let totalExpenseSinceStart = 0
+    realExpenses.forEach(t => {
+      const month = t.date?.substring(0, 7)
+      if (!month || month < expenseStartMonth) return
+      expenseMonths.add(month)
+      totalExpenseSinceStart += t.amount
+    })
+    const fullMonths = monthlyData.filter(m => m.transactionCount > 0)
+    const numMonths = Math.max(1, expenseMonths.size)
+    const avgExpense = Math.round(totalExpenseSinceStart / numMonths)
     const avgIncome = Math.round(fullMonths.reduce((s, m) => s + m.income, 0) / numMonths)
     const avgSaving = avgIncome - avgExpense
 
