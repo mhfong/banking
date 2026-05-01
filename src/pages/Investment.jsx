@@ -407,11 +407,11 @@ export default function Investment() {
           // Realized PNL from trades
           const realizedPNL = monthlyTotal
           
-          // Interest for this month (paid if available, otherwise accrued)
+          // Interest for this month = paid interest + accrued interest
           const paidInterest = data.monthlyInterest?.[monthKey] || 0
           const accruedInterest = data.monthlyInterestAccrued?.[monthKey] || 0
-          const monthInterest = Math.round((paidInterest || accruedInterest) * 100) / 100
-          const isAccrued = !paidInterest && accruedInterest !== 0
+          const monthInterest = Math.round((paidInterest + accruedInterest) * 100) / 100
+          const isAccrued = accruedInterest !== 0
           
           // Commission from trades this month — use monthlyCommission (includes both buy + sell sides)
           // Note: fifoDailyPnL.commission only captures sell-side commission, so we use the dedicated field

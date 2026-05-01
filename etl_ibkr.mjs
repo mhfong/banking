@@ -110,7 +110,54 @@ function formatDate(raw) {
   return `${d.substring(0, 4)}-${d.substring(4, 6)}-${d.substring(6, 8)}`
 }
 
-function processData(sections) {
+function extractLatestNavInterestAccruals(csv) {
+  const rows = []
+  let latestDate = null
+
+  for (const line of csv.split('\n')) {
+    const trimmed = line.trim()
+    if (!trimmed) continue
+
+    const cols = trimmed.split(',').map(c => c.replace(/^"|"$/g, ''))
+    if (!cols[0]?.startsWith('U') || cols.length <= 55) continue
+
+    const rawDate = cols[4] || ''
+    if (rawDate.length !== 8) continue
+
+    const date = formatDate(rawDate)
+    if (!date) continue
+
+    const accrued = parseFloat(cols[31] || 0)
+    if (!latestDate || date > latestDate) latestDate = date
+    if (accrued !== 0) rows.push({ date, amount: accrued })
+  }
+
+  if (!latestDate) return null
+
+  const latestMonth = latestDate.substring(0, 7)
+  const latestRows = rows.filter(r => r.date.startsWith(latestMonth))
+  if (!latestRows.length) return null
+
+  const dailyMap = {}
+  let totalInterestAccrued = 0
+  for (const row of latestRows) {
+    totalInterestAccrued += row.amount
+    dailyMap[row.date] = Math.round(((dailyMap[row.date] || 0) + row.amount) * 100) / 100
+  }
+
+  return {
+    latestMonth,
+    totalInterestAccrued: Math.round(totalInterestAccrued * 100) / 100,
+    monthlyInterestAccrued: {
+      [latestMonth]: Math.round(totalInterestAccrued * 100) / 100,
+    },
+    dailyInterest: Object.entries(dailyMap)
+      .map(([date, amount]) => ({ date, amount }))
+      .sort((a, b) => a.date.localeCompare(b.date)),
+  }
+}
+
+function processData(sections, latestNavInterestAccruals = null) {
   console.log('[ETL] Processing data...')
   
   const result = {
@@ -287,6 +334,14 @@ function processData(sections) {
       monthlyIntAccrued[month] = Math.round(((monthlyIntAccrued[month] || 0) + amount) * 100) / 100
     }
   }
+
+  if (latestNavInterestAccruals?.totalInterestAccrued) {
+    const latestMonth = latestNavInterestAccruals.latestMonth
+    if (latestMonth) {
+      monthlyIntAccrued[latestMonth] = Math.round(((monthlyIntAccrued[latestMonth] || 0) + latestNavInterestAccruals.totalInterestAccrued) * 100) / 100
+    }
+    totalInt = Math.round((totalInt + latestNavInterestAccruals.totalInterestAccrued) * 100) / 100
+  }
   
   result.summary.totalInterest = Math.round(totalInt * 100) / 100
   result.monthlyInterest = monthlyInt
@@ -310,6 +365,13 @@ function processData(sections) {
     
     dailyInterest[date] = Math.round(((dailyInterest[date] || 0) + amount) * 100) / 100
   }
+
+  if (latestNavInterestAccruals?.dailyInterest?.length) {
+    for (const entry of latestNavInterestAccruals.dailyInterest) {
+      dailyInterest[entry.date] = Math.round(((dailyInterest[entry.date] || 0) + entry.amount) * 100) / 100
+    }
+  }
+
   result.dailyInterest = Object.entries(dailyInterest)
     .map(([date, amount]) => ({ date, amount }))
     .sort((a, b) => a.date.localeCompare(b.date))
@@ -669,9 +731,10 @@ async function main() {
     // Parse
     const sections = parseCSV(csv)
     console.log(`[ETL] Parsed sections: ${Object.keys(sections).join(', ')}`)
+    const latestNavInterestAccruals = extractLatestNavInterestAccruals(csv)
     
     // Process
-    const data = processData(sections)
+    const data = processData(sections, latestNavInterestAccruals)
     
     // Push investment data
     await pushToFirebase(data)
