@@ -30,7 +30,8 @@ async function sleep(ms) { return new Promise(r => setTimeout(r, ms)) }
 
 async function requestStatement() {
   const url = `${BASE_URL}.SendRequest?t=${FLEX_TOKEN}&q=${QUERY_ID}&v=3`
-  const maxAttempts = 5
+  const maxAttempts = 10
+  const baseDelay = 30000 // 30 seconds
   let lastError = null
 
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
@@ -48,7 +49,7 @@ async function requestStatement() {
     lastError = errorMessage ? `${errorCode || 'unknown'}: ${errorMessage}` : null
 
     if (errorCode === '1001' && attempt < maxAttempts) {
-      const delayMs = 5000 * attempt
+      const delayMs = baseDelay + 15000 * (attempt - 1) // 30s, 45s, 60s, 75s, ...
       console.warn(`[ETL] Statement not ready (error 1001). Retrying in ${delayMs / 1000}s...`)
       await sleep(delayMs)
       continue
