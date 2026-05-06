@@ -30,16 +30,35 @@ async function sleep(ms) { return new Promise(r => setTimeout(r, ms)) }
 
 async function requestStatement() {
   const url = `${BASE_URL}.SendRequest?t=${FLEX_TOKEN}&q=${QUERY_ID}&v=3`
-  console.log('[ETL] Requesting Flex statement...')
-  const res = await fetch(url)
-  const text = await res.text()
-  const codeMatch = text.match(/<ReferenceCode>(\d+)<\/ReferenceCode>/)
-  if (!codeMatch) {
+  const maxAttempts = 5
+  let lastError = null
+
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    console.log(`[ETL] Requesting Flex statement (attempt ${attempt}/${maxAttempts})...`)
+    const res = await fetch(url)
+    const text = await res.text()
+    const codeMatch = text.match(/<ReferenceCode>(\d+)<\/ReferenceCode>/)
+    if (codeMatch) {
+      console.log(`[ETL] Reference: ${codeMatch[1]}`)
+      return codeMatch[1]
+    }
+
+    const errorCode = (text.match(/<ErrorCode>([^<]+)<\/ErrorCode>/) || [])[1]
+    const errorMessage = (text.match(/<ErrorMessage>([^<]+)<\/ErrorMessage>/) || [])[1]
+    lastError = errorMessage ? `${errorCode || 'unknown'}: ${errorMessage}` : null
+
+    if (errorCode === '1001' && attempt < maxAttempts) {
+      const delayMs = 5000 * attempt
+      console.warn(`[ETL] Statement not ready (error 1001). Retrying in ${delayMs / 1000}s...`)
+      await sleep(delayMs)
+      continue
+    }
+
     console.error('[ETL] Failed to get reference code:', text.substring(0, 500))
-    throw new Error('Failed to request statement')
+    throw new Error(`Failed to request statement${lastError ? ` (${lastError})` : ''}`)
   }
-  console.log(`[ETL] Reference: ${codeMatch[1]}`)
-  return codeMatch[1]
+
+  throw new Error(`Failed to request statement after ${maxAttempts} attempts${lastError ? ` (${lastError})` : ''}`)
 }
 
 async function getStatement(refCode) {
