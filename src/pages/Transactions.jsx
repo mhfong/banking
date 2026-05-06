@@ -7,7 +7,7 @@ import { useHotkeysConfig } from '../contexts/HotkeysContext'
 import MaskToggle from '../components/MaskToggle'
 import { db } from '../firebase'
 import {
-  collection, query, onSnapshot,
+  collection, query, where, onSnapshot,
   addDoc, deleteDoc, updateDoc, doc, Timestamp, getDoc, setDoc
 } from 'firebase/firestore'
 import '../styles/transactions.css'
@@ -179,12 +179,12 @@ export default function Transactions() {
   // Fetch transactions
   useEffect(() => {
     if (!user) return
-    const q = query(collection(db, 'transactions'))
+    const q = query(collection(db, 'transactions'), where('userId', '==', user.uid))
     const unsub = onSnapshot(q, (snap) => {
       const txns = snap.docs.map(d => {
         const data = d.data()
         return { id: d.id, ...data, _date: parseDate(data.date), _dateStr: toDateStr(parseDate(data.date)) }
-      }).filter(t => t.userId === user.uid || t.userId === 'global')
+      })
       setTransactions(txns)
     })
     return unsub

@@ -1,0 +1,47 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ── transactions ──
+    // Users can only read/write their own transactions (userId == their uid).
+    // The migration path (userId == 'global') is allowed only for updating
+    // the userId field to the requesting user's uid.
+    match /transactions/{txnId} {
+      allow create: if request.auth != null
+                    && request.resource.data.userId == request.auth.uid;
+
+      allow read, update, delete: if request.auth != null
+                                  && resource.data.userId == request.auth.uid;
+
+      // Allow reading + claiming 'global' legacy docs during migration
+      allow read: if request.auth != null
+                  && resource.data.userId == 'global';
+      allow update: if request.auth != null
+                    && resource.data.userId == 'global'
+                    && request.resource.data.userId == request.auth.uid;
+    }
+
+    // ── userSettings ──
+    // Each user can only access their own settings document (keyed by uid).
+    match /userSettings/{uid} {
+      allow read, write: if request.auth != null
+                         && request.auth.uid == uid;
+    }
+
+    // ── investment_data ──
+    // Owner sees 'latest'; other users see their own uid doc.
+    match /investment_data/{docId} {
+      allow read: if request.auth != null
+                  && (docId == request.auth.uid || docId == 'latest');
+      // Only backend (admin SDK) writes this collection,
+      // but allow owner to write 'latest' if needed.
+      allow write: if request.auth != null
+                   && (docId == request.auth.uid || docId == 'latest');
+    }
+
+    // Deny everything else
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

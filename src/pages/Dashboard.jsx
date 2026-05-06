@@ -8,7 +8,7 @@ import { useHotkeysConfig } from '../contexts/HotkeysContext'
 import MaskToggle from '../components/MaskToggle'
 import CountUp from '../components/CountUp'
 import { db } from '../firebase'
-import { collection, query, onSnapshot, getDocs, writeBatch, doc, getDoc, setDoc } from 'firebase/firestore'
+import { collection, query, where, onSnapshot, getDocs, writeBatch, doc, getDoc, setDoc } from 'firebase/firestore'
 import { BarChart, Bar, LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, ComposedChart, ReferenceLine, Customized } from 'recharts'
 import '../styles/dashboard.css'
 
@@ -93,12 +93,12 @@ export default function Dashboard() {
   useEffect(() => {
     if (!user) return
     async function migrate() {
-      const snap = await getDocs(collection(db, 'transactions'))
-      const globalDocs = snap.docs.filter(d => d.data().userId === 'global')
-      if (globalDocs.length === 0) return
+      const globalSnap = await getDocs(query(collection(db, 'transactions'), where('userId', '==', 'global')))
+      if (globalSnap.empty) return
       // Only migrate if this user has no own transactions yet
-      const ownDocs = snap.docs.filter(d => d.data().userId === user.uid)
-      if (ownDocs.length > 0) return
+      const ownSnap = await getDocs(query(collection(db, 'transactions'), where('userId', '==', user.uid)))
+      if (!ownSnap.empty) return
+      const globalDocs = globalSnap.docs
       console.log(`Migrating ${globalDocs.length} global transactions to ${user.uid}`)
       for (let i = 0; i < globalDocs.length; i += 400) {
         const batch = writeBatch(db)
@@ -110,7 +110,7 @@ export default function Dashboard() {
   }, [user])
 
   useEffect(() => {
-    const q = query(collection(db, 'transactions'))
+    const q = query(collection(db, 'transactions'), where('userId', '==', user.uid))
     const unsub = onSnapshot(q, (snap) => {
       const txns = snap.docs.map(d => {
         const data = d.data()
@@ -118,7 +118,7 @@ export default function Dashboard() {
         if (date?.toDate) date = date.toDate().toISOString().substring(0, 10)
         else if (typeof date !== 'string') date = ''
         return { id: d.id, ...data, date }
-      }).filter(t => t.userId === user.uid || t.userId === 'global')
+      })
       setTransactions(txns)
       setLoading(false)
     })
