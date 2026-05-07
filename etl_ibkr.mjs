@@ -4,27 +4,26 @@
 
 import { readFileSync, writeFileSync } from 'fs'
 import { execSync } from 'child_process'
-import { initializeApp } from 'firebase/app'
-import { getFirestore, collection, getDocs, doc, setDoc, writeBatch, deleteDoc } from 'firebase/firestore'
+import admin from 'firebase-admin'
 
 const FLEX_TOKEN = process.env.IBKR_TOKEN
 const QUERY_ID = process.env.IBKR_QUERY_ID
-const FIREBASE_API_KEY = process.env.VITE_FIREBASE_API_KEY
+const FIREBASE_SERVICE_ACCOUNT = process.env.FIREBASE_SERVICE_ACCOUNT
 const BASE_URL = 'https://gdcdyn.interactivebrokers.com/Universal/servlet/FlexStatementService'
 const OWNER_UID = '0G3jUSlKzQbzOrbD1cY0ari1Y4i1'
 
-if (!FLEX_TOKEN || !QUERY_ID || !FIREBASE_API_KEY) {
-  console.error('[ETL] Missing required env vars: IBKR_TOKEN, IBKR_QUERY_ID, VITE_FIREBASE_API_KEY')
+if (!FLEX_TOKEN || !QUERY_ID || !FIREBASE_SERVICE_ACCOUNT) {
+  console.error('[ETL] Missing required env vars: IBKR_TOKEN, IBKR_QUERY_ID, FIREBASE_SERVICE_ACCOUNT')
   process.exit(1)
 }
 
-// Firebase setup
-const fbApp = initializeApp({
-  apiKey: FIREBASE_API_KEY,
-  authDomain: 'login-system-7d812.firebaseapp.com',
-  projectId: 'login-system-7d812'
+// Firebase Admin setup (bypasses security rules)
+const serviceAccount = JSON.parse(FIREBASE_SERVICE_ACCOUNT)
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  projectId: serviceAccount.project_id
 })
-const fireDb = getFirestore(fbApp)
+const fireDb = admin.firestore()
 
 async function sleep(ms) { return new Promise(r => setTimeout(r, ms)) }
 
@@ -505,15 +504,15 @@ async function pushToFirebase(data) {
   console.log('[ETL] Pushing to Firebase...')
   
   // Merge with existing to preserve history
-  const docRef = doc(fireDb, 'investment_data', 'latest')
+  const docRef = fireDb.collection('investment_data').doc('latest')
   
   try {
     // Merge daily TWR:
     // New ETL data is the source of truth for all dates it covers.
     // Only keep Firebase entries for dates BEFORE the earliest new data point
     // (historical data from previous Flex Query windows).
-    const existingDoc = await (await import('firebase/firestore')).getDoc(docRef)
-    const existingData = existingDoc.exists() ? existingDoc.data() : {}
+    const existingDoc = await docRef.get()
+    const existingData = existingDoc.exists ? existingDoc.data() : {}
     
     const existingDailyTWR = existingData.dailyTWR || []
     const newDates = new Set(data.dailyTWR.map(d => d.date))
@@ -540,10 +539,10 @@ async function pushToFirebase(data) {
     
     // Push to Firestore (exclude rawDeposits — internal use only)
     const { rawDeposits, ...firebaseData } = data
-    await setDoc(docRef, firebaseData)
+    await docRef.set(firebaseData)
     
     // Post-push verification: ensure dailyTWR has latest data point
-    const verifyDoc = await (await import('firebase/firestore')).getDoc(docRef)
+    const verifyDoc = await docRef.get()
     const verifyData = verifyDoc.data()
     const verifyLatest = verifyData?.dailyTWR?.[verifyData.dailyTWR.length - 1]
     if (verifyLatest) {
@@ -567,11 +566,11 @@ async function pushToFirebase(data) {
 
 async function syncDepositsToTransactions(data) {
   console.log('[ETL] === Deposit Reconciliation Start ===')
-  const { Timestamp, deleteDoc: fbDeleteDoc } = await import('firebase/firestore')
+  const Timestamp = admin.firestore.Timestamp
   
   try {
     // Step 1: Load ALL existing IBKR transactions from Firebase
-    const snap = await getDocs(collection(fireDb, 'transactions'))
+    const snap = await fireDb.collection('transactions').get()
     const existingByDate = {}  // date → [{ id, amount, type }]
     
     snap.docs.forEach(docSnap => {
@@ -682,7 +681,7 @@ async function syncDepositsToTransactions(data) {
     if (toDelete.length > 0) {
       console.log(`[ETL] Deleting ${toDelete.length} orphaned/mismatched transactions...`)
       for (const id of toDelete) {
-        await fbDeleteDoc(doc(fireDb, 'transactions', id))
+        await fireDb.collection('transactions').doc(id).delete()
       }
       console.log(`[ETL] ✅ Deleted ${toDelete.length} records`)
     }
@@ -690,9 +689,9 @@ async function syncDepositsToTransactions(data) {
     // Step 4: Execute additions
     if (toAdd.length > 0) {
       console.log(`[ETL] Adding ${toAdd.length} new transactions...`)
-      const batch = writeBatch(fireDb)
+      const batch = fireDb.batch()
       for (const t of toAdd) {
-        batch.set(doc(collection(fireDb, 'transactions')), t)
+        batch.set(fireDb.collection('transactions').doc(), t)
       }
       await batch.commit()
       console.log(`[ETL] ✅ Added ${toAdd.length} records`)
@@ -704,7 +703,7 @@ async function syncDepositsToTransactions(data) {
     }
     
     // Step 6: Net balance verification
-    const snap2 = await getDocs(collection(fireDb, 'transactions'))
+    const snap2 = await fireDb.collection('transactions').get()
     let verifyNet = 0, verifyCount = 0
     snap2.docs.forEach(docSnap => {
       const txn = docSnap.data()
