@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Dark background matching --bg-primary -->
+  <rect width="32" height="32" rx="7" fill="#22272e"/>
+  <!-- Subtle grid lines -->
+  <line x1="4" y1="22" x2="28" y2="22" stroke="#444c56" stroke-width="0.75"/>
+  <line x1="4" y1="15" x2="28" y2="15" stroke="#444c56" stroke-width="0.75"/>
+  <!-- Area fill under the line -->
+  <polygon points="4,26 4,20 10,16 16,18 22,10 28,7 28,26" fill="#539bf5" fill-opacity="0.12"/>
+  <!-- Trending line in accent blue -->
+  <polyline
+    points="4,20 10,16 16,18 22,10 28,7"
+    fill="none"
+    stroke="#539bf5"
+    stroke-width="2.2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+  <!-- Green dot at the peak (latest data point) -->
+  <circle cx="28" cy="7" r="2.8" fill="#57ab5a"/>
+</svg>
