@@ -380,7 +380,70 @@ export default function Investment() {
         </div>
       </div>
 
-      <div className="holdings-section" style={{ animationDelay: '0.28s' }}>
+      <div className="chart-section" style={{ animationDelay: '0.32s' }}>
+        <div className="chart-title-row">
+          <h3 className="chart-section-title"><i className="fa-solid fa-arrow-trend-up"></i> {isPnlMode ? 'Total PNL (%)' : 'Time-Weighted Return'}</h3>
+          <div className="chart-mode-toggles" role="group" aria-label="Chart metric">
+            <button type="button" className={!isPnlMode ? 'active' : ''} aria-pressed={!isPnlMode} onClick={() => setChartMode('twr')}>TWR</button>
+            <button type="button" className={isPnlMode ? 'active' : ''} aria-pressed={isPnlMode} onClick={() => setChartMode('pnl')}>TPNL</button>
+          </div>
+        </div>
+        <div className={`chart-return ${((isPnlMode ? summary.totalPnL : summary.twr) || 0) >= 0 ? 'positive' : 'negative'}`}>
+          {masked ? '***' : isPnlMode ? `${fmt(animPnL)} (${fmtPct(totalPnlPercentage)})` : fmtPct(summary.twr || 0)}
+        </div>
+
+        {isPnlMode && !chartData.length ? (
+          <div className="chart-empty">Total PNL history will appear after the next IBKR sync.</div>
+        ) : (
+          <div className="chart-container">
+            <ResponsiveContainer width="100%" height={300}>
+              <AreaChart data={chartData} margin={{ top: 10, right: 10, left: 10, bottom: 5 }}>
+                <defs>
+                  <linearGradient id="splitColor" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset={0} stopColor="#57ab5a" stopOpacity={0.4} />
+                    <stop offset={gradientOffset} stopColor="#57ab5a" stopOpacity={0.05} />
+                    <stop offset={gradientOffset} stopColor="#e5534b" stopOpacity={0.05} />
+                    <stop offset={1} stopColor="#e5534b" stopOpacity={0.4} />
+                  </linearGradient>
+                  <linearGradient id="splitStroke" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset={0} stopColor="#57ab5a" stopOpacity={1} />
+                    <stop offset={gradientOffset} stopColor="#57ab5a" stopOpacity={1} />
+                    <stop offset={gradientOffset} stopColor="#e5534b" stopOpacity={1} />
+                    <stop offset={1} stopColor="#e5534b" stopOpacity={1} />
+                  </linearGradient>
+                </defs>
+                <CartesianGrid horizontal={true} vertical={false} strokeDasharray="3 3" stroke="#444c56" opacity={0.2} />
+                <XAxis dataKey="date" tick={{ fontSize: 10, fill: '#768390' }} tickFormatter={d => {
+                  const [,m,day] = d.split('-')
+                  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+                  return `${parseInt(day)} ${months[parseInt(m)-1]}`
+                }} interval={Math.max(1, Math.floor(chartData.length / 6))} axisLine={{ stroke: '#444c56' }} tickLine={false} />
+                <YAxis tick={{ fontSize: 11, fill: '#768390' }} tickFormatter={value => fmtPct(value)} axisLine={false} tickLine={false} orientation="right" />
+                <ReferenceLine y={0} stroke="#768390" strokeDasharray="3 3" strokeWidth={1} />
+                <Tooltip content={<CustomTooltip />} />
+                <Area
+                  type="monotone"
+                  dataKey="value"
+                  stroke="url(#splitStroke)"
+                  strokeWidth={2}
+                  fill="url(#splitColor)"
+                  dot={false}
+                  activeDot={{ r: 4, strokeWidth: 2, stroke: '#22272e' }}
+                  baseLine={0}
+                />
+              </AreaChart>
+            </ResponsiveContainer>
+          </div>
+        )}
+
+        <div className="period-toggles">
+          {PERIODS.map(p => (
+            <button key={p} className={period === p ? 'active' : ''} onClick={() => setPeriod(p)}>{p}</button>
+          ))}
+        </div>
+      </div>
+
+      <div className="holdings-section" style={{ animationDelay: '0.36s' }}>
         <div className="holdings-header-row">
           <div>
             <h3 className="holdings-section-title"><i className="fas fa-briefcase"></i> Holdings</h3>
@@ -433,69 +496,6 @@ export default function Investment() {
             </table>
           </div>
         )}
-      </div>
-
-      <div className="chart-section" style={{ animationDelay: '0.32s' }}>
-        <div className="chart-title-row">
-          <h3 className="chart-section-title"><i className="fa-solid fa-arrow-trend-up"></i> {isPnlMode ? 'Total PNL (%)' : 'Time-Weighted Return'}</h3>
-          <div className="chart-mode-toggles" role="group" aria-label="Chart metric">
-            <button type="button" className={!isPnlMode ? 'active' : ''} aria-pressed={!isPnlMode} onClick={() => setChartMode('twr')}>TWR</button>
-            <button type="button" className={isPnlMode ? 'active' : ''} aria-pressed={isPnlMode} onClick={() => setChartMode('pnl')}>TPNL</button>
-          </div>
-        </div>
-        <div className={`chart-return ${((isPnlMode ? summary.totalPnL : summary.twr) || 0) >= 0 ? 'positive' : 'negative'}`}>
-          {masked ? '***' : isPnlMode ? `${fmt(animPnL)} (${fmtPct(totalPnlPercentage)})` : fmtPct(summary.twr || 0)}
-        </div>
-
-        {isPnlMode && !chartData.length ? (
-          <div className="chart-empty">Total PNL history will appear after the next IBKR sync.</div>
-        ) : (
-          <div className="chart-container">
-            <ResponsiveContainer width="100%" height={300}>
-              <AreaChart data={chartData} margin={{ top: 10, right: 10, left: 10, bottom: 5 }}>
-                <defs>
-                  <linearGradient id="splitColor" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset={0} stopColor="#57ab5a" stopOpacity={0.4} />
-                    <stop offset={gradientOffset} stopColor="#57ab5a" stopOpacity={0.05} />
-                    <stop offset={gradientOffset} stopColor="#e5534b" stopOpacity={0.05} />
-                    <stop offset={1} stopColor="#e5534b" stopOpacity={0.4} />
-                  </linearGradient>
-                  <linearGradient id="splitStroke" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset={0} stopColor="#57ab5a" stopOpacity={1} />
-                    <stop offset={gradientOffset} stopColor="#57ab5a" stopOpacity={1} />
-                    <stop offset={gradientOffset} stopColor="#e5534b" stopOpacity={1} />
-                    <stop offset={1} stopColor="#e5534b" stopOpacity={1} />
-                  </linearGradient>
-                </defs>
-                <CartesianGrid horizontal={true} vertical={false} strokeDasharray="3 3" stroke="#444c56" opacity={0.2} />
-                <XAxis dataKey="date" tick={{ fontSize: 10, fill: '#768390' }} tickFormatter={d => {
-                  const [,m,day] = d.split('-')
-                  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
-                  return `${parseInt(day)} ${months[parseInt(m)-1]}`
-                }} interval={Math.max(1, Math.floor(chartData.length / 6))} axisLine={{ stroke: '#444c56' }} tickLine={false} />
-                <YAxis tick={{ fontSize: 11, fill: '#768390' }} tickFormatter={value => fmtPct(value)} axisLine={false} tickLine={false} orientation="right" />
-                <ReferenceLine y={0} stroke="#768390" strokeDasharray="3 3" strokeWidth={1} />
-                <Tooltip content={<CustomTooltip />} />
-                <Area
-                  type="monotone"
-                  dataKey="value"
-                  stroke="url(#splitStroke)"
-                  strokeWidth={2}
-                  fill="url(#splitColor)"
-                  dot={{ r: 2, fill: 'url(#splitStroke)', strokeWidth: 0 }}
-                  activeDot={{ r: 4, strokeWidth: 2, stroke: '#22272e' }}
-                  baseLine={0}
-                />
-              </AreaChart>
-            </ResponsiveContainer>
-          </div>
-        )}
-
-        <div className="period-toggles">
-          {PERIODS.map(p => (
-            <button key={p} className={period === p ? 'active' : ''} onClick={() => setPeriod(p)}>{p}</button>
-          ))}
-        </div>
       </div>
 
       {/* PNL Calendar Section */}
