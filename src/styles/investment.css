@@ -105,6 +105,137 @@
   }
 }
 
+/* Holdings */
+.holdings-section {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 24px;
+  opacity: 0;
+  transform: translateY(15px);
+  animation: statCardIn 0.5s ease forwards;
+}
+
+.holdings-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.holdings-section-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 0 4px;
+}
+
+.holdings-section-title i {
+  margin-right: 8px;
+  color: var(--accent, #539bf5);
+}
+
+.holdings-count {
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+.holdings-total {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.holdings-total span {
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+
+.holdings-total strong {
+  color: var(--text-primary);
+  font-size: 24px;
+  font-variant-numeric: tabular-nums;
+}
+
+.holdings-table-wrap {
+  margin-top: 18px;
+  overflow-x: auto;
+  border-top: 1px solid var(--border);
+}
+
+.holdings-table {
+  width: 100%;
+  min-width: 980px;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+
+.holdings-table th {
+  padding: 12px 10px 10px;
+  color: var(--text-secondary);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.35px;
+  text-align: right;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.holdings-table th:first-child,
+.holdings-table td:first-child {
+  padding-left: 0;
+  text-align: left;
+}
+
+.holdings-table th:last-child,
+.holdings-table td:last-child {
+  padding-right: 0;
+}
+
+.holdings-table td {
+  padding: 14px 10px;
+  border-top: 1px solid var(--border);
+  color: var(--text-primary);
+  font-size: 13px;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.holdings-table td.positive {
+  color: var(--green);
+  font-weight: 600;
+}
+
+.holdings-table td.negative {
+  color: var(--red);
+  font-weight: 600;
+}
+
+.holding-symbol {
+  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.holding-description {
+  max-width: 180px;
+  overflow: hidden;
+  color: var(--text-secondary);
+  font-size: 11px;
+  text-overflow: ellipsis;
+}
+
+.holdings-empty {
+  min-height: 110px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  font-size: 13px;
+  text-align: center;
+}
+
 /* Period toggles */
 .period-toggles {
   display: flex;
@@ -157,6 +288,18 @@
   margin-bottom: 8px;
 }
 
+.chart-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
+.chart-title-row .chart-section-title {
+  margin-bottom: 0;
+}
+
 .chart-section-title i {
   margin-right: 8px;
   color: var(--accent, #539bf5);
@@ -172,6 +315,47 @@
 
 .chart-return.positive { color: var(--green); }
 .chart-return.negative { color: var(--red); }
+
+.chart-mode-toggles {
+  display: flex;
+  gap: 3px;
+  padding: 3px;
+  background: var(--bg-primary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+.chart-mode-toggles button {
+  padding: 5px 10px;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.chart-mode-toggles button.active {
+  background: var(--accent);
+  color: white;
+}
+
+.chart-mode-toggles button:hover:not(.active) {
+  color: var(--text-primary);
+}
+
+.chart-empty {
+  height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  font-size: 13px;
+  text-align: center;
+}
 
 /* chart-subtitle kept for backwards compat */
 .chart-subtitle {
@@ -722,6 +906,20 @@
 }
 
 @media (max-width: 480px) {
+  .chart-title-row {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .chart-mode-toggles {
+    width: 100%;
+  }
+
+  .chart-mode-toggles button {
+    flex: 1;
+  }
+
   .period-toggles {
     width: 100%;
     overflow-x: auto;

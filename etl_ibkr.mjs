@@ -5,6 +5,8 @@
 import { readFileSync, writeFileSync } from 'fs'
 import { execSync } from 'child_process'
 import admin from 'firebase-admin'
+import { calculateDailyTotalPnL } from './investment_pnl.mjs'
+import { extractPositions } from './investment_positions.mjs'
 
 const FLEX_TOKEN = process.env.IBKR_TOKEN
 const QUERY_ID = process.env.IBKR_QUERY_ID
@@ -190,6 +192,8 @@ function processData(sections, latestNavInterestAccruals = null) {
       twr: 0
     },
     dailyTWR: [],
+    dailyTotalPnL: [],
+    positions: [],
     trades: [],
     deposits: [],
     fifoDailyPnL: [],
@@ -197,6 +201,9 @@ function processData(sections, latestNavInterestAccruals = null) {
     monthlyInterestAccrued: {},
     lastSyncAt: new Date().toISOString()
   }
+
+  result.positions = extractPositions(sections)
+  console.log(`[ETL] Positions: ${result.positions.length}`)
   
   // === NAV Data ===
   // EQUT has daily equity data (262 rows), CNAV has consolidated summary (1 row)
@@ -322,6 +329,7 @@ function processData(sections, latestNavInterestAccruals = null) {
   
   // === Total PnL = NLV - NetDeposited ===
   result.summary.totalPnL = Math.round((result.summary.netLiquidationValue - result.summary.netDeposited) * 100) / 100
+  result.dailyTotalPnL = calculateDailyTotalPnL(navRows, cfByDate, result.summary.totalPnL)
   
   // === Interest from CTRN ===
   const monthlyInt = {}

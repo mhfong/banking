@@ -4,6 +4,7 @@ import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceL
 import { useAuth } from '../contexts/AuthContext'
 import { useMask } from '../contexts/MaskContext'
 import { useIBKRData } from '../contexts/IBKRDataContext'
+import { calculateDailyTotalPnL, calculateDailyTotalPnLFromReturns, convertPnLPointsToPercentage } from '../../investment_pnl.mjs'
 import MaskToggle from '../components/MaskToggle'
 import CustomSelect from '../components/CustomSelect'
 import { db } from '../firebase'
@@ -60,6 +61,58 @@ function filterByPeriod(dailyPnL, period) {
   return filtered.map(d => ({ ...d, pct: Math.round((d.pct - base) * 100) / 100 }))
 }
 
+function filterTotalPnlByPeriod(dailyTotalPnL, period) {
+  if (!dailyTotalPnL.length) return []
+  const withValues = dailyTotalPnL.map(point => ({
+    ...point,
+    value: point.cumulativePnL ?? point.cumulative ?? point.pnl ?? 0,
+    dailyValue: point.dailyPnL ?? point.dailyReturn ?? 0,
+  }))
+  if (period === 'All') return withValues
+
+  const now = new Date(withValues[withValues.length - 1].date)
+  let cutoff
+  switch(period) {
+    case '1W': cutoff = new Date(now); cutoff.setDate(cutoff.getDate() - 7); break
+    case 'MTD': cutoff = new Date(now.getFullYear(), now.getMonth(), 1); break
+    case '1M': cutoff = new Date(now); cutoff.setMonth(cutoff.getMonth() - 1); break
+    case '3M': cutoff = new Date(now); cutoff.setMonth(cutoff.getMonth() - 3); break
+    case 'YTD': cutoff = new Date(now.getFullYear(), 0, 1); break
+    case '1Y': cutoff = new Date(now); cutoff.setFullYear(cutoff.getFullYear() - 1); break
+    default: return withValues
+  }
+  const cutStr = cutoff.toISOString().slice(0,10)
+  const filtered = withValues.filter(point => point.date >= cutStr)
+  if (!filtered.length) return withValues
+  const base = filtered[0].value - filtered[0].dailyValue
+  return filtered.map(point => ({ ...point, value: Math.round((point.value - base) * 100) / 100 }))
+}
+
+function getTotalPnlData(data) {
+  if (data?.dailyTotalPnL?.length) return data.dailyTotalPnL
+
+  const cashFlows = {}
+  for (const flow of data?.deposits || []) {
+    cashFlows[flow.date] = (cashFlows[flow.date] || 0) + (Number(flow.amount) || 0)
+  }
+
+  const legacyNavRows = (data?.dailyPnL || [])
+    .filter(point => point.endingValue != null)
+    .map(point => ({ date: point.date, total: point.endingValue }))
+  if (legacyNavRows.length) {
+    return calculateDailyTotalPnL(legacyNavRows, cashFlows, data.summary?.totalPnL)
+  }
+
+  const dailyReturns = data?.dailyTWR || []
+  if (!dailyReturns.length || data?.summary?.netLiquidationValue == null) return []
+  return calculateDailyTotalPnLFromReturns(
+    dailyReturns,
+    cashFlows,
+    data.summary.netLiquidationValue,
+    data.summary.totalPnL,
+  )
+}
+
 const fmt = (v) => v >= 0 ? `+$${Math.abs(v).toLocaleString()}` : `-$${Math.abs(v).toLocaleString()}`
 const fmtShort = (v) => {
   const abs = Math.abs(v)
@@ -67,12 +120,33 @@ const fmtShort = (v) => {
   return (v >= 0 ? '+' : '-') + '$' + abs.toFixed(0)
 }
 const fmtPct = (v) => (v >= 0 ? '+' : '') + v.toFixed(2) + '%'
+const fmtHoldingMoney = (v, decimals = 0) => {
+  if (v === null || v === undefined || !Number.isFinite(Number(v))) return '—'
+  return '$' + Number(v).toLocaleString(undefined, { minimumFractionDigits: decimals, maximumFractionDigits: decimals })
+}
+const fmtHoldingPrice = (v) => {
+  if (v === null || v === undefined || !Number.isFinite(Number(v))) return '—'
+  return Number(v).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 5 })
+}
+const fmtHoldingPnl = (v) => v === null || v === undefined ? '—' : fmt(Number(v))
+const fmtHoldingCompact = (v) => {
+  if (!Number.isFinite(Number(v))) return '—'
+  const abs = Math.abs(Number(v))
+  if (abs >= 1000000) return '$' + (abs / 1000000).toFixed(1) + 'M'
+  if (abs >= 1000) return '$' + Math.round(abs / 1000) + 'K'
+  return fmtHoldingMoney(v)
+}
+const fmtHoldingToday = (position) => {
+  if (position.todayPct !== null && position.todayPct !== undefined) return fmtPct(Number(position.todayPct))
+  return fmtHoldingPnl(position.todayPnL)
+}
 
 export default function Investment() {
   const { user } = useAuth()
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const [period, setPeriod] = useState('All')
+  const [chartMode, setChartMode] = useState('pnl')
   const { masked, mask } = useMask()
   const { data, loading: dataLoading } = useIBKRData()
   const [tradingTargetOverride, setTradingTargetOverride] = useState(null)
@@ -102,8 +176,29 @@ export default function Investment() {
   }, [user])
 
   const { trades = [], dailyTWR: dailyPnL = [], summary = {} } = data || {}
+  const positions = Array.isArray(data?.positions) ? data.positions : []
+  const dailyTotalPnL = useMemo(() => getTotalPnlData(data), [data])
+  const isPnlMode = chartMode === 'pnl'
 
-  const chartData = useMemo(() => filterByPeriod(dailyPnL, period), [dailyPnL, period])
+  const holdingsTotal = useMemo(() => positions.reduce((total, position) => total + (Number(position.marketValue) || 0), 0), [positions])
+
+  const chartData = useMemo(() => {
+    if (isPnlMode) {
+      return convertPnLPointsToPercentage(
+        filterTotalPnlByPeriod(dailyTotalPnL, period),
+        summary.netDeposited,
+      )
+    }
+    return filterByPeriod(dailyPnL, period).map(point => ({
+      ...point,
+      value: point.pct,
+      dailyValue: point.pnl,
+    }))
+  }, [dailyPnL, dailyTotalPnL, isPnlMode, period, summary.netDeposited])
+
+  const totalPnlPercentage = summary.netDeposited > 0
+    ? Math.round((summary.totalPnL / summary.netDeposited) * 10000) / 100
+    : 0
 
   // Calendar state
   // Build set of dates with actual trades (for clickable check)
@@ -208,7 +303,7 @@ export default function Investment() {
   // Calculate gradient stop offset for green/red split at 0 line
   const gradientOffset = useMemo(() => {
     if (!chartData.length) return 0.5
-    const values = chartData.map(d => d.pct)
+    const values = chartData.map(point => point.value)
     const max = Math.max(...values)
     const min = Math.min(...values)
     if (max <= 0) return 0
@@ -245,11 +340,13 @@ export default function Investment() {
   const CustomTooltip = ({ active, payload }) => {
     if (!active || !payload?.length) return null
     const d = payload[0].payload
+    const valueLabel = isPnlMode ? `${fmt(d.dollarValue)} (${fmtPct(d.value)})` : fmtPct(d.value)
+    const dailyValueLabel = isPnlMode ? `${fmt(d.dailyDollarValue)} (${fmtPct(d.dailyValue)})` : fmtPct(d.dailyValue)
     return (
       <div className="chart-tooltip">
         <div className="tooltip-date">{d.date}</div>
-        <div style={{ color: d.pct >= 0 ? 'var(--green)' : 'var(--red)' }}>{d.pct >= 0 ? '+' : ''}{d.pct.toFixed(2)}%</div>
-        <div style={{ color: 'var(--text-secondary)', fontSize: '11px' }}>Day: {masked ? '***' : fmt(d.pnl)}</div>
+        <div style={{ color: d.value >= 0 ? 'var(--green)' : 'var(--red)' }}>{masked ? '***' : valueLabel}</div>
+        <div style={{ color: 'var(--text-secondary)', fontSize: '11px' }}>Day: {masked ? '***' : dailyValueLabel}</div>
       </div>
     )
   }
@@ -283,51 +380,116 @@ export default function Investment() {
         </div>
       </div>
 
-      <div className="chart-section" style={{ animationDelay: '0.32s' }}>
-        <h3 className="chart-section-title"><i className="fa-solid fa-arrow-trend-up"></i> Time-Weighted Return</h3>
-        <div className={`chart-return ${(summary.twr || 0) >= 0 ? 'positive' : 'negative'}`}>
-          {masked ? '***' : fmtPct(summary.twr || 0)}
+      <div className="holdings-section" style={{ animationDelay: '0.28s' }}>
+        <div className="holdings-header-row">
+          <div>
+            <h3 className="holdings-section-title"><i className="fas fa-briefcase"></i> Holdings</h3>
+            <span className="holdings-count">{positions.length} {positions.length === 1 ? 'position' : 'positions'}</span>
+          </div>
+          <div className="holdings-total">
+            <span>Position</span>
+            <strong>{mask(fmtHoldingCompact(holdingsTotal))}</strong>
+          </div>
         </div>
 
-        <div className="chart-container">
-          <ResponsiveContainer width="100%" height={300}>
-            <AreaChart data={chartData} margin={{ top: 10, right: 10, left: 10, bottom: 5 }}>
-              <defs>
-                <linearGradient id="splitColor" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset={0} stopColor="#57ab5a" stopOpacity={0.4} />
-                  <stop offset={gradientOffset} stopColor="#57ab5a" stopOpacity={0.05} />
-                  <stop offset={gradientOffset} stopColor="#e5534b" stopOpacity={0.05} />
-                  <stop offset={1} stopColor="#e5534b" stopOpacity={0.4} />
-                </linearGradient>
-                <linearGradient id="splitStroke" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset={0} stopColor="#57ab5a" stopOpacity={1} />
-                  <stop offset={gradientOffset} stopColor="#57ab5a" stopOpacity={1} />
-                  <stop offset={gradientOffset} stopColor="#e5534b" stopOpacity={1} />
-                  <stop offset={1} stopColor="#e5534b" stopOpacity={1} />
-                </linearGradient>
-              </defs>
-              <CartesianGrid horizontal={true} vertical={false} strokeDasharray="3 3" stroke="#444c56" opacity={0.2} />
-              <XAxis dataKey="date" tick={{ fontSize: 10, fill: '#768390' }} tickFormatter={d => {
-                const [,m,day] = d.split('-')
-                const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
-                return `${parseInt(day)} ${months[parseInt(m)-1]}`
-              }} interval={Math.max(1, Math.floor(chartData.length / 6))} axisLine={{ stroke: '#444c56' }} tickLine={false} />
-              <YAxis tick={{ fontSize: 11, fill: '#768390' }} tickFormatter={v => `${v >= 0 ? '+' : ''}${v.toFixed(2)}%`} axisLine={false} tickLine={false} orientation="right" />
-              <ReferenceLine y={0} stroke="#768390" strokeDasharray="3 3" strokeWidth={1} />
-              <Tooltip content={<CustomTooltip />} />
-              <Area
-                type="monotone"
-                dataKey="pct"
-                stroke="url(#splitStroke)"
-                strokeWidth={2}
-                fill="url(#splitColor)"
-                dot={{ r: 2, fill: 'url(#splitStroke)', strokeWidth: 0 }}
-                activeDot={{ r: 4, strokeWidth: 2, stroke: '#22272e' }}
-                baseLine={0}
-              />
-            </AreaChart>
-          </ResponsiveContainer>
+        {!positions.length ? (
+          <div className="holdings-empty">Holdings will appear after the next IBKR sync.</div>
+        ) : (
+          <div className="holdings-table-wrap">
+            <table className="holdings-table">
+              <thead>
+                <tr>
+                  <th>Holding</th>
+                  <th>Today</th>
+                  <th>Market Value</th>
+                  <th>Unrealized P&amp;L</th>
+                  <th>Average Price</th>
+                  <th>Realized P&amp;L</th>
+                  <th>Cost Basis</th>
+                  <th>% Portfolio</th>
+                </tr>
+              </thead>
+              <tbody>
+                {positions.map((position, index) => {
+                  const portfolioPct = position.portfolioPct ?? (summary.netLiquidationValue > 0 ? (Number(position.marketValue) || 0) / summary.netLiquidationValue * 100 : null)
+                  const todayValue = position.todayPct ?? position.todayPnL
+                  return (
+                    <tr key={`${position.symbol}-${index}`}>
+                      <td>
+                        <div className="holding-symbol">{position.symbol}</div>
+                        <div className="holding-description">{position.description}{position.currency ? ` · ${position.currency}` : ''}</div>
+                      </td>
+                      <td className={todayValue == null ? '' : todayValue >= 0 ? 'positive' : 'negative'}>{mask(fmtHoldingToday(position))}</td>
+                      <td>{mask(fmtHoldingMoney(position.marketValue))}</td>
+                      <td className={position.unrealizedPnL >= 0 ? 'positive' : 'negative'}>{mask(fmtHoldingPnl(position.unrealizedPnL))}</td>
+                      <td>{mask(fmtHoldingPrice(position.averagePrice))}</td>
+                      <td className={position.realizedPnL >= 0 ? 'positive' : 'negative'}>{mask(fmtHoldingPnl(position.realizedPnL))}</td>
+                      <td>{mask(fmtHoldingMoney(position.costBasis))}</td>
+                      <td>{mask(portfolioPct == null ? '—' : `${portfolioPct.toFixed(2)}%`)}</td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+
+      <div className="chart-section" style={{ animationDelay: '0.32s' }}>
+        <div className="chart-title-row">
+          <h3 className="chart-section-title"><i className="fa-solid fa-arrow-trend-up"></i> {isPnlMode ? 'Total PNL (%)' : 'Time-Weighted Return'}</h3>
+          <div className="chart-mode-toggles" role="group" aria-label="Chart metric">
+            <button type="button" className={!isPnlMode ? 'active' : ''} aria-pressed={!isPnlMode} onClick={() => setChartMode('twr')}>TWR</button>
+            <button type="button" className={isPnlMode ? 'active' : ''} aria-pressed={isPnlMode} onClick={() => setChartMode('pnl')}>TPNL</button>
+          </div>
         </div>
+        <div className={`chart-return ${((isPnlMode ? summary.totalPnL : summary.twr) || 0) >= 0 ? 'positive' : 'negative'}`}>
+          {masked ? '***' : isPnlMode ? `${fmt(animPnL)} (${fmtPct(totalPnlPercentage)})` : fmtPct(summary.twr || 0)}
+        </div>
+
+        {isPnlMode && !chartData.length ? (
+          <div className="chart-empty">Total PNL history will appear after the next IBKR sync.</div>
+        ) : (
+          <div className="chart-container">
+            <ResponsiveContainer width="100%" height={300}>
+              <AreaChart data={chartData} margin={{ top: 10, right: 10, left: 10, bottom: 5 }}>
+                <defs>
+                  <linearGradient id="splitColor" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset={0} stopColor="#57ab5a" stopOpacity={0.4} />
+                    <stop offset={gradientOffset} stopColor="#57ab5a" stopOpacity={0.05} />
+                    <stop offset={gradientOffset} stopColor="#e5534b" stopOpacity={0.05} />
+                    <stop offset={1} stopColor="#e5534b" stopOpacity={0.4} />
+                  </linearGradient>
+                  <linearGradient id="splitStroke" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset={0} stopColor="#57ab5a" stopOpacity={1} />
+                    <stop offset={gradientOffset} stopColor="#57ab5a" stopOpacity={1} />
+                    <stop offset={gradientOffset} stopColor="#e5534b" stopOpacity={1} />
+                    <stop offset={1} stopColor="#e5534b" stopOpacity={1} />
+                  </linearGradient>
+                </defs>
+                <CartesianGrid horizontal={true} vertical={false} strokeDasharray="3 3" stroke="#444c56" opacity={0.2} />
+                <XAxis dataKey="date" tick={{ fontSize: 10, fill: '#768390' }} tickFormatter={d => {
+                  const [,m,day] = d.split('-')
+                  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+                  return `${parseInt(day)} ${months[parseInt(m)-1]}`
+                }} interval={Math.max(1, Math.floor(chartData.length / 6))} axisLine={{ stroke: '#444c56' }} tickLine={false} />
+                <YAxis tick={{ fontSize: 11, fill: '#768390' }} tickFormatter={value => fmtPct(value)} axisLine={false} tickLine={false} orientation="right" />
+                <ReferenceLine y={0} stroke="#768390" strokeDasharray="3 3" strokeWidth={1} />
+                <Tooltip content={<CustomTooltip />} />
+                <Area
+                  type="monotone"
+                  dataKey="value"
+                  stroke="url(#splitStroke)"
+                  strokeWidth={2}
+                  fill="url(#splitColor)"
+                  dot={{ r: 2, fill: 'url(#splitStroke)', strokeWidth: 0 }}
+                  activeDot={{ r: 4, strokeWidth: 2, stroke: '#22272e' }}
+                  baseLine={0}
+                />
+              </AreaChart>
+            </ResponsiveContainer>
+          </div>
+        )}
 
         <div className="period-toggles">
           {PERIODS.map(p => (

@@ -121,6 +121,7 @@ function generateTransactions() {
 function generateInvestmentData() {
   // Generate daily TWR data from 2025-01 to now
   const dailyTWR = []
+  const dailyTotalPnL = []
   const trades = []
   const fifoDailyPnL = []
   const deposits = []
@@ -141,6 +142,7 @@ function generateInvestmentData() {
     const monthKey = dateStr.substring(0, 7)
 
     // Random daily return -2% to +2% with slight positive bias
+    const previousNlv = nlv
     const dailyReturn = (Math.random() - 0.47) * 0.04
     cumTWR = (1 + cumTWR / 100) * (1 + dailyReturn) * 100 - 100
     nlv = nlv * (1 + dailyReturn)
@@ -172,12 +174,22 @@ function generateInvestmentData() {
     }
 
     // Quarterly deposits
+    let cashFlow = 0
     if (d.getDate() === 15 && d.getMonth() % 3 === 0) {
       const dep = rand(20000, 50000)
       deposits.push({ date: dateStr, amount: dep })
       netDeposited += dep
       nlv += dep
+      cashFlow = dep
     }
+
+    dailyTotalPnL.push({
+      date: dateStr,
+      dailyPnL: Math.round((nlv - previousNlv - cashFlow) * 100) / 100,
+      cumulativePnL: Math.round((nlv - netDeposited) * 100) / 100,
+      endingValue: Math.round(nlv * 100) / 100,
+      cashFlow,
+    })
 
     // Monthly interest
     if (!monthlyInterest[monthKey]) {
@@ -199,6 +211,7 @@ function generateInvestmentData() {
       twr: Math.round(cumTWR * 100) / 100
     },
     dailyTWR,
+    dailyTotalPnL,
     trades,
     fifoDailyPnL,
     deposits,
