@@ -11,7 +11,7 @@
 
 .inv-header h1 {
   font-size: 24px;
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .mask-toggle {
@@ -38,8 +38,8 @@
 
 .inv-return {
   font-size: 36px;
-  font-weight: 800;
-  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  font-variant-numeric: proportional-nums;
   min-width: 160px;
 }
 
@@ -91,8 +91,8 @@
 
 .inv-stat-value {
   font-size: 22px;
-  font-weight: 700;
-  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+  font-variant-numeric: proportional-nums;
 }
 
 .inv-stat-value.positive { color: var(--green); }
@@ -132,7 +132,7 @@
 
 .holdings-section-title i {
   margin-right: 8px;
-  color: var(--accent, #539bf5);
+  color: var(--accent, #2f80ff);
 }
 
 .holdings-count {
@@ -155,7 +155,8 @@
 .holdings-total strong {
   color: var(--text-primary);
   font-size: 24px;
-  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+  font-variant-numeric: proportional-nums;
 }
 
 .holdings-table-wrap {
@@ -168,7 +169,7 @@
   width: 100%;
   min-width: 980px;
   border-collapse: collapse;
-  font-variant-numeric: tabular-nums;
+  font-variant-numeric: proportional-nums;
 }
 
 .holdings-table th {
@@ -255,14 +256,14 @@
   border-radius: 6px;
   color: var(--text-secondary);
   font-size: 13px;
-  font-weight: 500;
+  font-weight: 400;
   cursor: pointer;
   transition: all 0.2s;
 }
 
 .period-toggles button.active {
-  background: var(--accent);
-  color: white;
+  background: var(--accent-soft);
+  color: var(--accent);
 }
 
 .period-toggles button:hover:not(.active) {
@@ -302,13 +303,13 @@
 
 .chart-section-title i {
   margin-right: 8px;
-  color: var(--accent, #539bf5);
+  color: var(--accent, #2f80ff);
 }
 
 .chart-return {
   font-size: 32px;
-  font-weight: 800;
-  font-variant-numeric: tabular-nums;
+  font-weight: 400;
+  font-variant-numeric: proportional-nums;
   margin-top: 20px;
   margin-bottom: 0;
 }
@@ -333,14 +334,14 @@
   border-radius: 6px;
   color: var(--text-secondary);
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 500;
   cursor: pointer;
   transition: all 0.2s;
 }
 
 .chart-mode-toggles button.active {
-  background: var(--accent);
-  color: white;
+  background: var(--accent-soft);
+  color: var(--accent);
 }
 
 .chart-mode-toggles button:hover:not(.active) {
@@ -421,7 +422,7 @@
   padding: 10px 12px;
   font-size: 13px;
   border-bottom: 1px solid var(--border);
-  font-variant-numeric: tabular-nums;
+  font-variant-numeric: proportional-nums;
 }
 
 .trades-table td.positive { color: var(--green); font-weight: 600; }
@@ -719,12 +720,12 @@
 
 @keyframes calHeatGreen {
   0% { background: var(--bg-primary); border-color: transparent; }
-  100% { background: rgba(87, 171, 90, 0.12); border-color: rgba(87, 171, 90, 0.25); }
+  100% { background: rgba(0, 184, 90, 0.12); border-color: rgba(0, 184, 90, 0.25); }
 }
 
 @keyframes calHeatRed {
   0% { background: var(--bg-primary); border-color: transparent; }
-  100% { background: rgba(229, 83, 75, 0.12); border-color: rgba(229, 83, 75, 0.25); }
+  100% { background: rgba(255, 59, 82, 0.12); border-color: rgba(255, 59, 82, 0.25); }
 }
 
 .cal-cell.empty {
@@ -757,14 +758,14 @@
 
 .cal-cell.best-day {
   border: 2px solid var(--green) !important;
-  box-shadow: 0 0 8px rgba(87, 171, 90, 0.4);
-  background: rgba(87, 171, 90, 0.2);
+  box-shadow: 0 0 8px rgba(0, 184, 90, 0.4);
+  background: rgba(0, 184, 90, 0.2);
 }
 
 .cal-cell.worst-day {
   border: 2px solid var(--red) !important;
-  box-shadow: 0 0 8px rgba(229, 83, 75, 0.4);
-  background: rgba(229, 83, 75, 0.2);
+  box-shadow: 0 0 8px rgba(255, 59, 82, 0.4);
+  background: rgba(255, 59, 82, 0.2);
 }
 
 .cal-closed-label {
@@ -807,7 +808,7 @@
 .cal-day-pnl {
   font-size: 13px;
   font-weight: 700;
-  font-variant-numeric: tabular-nums;
+  font-variant-numeric: proportional-nums;
   line-height: 1.2;
 }
 
@@ -815,7 +816,7 @@
   font-size: 11px;
   font-weight: 500;
   color: var(--text-secondary);
-  font-variant-numeric: tabular-nums;
+  font-variant-numeric: proportional-nums;
   line-height: 1.2;
 }
 
@@ -971,19 +972,19 @@
 }
 
 .target-bar-section.target-achieved {
-  border-color: rgba(152, 110, 226, 0.5);
-  box-shadow: 0 0 12px rgba(152, 110, 226, 0.2), 0 0 30px rgba(83, 155, 245, 0.1), inset 0 0 12px rgba(152, 110, 226, 0.05);
+  border-color: rgba(47, 128, 255, 0.5);
+  box-shadow: 0 0 12px rgba(47, 128, 255, 0.2), 0 0 30px rgba(47, 128, 255, 0.1), inset 0 0 12px rgba(47, 128, 255, 0.05);
   animation: targetGlow 2s ease-in-out infinite;
 }
 
 @keyframes targetGlow {
   0%, 100% {
-    border-color: rgba(152, 110, 226, 0.5);
-    box-shadow: 0 0 12px rgba(152, 110, 226, 0.2), 0 0 30px rgba(83, 155, 245, 0.1), inset 0 0 12px rgba(152, 110, 226, 0.05);
+    border-color: rgba(47, 128, 255, 0.5);
+    box-shadow: 0 0 12px rgba(47, 128, 255, 0.2), 0 0 30px rgba(47, 128, 255, 0.1), inset 0 0 12px rgba(47, 128, 255, 0.05);
   }
   50% {
-    border-color: rgba(83, 155, 245, 0.7);
-    box-shadow: 0 0 20px rgba(152, 110, 226, 0.35), 0 0 45px rgba(83, 155, 245, 0.2), inset 0 0 20px rgba(152, 110, 226, 0.08);
+    border-color: rgba(47, 128, 255, 0.7);
+    box-shadow: 0 0 20px rgba(47, 128, 255, 0.35), 0 0 45px rgba(47, 128, 255, 0.2), inset 0 0 20px rgba(47, 128, 255, 0.08);
   }
 }
 
@@ -1025,12 +1026,12 @@
 .target-fill {
   height: 100%;
   border-radius: 5px;
-  background: linear-gradient(90deg, #539bf5, #57ab5a);
+  background: linear-gradient(90deg, #2f80ff, #00b85a);
   transition: width 0.8s ease;
 }
 
 .target-fill.achieved {
-  background: linear-gradient(90deg, #986ee2, #539bf5, #986ee2);
+  background: linear-gradient(90deg, #2f80ff, #00b85a, #2f80ff);
   background-size: 200% 100%;
   animation: targetBarShimmer 2s ease infinite;
 }

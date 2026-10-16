@@ -400,26 +400,26 @@ export default function Investment() {
               <AreaChart data={chartData} margin={{ top: 10, right: 10, left: 10, bottom: 5 }}>
                 <defs>
                   <linearGradient id="splitColor" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset={0} stopColor="#57ab5a" stopOpacity={0.4} />
-                    <stop offset={gradientOffset} stopColor="#57ab5a" stopOpacity={0.05} />
-                    <stop offset={gradientOffset} stopColor="#e5534b" stopOpacity={0.05} />
-                    <stop offset={1} stopColor="#e5534b" stopOpacity={0.4} />
+                    <stop offset={0} stopColor="#00b85a" stopOpacity={0.4} />
+                    <stop offset={gradientOffset} stopColor="#00b85a" stopOpacity={0.05} />
+                    <stop offset={gradientOffset} stopColor="#ff3b52" stopOpacity={0.05} />
+                    <stop offset={1} stopColor="#ff3b52" stopOpacity={0.4} />
                   </linearGradient>
                   <linearGradient id="splitStroke" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset={0} stopColor="#57ab5a" stopOpacity={1} />
-                    <stop offset={gradientOffset} stopColor="#57ab5a" stopOpacity={1} />
-                    <stop offset={gradientOffset} stopColor="#e5534b" stopOpacity={1} />
-                    <stop offset={1} stopColor="#e5534b" stopOpacity={1} />
+                    <stop offset={0} stopColor="#00b85a" stopOpacity={1} />
+                    <stop offset={gradientOffset} stopColor="#00b85a" stopOpacity={1} />
+                    <stop offset={gradientOffset} stopColor="#ff3b52" stopOpacity={1} />
+                    <stop offset={1} stopColor="#ff3b52" stopOpacity={1} />
                   </linearGradient>
                 </defs>
-                <CartesianGrid horizontal={true} vertical={false} strokeDasharray="3 3" stroke="#444c56" opacity={0.2} />
-                <XAxis dataKey="date" tick={{ fontSize: 10, fill: '#768390' }} tickFormatter={d => {
+                <CartesianGrid horizontal={true} vertical={false} strokeDasharray="3 3" stroke="#454850" opacity={0.2} />
+                <XAxis dataKey="date" tick={{ fontSize: 10, fill: '#9a9ba0' }} tickFormatter={d => {
                   const [,m,day] = d.split('-')
                   const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
                   return `${parseInt(day)} ${months[parseInt(m)-1]}`
-                }} interval={Math.max(1, Math.floor(chartData.length / 6))} axisLine={{ stroke: '#444c56' }} tickLine={false} />
-                <YAxis tick={{ fontSize: 11, fill: '#768390' }} tickFormatter={value => fmtPct(value)} axisLine={false} tickLine={false} orientation="right" />
-                <ReferenceLine y={0} stroke="#768390" strokeDasharray="3 3" strokeWidth={1} />
+                }} interval={Math.max(1, Math.floor(chartData.length / 6))} axisLine={{ stroke: '#454850' }} tickLine={false} />
+                <YAxis tick={{ fontSize: 11, fill: '#9a9ba0' }} tickFormatter={value => fmtPct(value)} axisLine={false} tickLine={false} orientation="right" />
+                <ReferenceLine y={0} stroke="#9a9ba0" strokeDasharray="3 3" strokeWidth={1} />
                 <Tooltip content={<CustomTooltip />} />
                 <Area
                   type="monotone"
@@ -428,7 +428,7 @@ export default function Investment() {
                   strokeWidth={2}
                   fill="url(#splitColor)"
                   dot={false}
-                  activeDot={{ r: 4, strokeWidth: 2, stroke: '#22272e' }}
+                  activeDot={{ r: 4, strokeWidth: 2, stroke: '#15171c' }}
                   baseLine={0}
                 />
               </AreaChart>
