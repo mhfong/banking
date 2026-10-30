@@ -7,6 +7,7 @@ import { execSync } from 'child_process'
 import admin from 'firebase-admin'
 import { calculateDailyTotalPnL } from './investment_pnl.mjs'
 import { extractPositions } from './investment_positions.mjs'
+import { alignDailyTotalPnL, isDateInWindow, mergeDepositHistory, summarizeDeposits, upsertDateSeries } from './ibkr_deposit_history.mjs'
 
 const FLEX_TOKEN = process.env.IBKR_TOKEN
 const QUERY_ID = process.env.IBKR_QUERY_ID
@@ -199,6 +200,8 @@ function processData(sections, latestNavInterestAccruals = null) {
     fifoDailyPnL: [],
     monthlyInterest: {},
     monthlyInterestAccrued: {},
+    sourceStartDate: null,
+    sourceEndDate: null,
     lastSyncAt: new Date().toISOString()
   }
 
@@ -275,6 +278,11 @@ function processData(sections, latestNavInterestAccruals = null) {
     const amount = parseFloat(r.Amount || 0)
     cfByDate[date] = (cfByDate[date] || 0) + amount
   }
+
+  const flowDates = Object.keys(cfByDate).sort()
+  result.sourceStartDate = navRows.length ? navRows[0].date : (flowDates[0] || null)
+  result.sourceEndDate = navRows.length ? navRows[navRows.length - 1].date : (flowDates[flowDates.length - 1] || null)
+  console.log(`[ETL] Source window: ${result.sourceStartDate || 'unknown'} to ${result.sourceEndDate || 'unknown'}`)
   
   // Calculate net deposited
   let totalDeposited = 0, totalWithdrawn = 0
@@ -521,21 +529,35 @@ async function pushToFirebase(data) {
     // (historical data from previous Flex Query windows).
     const existingDoc = await docRef.get()
     const existingData = existingDoc.exists ? existingDoc.data() : {}
-    
-    const existingDailyTWR = existingData.dailyTWR || []
-    const newDates = new Set(data.dailyTWR.map(d => d.date))
-    const earliestNewDate = data.dailyTWR.length ? data.dailyTWR[0].date : null
-    
-    // Keep old entries only if they're before our new data range
-    // (they were calculated correctly in their original run)
-    const historicalTWR = earliestNewDate 
-      ? existingDailyTWR.filter(d => d.date < earliestNewDate)
-      : []
-    
-    // Combine: historical (pre-window) + new (full recalculated chain)
-    data.dailyTWR = [...historicalTWR, ...data.dailyTWR]
-    
-    console.log(`[ETL] TWR merge: ${historicalTWR.length} historical + ${data.dailyTWR.length - historicalTWR.length} new = ${data.dailyTWR.length} total`)
+    const sourceWindow = {
+      start: data.sourceStartDate,
+      end: data.sourceEndDate,
+    }
+
+    data.deposits = mergeDepositHistory(existingData.deposits || [], data.deposits || [], sourceWindow)
+    const depositSummary = summarizeDeposits(data.deposits)
+    data.summary = {
+      ...data.summary,
+      ...depositSummary,
+      totalPnL: Math.round((data.summary.netLiquidationValue - depositSummary.netDeposited) * 100) / 100,
+    }
+    data.dailyTotalPnL = alignDailyTotalPnL(data.dailyTotalPnL, data.summary.totalPnL)
+    console.log(`[ETL] Deposit history: ${data.deposits.length} dates, net deposited $${data.summary.netDeposited.toFixed(2)}`)
+
+    data.dailyTWR = upsertDateSeries(existingData.dailyTWR || [], data.dailyTWR || [])
+    data.dailyTotalPnL = upsertDateSeries(existingData.dailyTotalPnL || [], data.dailyTotalPnL || [])
+    data.dailyInterest = upsertDateSeries(existingData.dailyInterest || [], data.dailyInterest || [])
+    data.dailyCommission = upsertDateSeries(existingData.dailyCommission || [], data.dailyCommission || [])
+    data.fifoDailyPnL = upsertDateSeries(existingData.fifoDailyPnL || [], data.fifoDailyPnL || [])
+
+    data.monthlyInterest = { ...(existingData.monthlyInterest || {}), ...(data.monthlyInterest || {}) }
+    data.monthlyInterestAccrued = { ...(existingData.monthlyInterestAccrued || {}), ...(data.monthlyInterestAccrued || {}) }
+    data.monthlyCommission = { ...(existingData.monthlyCommission || {}), ...(data.monthlyCommission || {}) }
+
+    data.summary.totalInterest = Math.round(data.dailyInterest.reduce((sum, entry) => sum + (Number(entry.amount) || 0), 0) * 100) / 100
+    data.summary.totalCommission = Math.round(data.dailyCommission.reduce((sum, entry) => sum + (Number(entry.amount) || 0), 0) * 100) / 100
+
+    console.log(`[ETL] Date-series merge: TWR=${data.dailyTWR.length}, total PNL=${data.dailyTotalPnL.length}, interest=${data.dailyInterest.length}, commission=${data.dailyCommission.length}, FIFO=${data.fifoDailyPnL.length}`)
     
     // Merge trades (dedup by date, symbol, type, price)
     const tradeKey = t => `${t.date}-${t.symbol}-${t.type}-${t.price}`
@@ -547,7 +569,7 @@ async function pushToFirebase(data) {
     
     // Push to Firestore (exclude rawDeposits — internal use only)
     const { rawDeposits, ...firebaseData } = data
-    await docRef.set(firebaseData)
+    await docRef.set(firebaseData, { merge: true })
     
     // Post-push verification: ensure dailyTWR has latest data point
     const verifyDoc = await docRef.get()
@@ -599,6 +621,10 @@ async function syncDepositsToTransactions(data) {
     })
     
     // Step 2: Build ETL source of truth map (date → net amount)
+    const sourceWindow = {
+      start: data.sourceStartDate,
+      end: data.sourceEndDate,
+    }
     const etlByDate = {}  // date → amount (positive = deposit, negative = withdrawal)
     for (const d of data.deposits) {
       etlByDate[d.date] = d.amount
@@ -614,8 +640,20 @@ async function syncDepositsToTransactions(data) {
       const fbTxns = existingByDate[date] || []
       const fbNet = fbTxns.reduce((s, t) => s + (t.type === 'expense' ? t.amount : -t.amount), 0)
       
+      // Out-of-window Firebase records are historical and cannot be called orphaned
+      // just because this rolling Flex response does not contain them.
+      if (etlAmount === undefined) {
+        if (!isDateInWindow(date, sourceWindow)) continue
+
+        for (const t of fbTxns) {
+          toDelete.push(t.id)
+          console.log(`[ETL] - ORPHAN: ${date} $${t.amount} ${t.type} (not in IBKR, deleting ${t.id})`)
+        }
+        continue
+      }
+
       // Case 1: ETL has it, Firebase doesn't → add new transaction
-      if (etlAmount !== undefined && fbTxns.length === 0) {
+      if (fbTxns.length === 0) {
         const type = etlAmount > 0 ? 'expense' : 'income'
         toAdd.push({
           date,
@@ -629,15 +667,6 @@ async function syncDepositsToTransactions(data) {
           excludeFromChart: true
         })
         console.log(`[ETL] + NEW: ${date} $${etlAmount} (not in Firebase)`)
-        continue
-      }
-      
-      // Case 2: Firebase has it, ETL doesn't → orphaned, delete all
-      if (etlAmount === undefined && fbTxns.length > 0) {
-        for (const t of fbTxns) {
-          toDelete.push(t.id)
-          console.log(`[ETL] - ORPHAN: ${date} $${t.amount} ${t.type} (not in IBKR, deleting ${t.id})`)
-        }
         continue
       }
       
@@ -660,8 +689,13 @@ async function syncDepositsToTransactions(data) {
         }
         continue  // All good
       }
+
+      if (!isDateInWindow(date, sourceWindow)) {
+        console.log(`[ETL] ~ PRESERVE: ${date} historical Firebase total $${fbNet.toFixed(2)} differs from current window data`)
+        continue
+      }
       
-      // Case 4: Both exist but totals DON'T match → reconcile
+      // Both exist but totals DON'T match inside the current source window → reconcile
       console.warn(`[ETL] ⚠️ MISMATCH ${date}: ETL=$${etlAmount.toFixed(2)} vs FB=$${fbNet.toFixed(2)}`)
       
       // Delete all existing IBKR txns for this date and re-add the correct one
@@ -715,19 +749,24 @@ async function syncDepositsToTransactions(data) {
     let verifyNet = 0, verifyCount = 0
     snap2.docs.forEach(docSnap => {
       const txn = docSnap.data()
-      if (txn.paymentMethod === 'IBKR') {
-        verifyCount++
-        verifyNet += (txn.type === 'expense' ? txn.amount : -txn.amount)
-      }
+      if (txn.paymentMethod !== 'IBKR') return
+      const dateStr = typeof txn.date === 'string'
+        ? txn.date
+        : (txn.date?.toDate ? txn.date.toDate().toISOString().slice(0, 10) : String(txn.date))
+      if (!isDateInWindow(dateStr, sourceWindow)) return
+      verifyCount++
+      verifyNet += (txn.type === 'expense' ? txn.amount : -txn.amount)
     })
     
-    const etlNet = data.deposits.reduce((s, d) => s + d.amount, 0)
+    const etlNet = data.deposits
+      .filter(d => isDateInWindow(d.date, sourceWindow))
+      .reduce((s, d) => s + d.amount, 0)
     const balanceMatch = Math.abs(verifyNet - etlNet) < 1
     
     console.log(`[ETL] Post-sync verification:`)  
     console.log(`  IBKR txn count: ${verifyCount}`)
     console.log(`  Firebase net: $${verifyNet.toFixed(2)}`)
-    console.log(`  ETL net:      $${etlNet.toFixed(2)}`)
+    console.log(`  ETL net (${sourceWindow.start || 'unknown'} to ${sourceWindow.end || 'unknown'}): $${etlNet.toFixed(2)}`)
     console.log(`  Match: ${balanceMatch ? '✅ YES' : '❌ NO — MANUAL REVIEW REQUIRED'}`)
     
     if (!balanceMatch) {
