@@ -31,7 +31,7 @@ export function mergeDepositHistory(existingDeposits = [], windowDeposits = [], 
   }
 
   for (const deposit of existingDeposits) {
-    if (!deposit?.date || isDateInWindow(deposit.date, sourceWindow)) continue
+    if (!deposit?.date) continue
     addAmount(deposit.date, Number(deposit.amount) || 0)
   }
 

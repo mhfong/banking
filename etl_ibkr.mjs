@@ -640,14 +640,11 @@ async function syncDepositsToTransactions(data) {
       const fbTxns = existingByDate[date] || []
       const fbNet = fbTxns.reduce((s, t) => s + (t.type === 'expense' ? t.amount : -t.amount), 0)
       
-      // Out-of-window Firebase records are historical and cannot be called orphaned
-      // just because this rolling Flex response does not contain them.
+      // An omitted date is not evidence that the historical record is invalid.
+      // Only dates explicitly returned by the latest Flex response are authoritative.
       if (etlAmount === undefined) {
-        if (!isDateInWindow(date, sourceWindow)) continue
-
-        for (const t of fbTxns) {
-          toDelete.push(t.id)
-          console.log(`[ETL] - ORPHAN: ${date} $${t.amount} ${t.type} (not in IBKR, deleting ${t.id})`)
+        if (fbTxns.length > 0) {
+          console.log(`[ETL] ~ PRESERVE: ${date} Firebase total $${fbNet.toFixed(2)} omitted from current Flex response`)
         }
         continue
       }
