@@ -5,7 +5,7 @@
 import { readFileSync, writeFileSync } from 'fs'
 import { execSync } from 'child_process'
 import admin from 'firebase-admin'
-import { calculateDailyTotalPnL } from './investment_pnl.mjs'
+import { calculateDailyTotalPnL, selectAuthoritativeTWR } from './investment_pnl.mjs'
 import { extractPositions } from './investment_positions.mjs'
 import { alignDailyTotalPnL, isDateInWindow, mergeDepositHistory, summarizeDeposits, upsertDateSeries } from './ibkr_deposit_history.mjs'
 
@@ -229,7 +229,7 @@ function processData(sections, latestNavInterestAccruals = null) {
   // Get NLV from CNAV (consolidated) as authoritative final value, fallback to last EQUT row
   const cnavRow = (sections.CNAV || [])[0]
   const cnavNLV = cnavRow ? parseFloat(cnavRow.EndingValue || 0) : 0
-  const cnavTWR = cnavRow ? parseFloat(cnavRow.TWR || 0) : 0
+  const cnavTWR = cnavRow && cnavRow.TWR !== '' ? parseFloat(cnavRow.TWR) : null
   
   if (navRows.length === 0 && cnavNLV === 0) throw new Error('No NAV data found')
   
@@ -316,7 +316,8 @@ function processData(sections, latestNavInterestAccruals = null) {
     })
   }
   
-  result.summary.twr = Math.round((twrProduct - 1) * 10000) / 100
+  const calculatedTWR = Math.round((twrProduct - 1) * 10000) / 100
+  result.summary.twr = selectAuthoritativeTWR(cnavTWR, calculatedTWR)
   
   // Log latest TWR data point for monitoring
   const latestTWR = result.dailyTWR[result.dailyTWR.length - 1]

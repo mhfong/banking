@@ -2,6 +2,14 @@ function roundCents(value) {
   return Math.round(value * 100) / 100
 }
 
+export function selectAuthoritativeTWR(cnavTWR, calculatedTWR) {
+  const authoritativeTWR = Number(cnavTWR)
+  if (cnavTWR !== null && cnavTWR !== undefined && cnavTWR !== '' && Number.isFinite(authoritativeTWR)) {
+    return roundCents(authoritativeTWR)
+  }
+  return roundCents(Number(calculatedTWR) || 0)
+}
+
 export function convertPnLPointsToPercentage(points, netDeposited) {
   const denominator = Number(netDeposited)
   if (!Number.isFinite(denominator) || denominator <= 0) {

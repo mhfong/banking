@@ -1,5 +1,8 @@
 import assert from 'node:assert/strict'
-import { calculateDailyTotalPnL, calculateDailyTotalPnLFromReturns, convertPnLPointsToPercentage } from '../investment_pnl.mjs'
+import { calculateDailyTotalPnL, calculateDailyTotalPnLFromReturns, convertPnLPointsToPercentage, selectAuthoritativeTWR } from '../investment_pnl.mjs'
+
+assert.equal(selectAuthoritativeTWR(-0.69, -0.07), -0.69)
+assert.equal(selectAuthoritativeTWR(null, -0.07), -0.07)
 
 const points = calculateDailyTotalPnL([
   { date: '2026-01-01', total: 1000 },
