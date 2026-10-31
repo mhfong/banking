@@ -26,18 +26,22 @@ export function upsertDateSeries(existingRecords = [], latestRecords = []) {
 
 export function mergeDepositHistory(existingDeposits = [], windowDeposits = [], sourceWindow = {}) {
   const mergedByDate = new Map()
-  const addAmount = (date, amount) => {
-    mergedByDate.set(date, roundCents((mergedByDate.get(date) || 0) + amount))
-  }
+  const latestByDate = new Map()
 
   for (const deposit of existingDeposits) {
     if (!deposit?.date) continue
-    addAmount(deposit.date, Number(deposit.amount) || 0)
+    const amount = Number(deposit.amount) || 0
+    mergedByDate.set(deposit.date, roundCents((mergedByDate.get(deposit.date) || 0) + amount))
   }
 
   for (const deposit of windowDeposits) {
     if (!deposit?.date) continue
-    addAmount(deposit.date, Number(deposit.amount) || 0)
+    const amount = Number(deposit.amount) || 0
+    latestByDate.set(deposit.date, roundCents((latestByDate.get(deposit.date) || 0) + amount))
+  }
+
+  for (const [date, amount] of latestByDate) {
+    mergedByDate.set(date, amount)
   }
 
   return Array.from(mergedByDate, ([date, amount]) => ({ date, amount }))

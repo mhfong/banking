@@ -73,4 +73,14 @@ describe('IBKR deposit history', () => {
       { date: '2025-10-30', amount: 50100 },
     ])
   })
+
+  it('replaces an existing deposit date with the latest window value', () => {
+    expect(mergeDepositHistory(
+      [{ date: '2026-10-30', amount: 50100 }],
+      [{ date: '2026-10-30', amount: 50100 }],
+      { start: '2025-10-30', end: '2026-10-30' },
+    )).toEqual([
+      { date: '2026-10-30', amount: 50100 },
+    ])
+  })
 })
