@@ -19,3 +19,7 @@ merge.mjs
 import_transactions.mjs
 extract_sample.mjs
 secrets.txt
+
+# Local agent artifacts and repository planning notes
+.superpowers/
+/docs/
