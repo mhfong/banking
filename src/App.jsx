@@ -10,6 +10,7 @@ import Transactions from './pages/Transactions'
 import Investment from './pages/Investment'
 import Trades from './pages/Trades'
 import Settings from './pages/Settings'
+import CashoutCycle from './pages/CashoutCycle'
 import Layout from './components/Layout'
 
 function PrivateRoute({ children }) {
@@ -33,6 +34,7 @@ function AppRoutes() {
       <Route path="/transactions" element={<PrivateRoute><Layout><Transactions /></Layout></PrivateRoute>} />
       <Route path="/investment" element={<PrivateRoute><Layout><Investment /></Layout></PrivateRoute>} />
       <Route path="/investment/trades" element={<PrivateRoute><Layout><Trades /></Layout></PrivateRoute>} />
+      <Route path="/cashout-cycle" element={<PrivateRoute><Layout><CashoutCycle /></Layout></PrivateRoute>} />
       <Route path="/settings" element={<PrivateRoute><Layout><Settings /></Layout></PrivateRoute>} />
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>

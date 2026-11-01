@@ -509,6 +509,23 @@
 
 .txn-delete-btn:hover { opacity: 1; color: var(--red); }
 
+.txn-copy-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--text-secondary);
+  opacity: 0.3;
+  transition: opacity 0.2s, color 0.2s;
+  padding: 4px;
+  flex-shrink: 0;
+}
+
+.txn-copy-btn:hover {
+  opacity: 1;
+  color: var(--accent);
+}
+
 /* FAB */
 .txn-fab {
   position: fixed;

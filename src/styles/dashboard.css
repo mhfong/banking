@@ -92,7 +92,7 @@
 
 .stat-value {
   font-size: 24px;
-  font-weight: 700;
+  font-weight: 500;
 }
 
 .stat-value.negative {
@@ -727,7 +727,7 @@
 
 .cat-total-value {
   font-size: 18px;
-  font-weight: 700;
+  font-weight: 500;
   color: var(--text-primary);
   font-variant-numeric: tabular-nums;
 }
@@ -740,7 +740,7 @@
 
 .cat-total-avg {
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 500;
   color: var(--text-secondary);
   font-variant-numeric: tabular-nums;
 }
@@ -863,7 +863,7 @@
 
 .cat-bar-amount {
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 500;
   color: var(--text-primary);
 }
 
@@ -876,7 +876,7 @@
 
 .cat-bar-current {
   font-size: 13px;
-  font-weight: 700;
+  font-weight: 500;
   color: var(--text-primary);
 }
 
@@ -1327,7 +1327,7 @@
 
 .proj-summary-val {
   font-size: 15px;
-  font-weight: 700;
+  font-weight: 500;
   color: var(--text-primary);
 }
 
@@ -1375,7 +1375,7 @@
 
 .proj-hero-pct {
   font-size: 28px;
-  font-weight: 800;
+  font-weight: 500;
   letter-spacing: -0.5px;
   background: linear-gradient(135deg, #3bc9db, #63e6be, #3bc9db, #63e6be);
   background-size: 300% 300%;
@@ -1388,7 +1388,7 @@
 
 .proj-hero-pct-num {
   font-size: 20px;
-  font-weight: 700;
+  font-weight: 500;
 }
 
 @keyframes goldShimmer {
@@ -1413,14 +1413,14 @@
 
 .proj-hero-sub-val {
   font-size: 20px;
-  font-weight: 700;
+  font-weight: 500;
   color: var(--text-secondary);
   letter-spacing: -0.3px;
 }
 
 .proj-hero-sub-pct {
   font-size: 15px;
-  font-weight: 600;
+  font-weight: 500;
   color: #768390;
 }
 

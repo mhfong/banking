@@ -61,7 +61,7 @@ const FORM_CATEGORIES = {
   expense: ['Bills', 'Food', 'Gambling', 'Other', 'Card Collecting', 'Home', 'Income', 'Transport', 'Tax', 'Travel', 'Investment']
 }
 
-const PAYMENT_METHODS = ['HSBC Red', 'SC Mastercard', 'Cash', 'PayMe', 'Octopus', 'FPS', 'Bank Transfer', 'Other']
+const PAYMENT_METHODS = ['HSBC Red', 'SC Mastercard', 'MOX', 'DBS Eminent', 'Cash', 'PayMe', 'Octopus', 'FPS', 'Bank Transfer', 'Other']
 
 function parseDate(d) {
   if (!d) return new Date()
@@ -382,15 +382,16 @@ export default function Transactions() {
   const fromRef = useRef(null)
   const toRef = useRef(null)
 
-  useEffect(() => {
-    if (formType === 'income') {
+  function handleFormTypeChange(type) {
+    setFormType(type)
+    if (type === 'income') {
       setFormCategory('Income')
       setFormPayment('FPS')
     } else {
       setFormCategory('Food')
       setFormPayment(PAYMENT_METHODS[0])
     }
-  }, [formType])
+  }
 
   async function handleAdd(e) {
     e.preventDefault()
@@ -433,6 +434,18 @@ export default function Transactions() {
     setFormCategory(t.category)
     setFormPayment(t.paymentMethod || PAYMENT_METHODS[0])
     setFormDate(t._dateStr || toDateStr(new Date()))
+    setFormExcludeChart(t.excludeFromChart || false)
+    setShowForm(true)
+  }
+
+  function handleDuplicate(t) {
+    setEditingId(null)
+    setFormType(t.type)
+    setFormAmount(String(t.amount))
+    setFormDesc(t.description || '')
+    setFormCategory(t.category)
+    setFormPayment(t.paymentMethod || PAYMENT_METHODS[0])
+    setFormDate(toDateStr(new Date()))
     setFormExcludeChart(t.excludeFromChart || false)
     setShowForm(true)
   }
@@ -605,6 +618,14 @@ export default function Transactions() {
                 <button className="txn-delete-btn" onClick={(e) => { e.stopPropagation(); handleDelete(t.id) }}>
                   <i className="fas fa-trash-alt"></i>
                 </button>
+                <button
+                  className="txn-copy-btn"
+                  aria-label="Duplicate transaction"
+                  title="Duplicate transaction"
+                  onClick={(e) => { e.stopPropagation(); handleDuplicate(t) }}
+                >
+                  <i className="fas fa-copy"></i>
+                </button>
               </div>
             ))}
           </div>
@@ -650,9 +671,9 @@ export default function Transactions() {
             <form onSubmit={handleAdd}>
               <div className="txn-form-type-toggle">
                 <button type="button" className={`txn-form-toggle-btn ${formType === 'expense' ? 'active-expense' : ''}`}
-                  onClick={() => setFormType('expense')}>Expense</button>
+                  onClick={() => handleFormTypeChange('expense')}>Expense</button>
                 <button type="button" className={`txn-form-toggle-btn ${formType === 'income' ? 'active-income' : ''}`}
-                  onClick={() => setFormType('income')}>Income</button>
+                  onClick={() => handleFormTypeChange('income')}>Income</button>
               </div>
               <div className="txn-form-group">
                 <label>Amount ($)</label>

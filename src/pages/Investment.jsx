@@ -114,6 +114,11 @@ function getTotalPnlData(data) {
 }
 
 const fmt = (v) => v >= 0 ? `+$${Math.abs(v).toLocaleString()}` : `-$${Math.abs(v).toLocaleString()}`
+export const formatNetDeposited = (value) => {
+  const amount = Number(value)
+  if (!Number.isFinite(amount)) return '$0.00'
+  return '$' + amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+}
 const fmtShort = (v) => {
   const abs = Math.abs(v)
   if (abs >= 1000) return (v >= 0 ? '+' : '-') + '$' + (abs/1000).toFixed(1) + 'k'
@@ -320,7 +325,7 @@ export default function Investment() {
   // Count-up animated values for stat cards (must be before any early returns — Rules of Hooks)
   const animNLV = useCountUp(Math.round((summary?.netLiquidationValue || 0) * 10) / 10, 900, 1)
   const animPnL = useCountUp(Math.round(summary?.totalPnL || 0), 900, 0)
-  const animDeposited = useCountUp(Math.round(summary?.netDeposited || 0), 900, 0)
+  const animDeposited = useCountUp(Number(summary?.netDeposited || 0), 900, 2)
   const animInterest = useCountUp(Math.round((summary?.totalInterest || 0) * 100) / 100, 900, 2)
 
   if (!data || !data.summary || !data.summary.netLiquidationValue) {
@@ -372,7 +377,7 @@ export default function Investment() {
         </div>
         <div className="inv-stat-card" style={{ animationDelay: '0.16s' }}>
           <div className="inv-stat-label">Net Deposited</div>
-          <div className="inv-stat-value">{mask('$' + animDeposited.toLocaleString())}</div>
+          <div className="inv-stat-value">{mask(formatNetDeposited(animDeposited))}</div>
         </div>
         <div className="inv-stat-card" style={{ animationDelay: '0.24s' }}>
           <div className="inv-stat-label">Interest Earned</div>

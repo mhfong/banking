@@ -39,6 +39,205 @@ service cloud.firestore {
                    && (docId == request.auth.uid || docId == 'latest');
     }
 
+    // ── cashoutCards ──
+    match /cashoutCards/{cardId} {
+      allow create: if request.auth != null
+                    && request.resource.data.keys().hasAll([
+                      'userId', 'name', 'issuer', 'totalCreditLimit',
+                      'monthlyBorrowLimit', 'nextStatementDate', 'active', 'archivedAt'
+                    ])
+                    && request.resource.data.userId == request.auth.uid
+                    && request.resource.data.name is string
+                    && (request.resource.data.issuer == null
+                        || request.resource.data.issuer is string)
+                    && request.resource.data.totalCreditLimit is number
+                    && request.resource.data.totalCreditLimit >= 0
+                    && request.resource.data.monthlyBorrowLimit is number
+                    && request.resource.data.monthlyBorrowLimit >= 0
+                    && request.resource.data.nextStatementDate is string
+                    && request.resource.data.active is bool
+                    && (request.resource.data.archivedAt == null
+                        || request.resource.data.archivedAt is timestamp);
+
+      allow read, delete: if request.auth != null
+                          && resource.data.userId == request.auth.uid;
+
+      allow update: if request.auth != null
+                    && resource.data.userId == request.auth.uid
+                    && request.resource.data.userId == resource.data.userId
+                    && request.resource.data.userId == request.auth.uid
+                    && request.resource.data.keys().hasAll([
+                      'userId', 'name', 'issuer', 'totalCreditLimit',
+                      'monthlyBorrowLimit', 'nextStatementDate', 'active', 'archivedAt'
+                    ])
+                    && request.resource.data.name is string
+                    && (request.resource.data.issuer == null
+                        || request.resource.data.issuer is string)
+                    && request.resource.data.totalCreditLimit is number
+                    && request.resource.data.totalCreditLimit >= 0
+                    && request.resource.data.monthlyBorrowLimit is number
+                    && request.resource.data.monthlyBorrowLimit >= 0
+                    && request.resource.data.nextStatementDate is string
+                    && request.resource.data.active is bool
+                    && (request.resource.data.archivedAt == null
+                        || request.resource.data.archivedAt is timestamp);
+    }
+
+    // ── cashouts ──
+    match /cashouts/{cashoutId} {
+      allow create: if request.auth != null
+                    && request.resource.data.keys().hasAll([
+                      'userId', 'cardId', 'amount', 'borrowedOn',
+                      'statementDate', 'expectedPaymentOn', 'expectedPaymentAmount', 'status'
+                    ])
+                    && request.resource.data.userId == request.auth.uid
+                    && request.resource.data.cardId is string
+                    && request.resource.data.amount is number
+                    && request.resource.data.amount >= 0
+                    && request.resource.data.borrowedOn is string
+                    && request.resource.data.statementDate is string
+                    && request.resource.data.expectedPaymentOn is string
+                    && request.resource.data.expectedPaymentAmount is number
+                    && request.resource.data.expectedPaymentAmount >= 0
+                    && request.resource.data.status is string;
+
+      allow read, delete: if request.auth != null
+                          && resource.data.userId == request.auth.uid;
+
+      allow update: if request.auth != null
+                    && resource.data.userId == request.auth.uid
+                    && request.resource.data.userId == resource.data.userId
+                    && request.resource.data.userId == request.auth.uid
+                    && request.resource.data.keys().hasAll([
+                      'userId', 'cardId', 'amount', 'borrowedOn',
+                      'statementDate', 'expectedPaymentOn', 'expectedPaymentAmount', 'status'
+                    ])
+                    && request.resource.data.cardId is string
+                    && request.resource.data.amount is number
+                    && request.resource.data.amount >= 0
+                    && request.resource.data.borrowedOn is string
+                    && request.resource.data.statementDate is string
+                    && request.resource.data.expectedPaymentOn is string
+                    && request.resource.data.expectedPaymentAmount is number
+                    && request.resource.data.expectedPaymentAmount >= 0
+                    && request.resource.data.status is string;
+    }
+
+    // ── cashoutDueDates ──
+    match /cashoutDueDates/{dueDateId} {
+      allow create: if request.auth != null
+                    && request.resource.data.keys().hasAll([
+                      'userId', 'cardId', 'dueOn'
+                    ])
+                    && request.resource.data.userId == request.auth.uid
+                    && request.resource.data.cardId is string
+                    && request.resource.data.dueOn is string;
+
+      allow read, delete: if request.auth != null
+                          && resource.data.userId == request.auth.uid;
+
+      allow update: if request.auth != null
+                    && resource.data.userId == request.auth.uid
+                    && request.resource.data.userId == resource.data.userId
+                    && request.resource.data.userId == request.auth.uid
+                    && request.resource.data.keys().hasAll([
+                      'userId', 'cardId', 'dueOn'
+                    ])
+                    && request.resource.data.cardId is string
+                    && request.resource.data.dueOn is string;
+    }
+
+    // ── cashoutPayments ──
+    match /cashoutPayments/{paymentId} {
+      allow create: if request.auth != null
+                    && request.resource.data.keys().hasAll([
+                      'userId', 'cashoutId', 'amount', 'paidOn', 'note'
+                    ])
+                    && request.resource.data.userId == request.auth.uid
+                    && request.resource.data.cashoutId is string
+                    && request.resource.data.amount is number
+                    && request.resource.data.amount >= 0
+                    && request.resource.data.paidOn is string
+                    && (request.resource.data.note == null
+                        || request.resource.data.note is string);
+
+      allow read, delete: if request.auth != null
+                          && resource.data.userId == request.auth.uid;
+
+      allow update: if request.auth != null
+                    && resource.data.userId == request.auth.uid
+                    && request.resource.data.userId == resource.data.userId
+                    && request.resource.data.userId == request.auth.uid
+                    && request.resource.data.keys().hasAll([
+                      'userId', 'cashoutId', 'amount', 'paidOn', 'note'
+                    ])
+                    && request.resource.data.cashoutId is string
+                    && request.resource.data.amount is number
+                    && request.resource.data.amount >= 0
+                    && request.resource.data.paidOn is string
+                    && (request.resource.data.note == null
+                        || request.resource.data.note is string);
+    }
+
+    // ── cashoutLimitChanges ──
+    match /cashoutLimitChanges/{changeId} {
+      allow create: if request.auth != null
+                    && request.resource.data.keys().hasAll([
+                      'userId', 'cardId', 'effectiveOn', 'monthlyBorrowLimit', 'note'
+                    ])
+                    && request.resource.data.userId == request.auth.uid
+                    && request.resource.data.cardId is string
+                    && request.resource.data.effectiveOn is string
+                    && request.resource.data.monthlyBorrowLimit is number
+                    && request.resource.data.monthlyBorrowLimit >= 0
+                    && (request.resource.data.note == null
+                        || request.resource.data.note is string);
+
+      allow read, delete: if request.auth != null
+                          && resource.data.userId == request.auth.uid;
+
+      allow update: if request.auth != null
+                    && resource.data.userId == request.auth.uid
+                    && request.resource.data.userId == resource.data.userId
+                    && request.resource.data.userId == request.auth.uid
+                    && request.resource.data.keys().hasAll([
+                      'userId', 'cardId', 'effectiveOn', 'monthlyBorrowLimit', 'note'
+                    ])
+                    && request.resource.data.cardId is string
+                    && request.resource.data.effectiveOn is string
+                    && request.resource.data.monthlyBorrowLimit is number
+                    && request.resource.data.monthlyBorrowLimit >= 0
+                    && (request.resource.data.note == null
+                        || request.resource.data.note is string);
+    }
+
+    // ── cashoutSettings ──
+    match /cashoutSettings/{uid} {
+      allow read, delete: if request.auth != null
+                          && request.auth.uid == uid;
+
+      allow create, update: if request.auth != null
+                            && request.auth.uid == uid
+                            && request.resource.data.keys().hasAll([
+                              'salaryAmount', 'salaryDay', 'salaryAdjustment',
+                              'protectedMonthlyBudget', 'startingCashReserve',
+                              'reminderDaysBefore', 'browserNotificationsEnabled'
+                            ])
+                            && request.resource.data.salaryAmount is number
+                            && request.resource.data.salaryAmount >= 0
+                            && request.resource.data.salaryDay is number
+                            && request.resource.data.salaryDay >= 1
+                            && request.resource.data.salaryDay <= 31
+                            && request.resource.data.salaryAdjustment == 'previousWorkingDay'
+                            && request.resource.data.protectedMonthlyBudget is number
+                            && request.resource.data.protectedMonthlyBudget >= 0
+                            && request.resource.data.startingCashReserve is number
+                            && request.resource.data.startingCashReserve >= 0
+                            && request.resource.data.reminderDaysBefore is number
+                            && request.resource.data.reminderDaysBefore >= 0
+                            && request.resource.data.browserNotificationsEnabled is bool;
+    }
+
     // Deny everything else
     match /{document=**} {
       allow read, write: if false;

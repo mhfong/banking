@@ -46,12 +46,24 @@
 
 .nav-item i {
   font-size: 20px;
+  width: 24px;
+  height: 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   transition: color 0.2s;
 }
 
 .nav-item span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 2.4em;
+  height: 2.4em;
   line-height: 1.2;
   letter-spacing: 0.2px;
+  text-align: center;
 }
 
 .nav-item:hover {
@@ -125,6 +137,7 @@
     height: calc(52px + env(safe-area-inset-bottom));
     z-index: 100;
     background: var(--bg-card);
+    overflow: hidden;
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
   }
@@ -144,7 +157,8 @@
     border: none;
     gap: 0;
     order: 1;
-    flex: none;
+    flex: 2 1 0;
+    min-width: 0;
   }
 
   .sidebar-nav {
@@ -153,8 +167,9 @@
     gap: 0;
     overflow: visible;
     order: 2;
-    flex: none;
-    margin-left: auto;
+    flex: 4 1 0;
+    min-width: 0;
+    margin-left: 0;
   }
 
   .sidebar-nav::-webkit-scrollbar {
@@ -162,9 +177,9 @@
   }
 
   .nav-item {
-    flex: none;
+    flex: 1 1 0;
     flex-direction: column;
-    padding: 6px 14px;
+    padding: 4px 2px;
     gap: 2px;
     justify-content: center;
     align-items: center;
@@ -180,7 +195,14 @@
   .nav-item span {
     font-size: 9px;
     font-weight: 500;
-    white-space: nowrap;
+    line-height: 1.1;
+    min-width: 0;
+    max-width: 100%;
+    min-height: 2.2em;
+    height: 2.2em;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    text-align: center;
   }
 
   .nav-item.active::before {

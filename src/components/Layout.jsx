@@ -29,6 +29,10 @@ export default function Layout({ children }) {
             <i className="fas fa-chart-line"></i>
             <span>Investment</span>
           </NavLink>
+          <NavLink to="/cashout-cycle" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} title="Cashout Cycle">
+            <i className="fas fa-money-bill-transfer"></i>
+            <span>Cashout Cycle</span>
+          </NavLink>
         </div>
         <div className="sidebar-bottom">
           <button className="nav-item logout-btn" onClick={handleLogout} title="Sign Out">

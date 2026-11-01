@@ -1,0 +1,1909 @@
+.cashout-cycle-page {
+  --accent: #82b2ff;
+  --accent-hover: #82b2ff;
+  --accent-soft: rgba(130, 178, 255, 0.12);
+  max-width: 1180px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding-bottom: 24px;
+  animation: cashout-cycle-in 0.35s ease both;
+}
+
+.cashout-cycle-page .cashout-cycle-icon-button,
+.cashout-cycle-page .cashout-cycle-primary-button,
+.cashout-cycle-page .cashout-cycle-secondary-button,
+.cashout-cycle-page .cashout-cycle-text-button {
+  --accent: #2f80ff;
+  --accent-hover: #4d96ff;
+}
+
+@keyframes cashout-cycle-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.cashout-cycle-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 2px 2px 4px;
+}
+
+.cashout-cycle-kicker,
+.cashout-cycle-status-label {
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.cashout-cycle-header h1 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 3px;
+  font-size: 27px;
+  font-weight: 700;
+}
+
+.cashout-cycle-header h1 i {
+  color: var(--accent);
+  font-size: 21px;
+}
+
+.cashout-cycle-date {
+  max-width: 680px;
+  margin-top: 5px;
+  color: var(--text-secondary);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.cashout-cycle-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cashout-cycle-panel {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 18px;
+}
+
+.cashout-cycle-icon-button,
+.cashout-cycle-primary-button,
+.cashout-cycle-secondary-button,
+.cashout-cycle-text-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  transition: background 0.2s, border-color 0.2s, color 0.2s, opacity 0.2s;
+}
+
+.cashout-cycle-icon-button {
+  width: 38px;
+  height: 38px;
+  background: var(--bg-card);
+  border-color: var(--border);
+  color: var(--text-secondary);
+}
+
+.cashout-cycle-icon-button:hover:not(:disabled) {
+  color: var(--text-primary);
+  border-color: var(--accent);
+}
+
+.cashout-cycle-primary-button {
+  min-height: 38px;
+  padding: 0 14px;
+  background: var(--accent);
+  color: white;
+}
+
+.cashout-cycle-primary-button:hover:not(:disabled) {
+  background: var(--accent-hover);
+}
+
+.cashout-cycle-secondary-button {
+  min-height: 34px;
+  padding: 0 12px;
+  background: transparent;
+  border-color: var(--border);
+  color: var(--text-primary);
+}
+
+.cashout-cycle-secondary-button:hover:not(:disabled) {
+  border-color: var(--accent);
+  color: var(--accent-hover);
+}
+
+.cashout-cycle-text-button {
+  padding: 5px 0;
+  background: transparent;
+  color: var(--accent-hover);
+}
+
+.cashout-cycle-text-button:hover {
+  color: var(--text-primary);
+}
+
+.cashout-cycle-icon-button:disabled,
+.cashout-cycle-primary-button:disabled,
+.cashout-cycle-secondary-button:disabled,
+.cashout-cycle-inline-error button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.cashout-cycle-spin {
+  animation: cashout-cycle-spin 0.8s linear infinite;
+}
+
+@keyframes cashout-cycle-spin {
+  to { transform: rotate(360deg); }
+}
+
+.cashout-cycle-loading {
+  min-height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: var(--text-secondary);
+}
+
+.cashout-cycle-loading .spinner {
+  width: 24px;
+  height: 24px;
+  border-width: 2px;
+}
+
+.cashout-cycle-error {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  border-left: 3px solid var(--red);
+}
+
+.cashout-cycle-error > div {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.cashout-cycle-error > div > i {
+  color: var(--red);
+  font-size: 18px;
+  margin-top: 2px;
+}
+
+.cashout-cycle-error h2 {
+  font-size: 16px;
+  margin-bottom: 4px;
+}
+
+.cashout-cycle-error p,
+.cashout-cycle-placeholder-copy,
+.cashout-cycle-empty p {
+  color: var(--text-secondary);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.cashout-cycle-inline-error {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 38px;
+  padding: 8px 12px;
+  border: 1px solid rgba(255, 59, 82, 0.45);
+  border-radius: 8px;
+  background: rgba(255, 59, 82, 0.08);
+  color: #ff9aa8;
+  font-size: 13px;
+}
+
+.cashout-cycle-inline-error button {
+  margin-left: auto;
+  padding: 3px 0;
+  border: none;
+  background: transparent;
+  color: var(--text-primary);
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.cashout-cycle-empty {
+  min-height: 360px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  gap: 12px;
+  text-align: center;
+}
+
+.cashout-cycle-empty-icon {
+  display: grid;
+  width: 54px;
+  height: 54px;
+  place-items: center;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  color: var(--accent);
+  font-size: 22px;
+}
+
+.cashout-cycle-empty h2 {
+  font-size: 20px;
+}
+
+.cashout-cycle-empty p {
+  max-width: 380px;
+}
+
+.cashout-cycle-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  border-top: 3px solid var(--accent);
+}
+
+.cashout-cycle-status.normal { border-top-color: var(--green); }
+.cashout-cycle-status.at-risk { border-top-color: var(--red); }
+
+.cashout-cycle-status-copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
+}
+
+.cashout-cycle-status-copy strong {
+  font-size: 22px;
+}
+
+.cashout-cycle-status-copy p {
+  max-width: 760px;
+  color: var(--text-secondary);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.cashout-cycle-status-icon {
+  display: grid;
+  width: 46px;
+  height: 46px;
+  flex: 0 0 46px;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 19px;
+}
+
+.cashout-cycle-status.normal .cashout-cycle-status-icon { background: rgba(0, 184, 90, 0.12); color: var(--green); }
+.cashout-cycle-status.at-risk .cashout-cycle-status-icon { background: rgba(255, 59, 82, 0.12); color: var(--red); }
+
+.cashout-cycle-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+
+.cashout-cycle-slot-title {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.cashout-cycle-slot-title i {
+  color: var(--accent);
+  font-size: 15px;
+}
+
+.cashout-cycle-slot-title h2,
+.cashout-cycle-modal h2 {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.cashout-cycle-panel-subtitle,
+.cashout-cycle-panel-note {
+  color: var(--text-secondary);
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+.cashout-cycle-panel-subtitle {
+  margin-top: 6px;
+}
+
+.cashout-cycle-panel-note {
+  flex: 0 0 auto;
+}
+
+.cashout-cycle-capacity-panel .cashout-cycle-panel-header {
+  align-items: flex-start;
+}
+
+.cashout-cycle-capacity-panel {
+  overflow: hidden;
+  padding: 0;
+}
+
+.cashout-cycle-capacity-panel > .cashout-cycle-panel-header {
+  margin: 0;
+  padding: 24px 26px 22px;
+  border-bottom: 1px solid var(--border);
+}
+
+.cashout-cycle-capacity-panel .cashout-cycle-slot-title h2 {
+  font-size: 20px;
+}
+
+.cashout-cycle-capacity-legend {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  margin-top: 9px;
+  color: var(--text-secondary);
+  font-size: 10px;
+}
+
+.cashout-cycle-capacity-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.cashout-cycle-legend-swatch {
+  display: inline-block;
+  width: 26px;
+  height: 7px;
+  border: 1px solid #3b4960;
+  border-radius: 999px;
+  background: transparent;
+}
+
+.cashout-cycle-legend-swatch.used {
+  border-color: var(--green);
+  background: var(--green);
+}
+
+.cashout-cycle-legend-swatch.no-credit { background: var(--red); }
+
+.cashout-cycle-metrics {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.cashout-cycle-metric {
+  min-width: 0;
+  padding: 13px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg-primary);
+}
+
+.cashout-cycle-metric span {
+  display: block;
+  margin-bottom: 7px;
+  color: var(--text-secondary);
+  font-size: 11px;
+  line-height: 1.3;
+}
+
+.cashout-cycle-metric strong {
+  display: block;
+  overflow: hidden;
+  font-size: 17px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cashout-cycle-slot-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.cashout-cycle-slot {
+  min-width: 0;
+}
+
+.cashout-cycle-slot-meta {
+  display: block;
+  margin-top: 18px;
+  color: var(--text-secondary);
+  font-size: 11px;
+}
+
+.cashout-cycle-callback-surface {
+  display: none;
+}
+
+.cashout-cycle-placeholder-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  min-height: 48px;
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+
+.cashout-cycle-placeholder-tag {
+  flex: 0 0 auto;
+  padding: 5px 8px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--accent-hover);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.cashout-cycle-placeholder-tag.danger {
+  border-color: rgba(255, 59, 82, 0.45);
+  color: #ff9aa8;
+}
+
+.cashout-cycle-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(8, 11, 17, 0.76);
+}
+
+.cashout-cycle-modal {
+  width: min(100%, 520px);
+  max-height: calc(100vh - 40px);
+  overflow-y: auto;
+  padding: 22px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+}
+
+.cashout-cycle-modal .cashout-cycle-panel-header {
+  align-items: flex-start;
+}
+
+.cashout-cycle-selection {
+  margin-top: 16px;
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+.cashout-cycle-selection strong {
+  color: var(--text-primary);
+}
+
+.cashout-cycle-form {
+  margin-top: 4px;
+}
+
+.cashout-cycle-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 12px;
+}
+
+.cashout-cycle-form-heading {
+  align-items: flex-start;
+  margin-top: 4px;
+  margin-bottom: 12px;
+}
+
+.cashout-cycle-form-heading h3 {
+  margin-top: 3px;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.cashout-cycle-form-error,
+.cashout-cycle-form-warning {
+  margin-bottom: 14px;
+  padding: 9px 10px;
+  border: 1px solid rgba(255, 59, 82, 0.45);
+  border-radius: 8px;
+  background: rgba(255, 59, 82, 0.08);
+  color: #ff9aa8;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.cashout-cycle-form-warning {
+  border-color: rgba(255, 189, 46, 0.45);
+  background: rgba(255, 189, 46, 0.08);
+  color: #ffd979;
+}
+
+.cashout-cycle-form-help {
+  margin-bottom: 14px;
+  color: var(--text-secondary);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.cashout-cycle-capacity-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.cashout-cycle-capacity-item {
+  min-width: 0;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg-primary);
+}
+
+.cashout-cycle-capacity-item span,
+.cashout-cycle-card-list-item span,
+.cashout-cycle-cashout-action span {
+  display: block;
+  color: var(--text-secondary);
+  font-size: 11px;
+  line-height: 1.35;
+}
+
+.cashout-cycle-capacity-item strong {
+  display: block;
+  margin-top: 4px;
+  overflow: hidden;
+  font-size: 14px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cashout-cycle-form-section {
+  margin: 4px 0 16px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.cashout-cycle-form-section legend {
+  padding: 0 5px;
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+.cashout-cycle-form textarea {
+  width: 100%;
+  resize: vertical;
+  padding: 10px 14px;
+  background: var(--bg-primary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text-primary);
+  font-size: 14px;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.cashout-cycle-form textarea:focus {
+  border-color: var(--accent);
+}
+
+.cashout-cycle-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.cashout-cycle-form-actions .cashout-cycle-primary-button {
+  min-width: 132px;
+}
+
+.cashout-cycle-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 16px;
+  cursor: pointer;
+}
+
+.cashout-cycle-checkbox input {
+  width: auto;
+  accent-color: var(--accent);
+}
+
+.cashout-cycle-checkbox span {
+  color: var(--text-primary);
+  font-size: 13px;
+}
+
+.cashout-cycle-card-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.cashout-cycle-card-list-item,
+.cashout-cycle-cashout-action {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg-primary);
+}
+
+.cashout-cycle-card-list-item.selected {
+  border-color: var(--accent);
+}
+
+.cashout-cycle-card-list-item strong,
+.cashout-cycle-cashout-action strong {
+  display: block;
+  margin-bottom: 3px;
+  font-size: 13px;
+}
+
+.cashout-cycle-card-list-actions {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 10px;
+}
+
+.cashout-cycle-text-button.danger {
+  color: #ff9aa8;
+}
+
+.cashout-cycle-text-button.danger:hover {
+  color: var(--red);
+}
+
+.cashout-cycle-cashout-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cashout-cycle-cashout-action .cashout-cycle-secondary-button {
+  flex: 0 0 auto;
+}
+
+@media (max-width: 900px) {
+  .cashout-cycle-metrics {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .cashout-cycle-header {
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .cashout-cycle-actions {
+    width: 100%;
+  }
+
+  .cashout-cycle-actions .cashout-cycle-primary-button {
+    flex: 1;
+  }
+
+  .cashout-cycle-status,
+  .cashout-cycle-error {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .cashout-cycle-status-icon {
+    display: none;
+  }
+
+  .cashout-cycle-error .cashout-cycle-secondary-button {
+    align-self: flex-start;
+  }
+
+  .cashout-cycle-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .cashout-cycle-slot-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cashout-cycle-panel-note {
+    display: none;
+  }
+
+}
+
+@media (max-width: 420px) {
+  .cashout-cycle-panel {
+    padding: 16px;
+  }
+
+  .cashout-cycle-metrics {
+    grid-template-columns: 1fr;
+  }
+
+  .cashout-cycle-placeholder-row {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .cashout-cycle-form-grid,
+  .cashout-cycle-capacity-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cashout-cycle-form-actions {
+    justify-content: stretch;
+  }
+
+  .cashout-cycle-form-actions button {
+    flex: 1;
+  }
+
+  .cashout-cycle-card-list-item,
+  .cashout-cycle-cashout-action {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .cashout-cycle-card-list-actions {
+    width: 100%;
+  }
+}
+
+.cashout-cycle-status-banner {
+  align-items: flex-start;
+  padding: 22px;
+}
+
+.cashout-cycle-status-banner.pending {
+  border-top-color: var(--accent);
+}
+
+.cashout-cycle-status-banner .cashout-cycle-status-copy {
+  min-width: 0;
+  flex: 1;
+}
+
+.cashout-cycle-status-banner .cashout-cycle-status-copy h2 {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.cashout-cycle-status-banner .cashout-cycle-status-copy p {
+  max-width: 780px;
+}
+
+.cashout-cycle-status-actions {
+  display: flex;
+  align-items: flex-end;
+  flex: 0 0 auto;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.cashout-cycle-status-review {
+  white-space: nowrap;
+}
+
+.cashout-cycle-status-failure {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(100px, max-content));
+  gap: 12px 22px;
+  margin-top: 14px;
+}
+
+.cashout-cycle-status-failure div {
+  min-width: 0;
+}
+
+.cashout-cycle-status-failure dt,
+.cashout-cycle-status-failure dd {
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.cashout-cycle-status-failure dt {
+  margin-bottom: 3px;
+  color: var(--text-secondary);
+}
+
+.cashout-cycle-status-failure dd {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.cashout-cycle-status-secondary-failure {
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+.cashout-cycle-status-secondary-failure h3 {
+  margin: 0;
+  color: var(--red);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.cashout-cycle-summary {
+  min-width: 0;
+}
+
+.cashout-cycle-summary-metrics {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.cashout-cycle-summary-metric {
+  min-width: 0;
+  padding: 13px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg-primary);
+}
+
+.cashout-cycle-summary-metric span,
+.cashout-cycle-next-borrow span,
+.cashout-cycle-settings-overview span {
+  display: block;
+  color: var(--text-secondary);
+  font-size: 11px;
+  line-height: 1.35;
+}
+
+.cashout-cycle-summary-metric strong {
+  display: block;
+  margin-top: 7px;
+  overflow: hidden;
+  font-size: 17px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cashout-cycle-next-borrow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin-top: 12px;
+  padding: 15px 16px;
+  border-left: 3px solid var(--accent);
+  background: var(--accent-soft);
+}
+
+.cashout-cycle-summary-eyebrow {
+  color: var(--accent-hover) !important;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.cashout-cycle-next-borrow h3 {
+  margin-top: 4px;
+  font-size: 16px;
+}
+
+.cashout-cycle-next-borrow p {
+  margin-top: 4px;
+  color: var(--text-secondary);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.cashout-cycle-next-borrow p strong {
+  color: var(--text-primary);
+}
+
+.cashout-cycle-next-borrow-amount {
+  flex: 0 0 auto;
+  color: var(--text-primary);
+  font-size: 20px;
+}
+
+.cashout-cycle-reminders-panel {
+  min-width: 0;
+}
+
+.cashout-cycle-reminder-count {
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.cashout-cycle-reminders-empty,
+.cashout-cycle-reminder-warning {
+  color: var(--text-secondary);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.cashout-cycle-reminder-warning {
+  margin-bottom: 12px;
+  color: var(--yellow);
+}
+
+.cashout-cycle-reminder-list {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cashout-cycle-reminder-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-width: 0;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--yellow);
+  border-radius: 8px;
+  background: var(--bg-primary);
+}
+
+.cashout-cycle-reminder-item > div {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+
+.cashout-cycle-reminder-item > div:last-child {
+  flex: 0 0 auto;
+  justify-items: end;
+  text-align: right;
+}
+
+.cashout-cycle-reminder-item strong {
+  overflow: hidden;
+  font-size: 13px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cashout-cycle-reminder-item span,
+.cashout-cycle-reminder-item small {
+  color: var(--text-secondary);
+  font-size: 11px;
+  line-height: 1.35;
+}
+
+.cashout-cycle-reminder-item > div:last-child strong {
+  color: var(--text-primary);
+  font-size: 14px;
+}
+
+.cashout-cycle-notification-action {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.cashout-cycle-notification-action .cashout-cycle-form-help {
+  flex: 1 1 240px;
+  margin: 0;
+}
+
+.cashout-cycle-view-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(280px, 0.85fr);
+  gap: 16px;
+}
+
+.cashout-cycle-card-capacity-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  padding: 20px;
+}
+
+.cashout-cycle-card-capacity {
+  min-width: 0;
+  min-height: 222px;
+  padding: 22px 20px 20px;
+  border: 1px solid #2d3b50;
+  border-radius: 9px;
+  background: #1a2230;
+}
+
+.cashout-cycle-card-capacity:hover,
+.cashout-cycle-card-capacity:focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px rgba(90, 158, 255, 0.18);
+}
+
+.cashout-cycle-card-capacity-trigger {
+  display: block;
+  width: 100%;
+  min-height: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.cashout-cycle-card-capacity-trigger:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.cashout-cycle-card-capacity-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 29px;
+}
+
+.cashout-cycle-card-capacity-header h3 {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: 16px;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+.cashout-cycle-capacity-state {
+  flex: 0 0 auto;
+  padding: 6px 10px;
+  border: 0;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.cashout-cycle-capacity-state.ready {
+  background: rgba(0, 184, 90, 0.13);
+  color: #68e0a1;
+}
+
+.cashout-cycle-capacity-state.partial {
+  background: rgba(0, 184, 90, 0.13);
+  color: #68e0a1;
+}
+
+.cashout-cycle-capacity-state.locked {
+  background: rgba(255, 189, 46, 0.14);
+  color: var(--yellow);
+}
+
+.cashout-cycle-capacity-state.no-credit {
+  background: rgba(255, 59, 82, 0.14);
+  color: #ff9eab;
+}
+
+.cashout-cycle-card-capacity-hero {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.cashout-cycle-card-capacity-available-wrap {
+  display: flex;
+  align-items: baseline;
+  min-width: 0;
+  gap: 5px;
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.cashout-cycle-card-capacity-available {
+  display: block;
+  overflow: hidden;
+  color: var(--text-primary);
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cashout-cycle-card-capacity-progress {
+  height: 7px;
+  margin-top: 18px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #2b3546;
+}
+
+.cashout-cycle-card-capacity-progress span {
+  display: block;
+  height: 100%;
+  min-width: 0;
+  border-radius: inherit;
+  background: var(--accent);
+  transition: width 0.25s ease;
+}
+
+.cashout-cycle-card-capacity-progress.ready span,
+.cashout-cycle-card-capacity-progress.partial span {
+  background: var(--green);
+}
+
+.cashout-cycle-card-capacity-progress.locked span {
+  background: var(--yellow);
+}
+
+.cashout-cycle-card-capacity-progress.no-credit span {
+  background: var(--red);
+}
+
+.cashout-cycle-card-capacity-limit {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 13px;
+  color: var(--text-secondary);
+  font-size: 11px;
+}
+
+.cashout-cycle-card-capacity-limit span:last-child {
+  overflow: hidden;
+  text-align: right;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cashout-cycle-card-capacity-limit strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.cashout-cycle-card-capacity-note {
+  margin-top: 13px;
+  color: var(--text-secondary);
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.cashout-cycle-card-capacity-note.no-credit {
+  color: #ff9eab;
+}
+
+.cashout-cycle-capacity-empty,
+.cashout-cycle-forecast-empty {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 64px;
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+
+.cashout-cycle-capacity-empty i {
+  color: var(--accent);
+}
+
+.cashout-cycle-settings-overview {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.cashout-cycle-settings-overview div {
+  min-width: 0;
+  padding: 13px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg-primary);
+}
+
+.cashout-cycle-settings-overview strong {
+  display: block;
+  margin-top: 6px;
+  font-size: 16px;
+}
+
+.cashout-cycle-settings-note {
+  margin-top: 14px;
+  color: var(--text-secondary);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.cashout-cycle-forecast-panel {
+  min-width: 0;
+  scroll-margin-top: 16px;
+}
+
+.cashout-cycle-calendar-panel .cashout-cycle-panel-header {
+  margin-bottom: 16px;
+}
+
+.cashout-cycle-calendar {
+  min-width: 0;
+}
+
+.cashout-cycle-calendar-toolbar {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border);
+}
+
+.cashout-cycle-calendar-month {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.cashout-cycle-calendar-month span {
+  color: var(--text-secondary);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.cashout-cycle-calendar-month strong {
+  color: var(--text-primary);
+  font-size: 20px;
+  line-height: 1.1;
+}
+
+.cashout-cycle-calendar-controls {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.cashout-cycle-calendar-control {
+  display: inline-grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  cursor: pointer;
+  font: inherit;
+  font-size: 12px;
+  transition: border-color 0.2s, color 0.2s, background 0.2s, transform 0.2s;
+}
+
+.cashout-cycle-calendar-control:hover,
+.cashout-cycle-calendar-control:focus-visible {
+  border-color: var(--accent-hover);
+  background: var(--accent-soft);
+  color: var(--accent-hover);
+  outline: none;
+  transform: translateY(-1px);
+}
+
+.cashout-cycle-calendar-control-today {
+  width: auto;
+  padding: 0 11px;
+  color: var(--accent-hover);
+  font-weight: 700;
+}
+
+.cashout-cycle-calendar-key {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+  padding: 13px 0;
+  color: var(--text-secondary);
+  font-size: 11px;
+}
+
+.cashout-cycle-calendar-key span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.cashout-cycle-calendar-key strong {
+  display: inline-grid;
+  width: 20px;
+  height: 20px;
+  place-items: center;
+  border-radius: 5px;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.cashout-cycle-calendar-key strong.borrow,
+.cashout-cycle-calendar-marker-type.borrow {
+  background: rgba(130, 178, 255, 0.16);
+  color: var(--accent-hover);
+}
+
+.cashout-cycle-calendar-key strong.due,
+.cashout-cycle-calendar-marker-type.due {
+  background: rgba(255, 189, 46, 0.16);
+  color: var(--yellow);
+}
+
+.cashout-cycle-calendar-key strong.payment,
+.cashout-cycle-calendar-marker-type.payment {
+  background: rgba(0, 184, 90, 0.16);
+  color: var(--green);
+}
+
+.cashout-cycle-calendar-scroll {
+  max-width: 100%;
+  overflow-x: auto;
+  scrollbar-color: var(--border) transparent;
+  scrollbar-width: thin;
+}
+
+.cashout-cycle-calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  min-width: 728px;
+  overflow: hidden;
+  border-top: 1px solid var(--border);
+  border-left: 1px solid var(--border);
+  border-radius: 7px 7px 0 0;
+  background: var(--bg-primary);
+}
+
+.cashout-cycle-calendar-weekday {
+  min-width: 0;
+  padding: 10px 9px;
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.cashout-cycle-calendar-day {
+  min-width: 0;
+  min-height: 132px;
+  padding: 9px;
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  background: rgba(26, 34, 48, 0.62);
+}
+
+.cashout-cycle-calendar-day-outside {
+  background: rgba(15, 21, 31, 0.42);
+}
+
+.cashout-cycle-calendar-day-today {
+  background: rgba(130, 178, 255, 0.1);
+  box-shadow: inset 0 0 0 1px rgba(130, 178, 255, 0.55);
+}
+
+.cashout-cycle-calendar-day > time {
+  display: block;
+  color: var(--text-primary);
+  font-size: 13px;
+  font-weight: 750;
+  line-height: 1;
+}
+
+.cashout-cycle-calendar-day-outside > time {
+  color: var(--text-secondary);
+  opacity: 0.52;
+}
+
+.cashout-cycle-calendar-day-markers {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-top: 12px;
+}
+
+.cashout-cycle-calendar-marker {
+  display: grid;
+  grid-template-columns: 21px minmax(0, 1fr);
+  align-items: center;
+  min-width: 0;
+  min-height: 25px;
+  gap: 6px;
+  padding: 3px 6px 3px 4px;
+  overflow: hidden;
+  border-left: 3px solid var(--cashout-cycle-calendar-marker-color);
+  border-radius: 4px;
+  background: var(--cashout-cycle-calendar-marker-background);
+  color: var(--text-secondary);
+  font-size: 10px;
+  line-height: 1.15;
+}
+
+.cashout-cycle-calendar-marker-type {
+  display: inline-grid;
+  width: 21px;
+  height: 19px;
+  place-items: center;
+  border-radius: 4px;
+  font-size: 9px;
+  font-weight: 800;
+}
+
+.cashout-cycle-calendar-marker-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cashout-cycle-calendar-marker-borrow {
+  --cashout-cycle-calendar-marker-color: var(--accent-hover);
+  --cashout-cycle-calendar-marker-background: rgba(130, 178, 255, 0.12);
+}
+
+.cashout-cycle-calendar-marker-due {
+  --cashout-cycle-calendar-marker-color: var(--yellow);
+  --cashout-cycle-calendar-marker-background: rgba(255, 189, 46, 0.12);
+}
+
+.cashout-cycle-calendar-marker-payment {
+  --cashout-cycle-calendar-marker-color: var(--green);
+  --cashout-cycle-calendar-marker-background: rgba(0, 184, 90, 0.12);
+}
+
+.cashout-cycle-calendar-empty {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 64px;
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+
+@media (max-width: 720px) {
+  .cashout-cycle-calendar-toolbar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .cashout-cycle-calendar-controls {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cashout-cycle-calendar-control {
+    transition: none;
+  }
+}
+
+.cashout-cycle-forecast-risk {
+  display: grid;
+  grid-template-columns: minmax(150px, 0.8fr) minmax(110px, 0.5fr) minmax(0, 2fr);
+  gap: 12px 18px;
+  align-items: center;
+  padding: 13px 15px;
+  border-left: 3px solid var(--green);
+  background: rgba(0, 184, 90, 0.06);
+}
+
+.cashout-cycle-forecast-risk.at-risk {
+  border-left-color: var(--red);
+  background: rgba(255, 59, 82, 0.07);
+}
+
+.cashout-cycle-forecast-risk span,
+.cashout-cycle-forecast-snapshot span {
+  display: block;
+  color: var(--text-secondary);
+  font-size: 11px;
+  line-height: 1.35;
+}
+
+.cashout-cycle-forecast-risk strong {
+  display: block;
+  margin-top: 3px;
+  font-size: 14px;
+}
+
+.cashout-cycle-forecast-risk p {
+  color: var(--text-secondary);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.cashout-cycle-forecast-future-limit-failure {
+  grid-column: 1 / -1;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+}
+
+.cashout-cycle-forecast-future-limit-failure > strong {
+  color: var(--red);
+  font-size: 12px;
+}
+
+.cashout-cycle-forecast-future-limit-failure dl {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 8px 12px;
+  margin: 8px 0 0;
+}
+
+.cashout-cycle-forecast-future-limit-failure dt,
+.cashout-cycle-forecast-future-limit-failure dd {
+  font-size: 10px;
+  line-height: 1.35;
+}
+
+.cashout-cycle-forecast-future-limit-failure dt {
+  color: var(--text-secondary);
+}
+
+.cashout-cycle-forecast-future-limit-failure dd {
+  margin: 2px 0 0;
+  font-weight: 600;
+}
+
+.cashout-cycle-forecast-snapshot {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin: 12px 0;
+}
+
+.cashout-cycle-forecast-snapshot > div {
+  min-width: 0;
+  padding: 12px 13px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg-primary);
+}
+
+.cashout-cycle-forecast-snapshot strong {
+  display: block;
+  margin-top: 5px;
+  font-size: 17px;
+}
+
+.cashout-cycle-forecast-snapshot small {
+  display: block;
+  margin-top: 4px;
+  color: var(--text-secondary);
+  font-size: 10px;
+  line-height: 1.35;
+}
+
+.cashout-cycle-forecast-table-wrap {
+  width: 100%;
+}
+
+.cashout-cycle-forecast-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.cashout-cycle-forecast-table th,
+.cashout-cycle-forecast-table td {
+  padding: 11px 9px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  vertical-align: top;
+  overflow-wrap: anywhere;
+}
+
+.cashout-cycle-forecast-table thead th {
+  color: var(--text-secondary);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.cashout-cycle-forecast-table tbody th,
+.cashout-cycle-forecast-table tbody td {
+  font-size: 12px;
+}
+
+.cashout-cycle-forecast-table tbody tr.will-fail {
+  background: rgba(255, 59, 82, 0.07);
+}
+
+.cashout-cycle-forecast-table tbody tr.at-risk {
+  background: rgba(255, 189, 46, 0.045);
+}
+
+.cashout-cycle-forecast-table tbody th strong,
+.cashout-cycle-forecast-table tbody td > strong {
+  display: block;
+  font-size: 12px;
+}
+
+.cashout-cycle-forecast-table tbody th small,
+.cashout-cycle-forecast-table tbody td small {
+  display: block;
+  margin-top: 4px;
+  color: var(--text-secondary);
+  font-size: 10px;
+  line-height: 1.3;
+}
+
+.cashout-cycle-forecast-detail-list {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  flex-direction: column;
+  gap: 3px;
+  list-style: none;
+}
+
+.cashout-cycle-forecast-detail-list li {
+  display: flex;
+  gap: 5px;
+  align-items: baseline;
+  flex-wrap: wrap;
+}
+
+.cashout-cycle-forecast-detail-list small {
+  margin-top: 0 !important;
+  color: var(--text-secondary);
+}
+
+.cashout-cycle-forecast-none {
+  color: var(--text-secondary);
+  font-size: 11px;
+}
+
+.cashout-cycle-forecast-failure-label {
+  color: var(--red) !important;
+  font-weight: 700;
+}
+
+.cashout-cycle-forecast-row-future-limit {
+  margin-top: 7px;
+  padding-top: 6px;
+  border-top: 1px solid var(--border);
+}
+
+.cashout-cycle-forecast-row-future-limit strong {
+  color: var(--red);
+}
+
+.cashout-cycle-sr-only,
+.cashout-cycle-forecast-table caption {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (max-width: 1000px) {
+  .cashout-cycle-summary-metrics {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .cashout-cycle-card-capacity-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .cashout-cycle-forecast-table th,
+  .cashout-cycle-forecast-table td {
+    padding-right: 7px;
+    padding-left: 7px;
+  }
+}
+
+@media (max-width: 768px) {
+  .cashout-cycle-status-banner {
+    flex-direction: column;
+  }
+
+  .cashout-cycle-status-actions {
+    align-items: flex-start;
+    width: 100%;
+    flex-direction: row;
+  }
+
+  .cashout-cycle-status-icon {
+    display: grid;
+  }
+
+  .cashout-cycle-status-failure {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .cashout-cycle-summary-metrics,
+  .cashout-cycle-view-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .cashout-cycle-view-grid {
+    gap: 16px;
+  }
+
+  .cashout-cycle-forecast-risk {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .cashout-cycle-forecast-risk p {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 560px) {
+  .cashout-cycle-summary-metrics,
+  .cashout-cycle-view-grid,
+  .cashout-cycle-forecast-snapshot {
+    grid-template-columns: 1fr;
+  }
+
+  .cashout-cycle-capacity-panel > .cashout-cycle-panel-header {
+    padding: 20px 18px 18px;
+  }
+
+  .cashout-cycle-card-capacity-grid {
+    grid-template-columns: 1fr;
+    padding: 14px;
+  }
+
+  .cashout-cycle-card-capacity {
+    min-height: 0;
+  }
+
+  .cashout-cycle-card-capacity-available {
+    font-size: 27px;
+  }
+
+  .cashout-cycle-next-borrow {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .cashout-cycle-next-borrow-amount {
+    font-size: 18px;
+  }
+
+  .cashout-cycle-reminder-item {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .cashout-cycle-actions {
+    align-items: stretch;
+    flex-wrap: wrap;
+  }
+
+  .cashout-cycle-actions .cashout-cycle-secondary-button,
+  .cashout-cycle-actions .cashout-cycle-primary-button {
+    flex: 1 1 calc(50% - 4px);
+  }
+
+  .cashout-cycle-actions .cashout-cycle-icon-button {
+    flex: 0 0 38px;
+  }
+
+  .cashout-cycle-reminder-item > div:last-child {
+    justify-items: start;
+    text-align: left;
+  }
+
+  .cashout-cycle-settings-overview {
+    grid-template-columns: 1fr;
+  }
+
+  .cashout-cycle-forecast-risk {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .cashout-cycle-forecast-table,
+  .cashout-cycle-forecast-table tbody,
+  .cashout-cycle-forecast-table tr,
+  .cashout-cycle-forecast-table th,
+  .cashout-cycle-forecast-table td {
+    display: block;
+  }
+
+  .cashout-cycle-forecast-table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+  }
+
+  .cashout-cycle-forecast-table tr {
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .cashout-cycle-forecast-table th,
+  .cashout-cycle-forecast-table td {
+    display: grid;
+    grid-template-columns: minmax(118px, 42%) minmax(0, 1fr);
+    gap: 8px;
+    padding: 6px 0;
+    border-bottom: 0;
+  }
+
+  .cashout-cycle-forecast-table td::before,
+  .cashout-cycle-forecast-table th::before {
+    content: attr(data-label);
+    color: var(--text-secondary);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .cashout-cycle-forecast-table th strong,
+  .cashout-cycle-forecast-table th small,
+  .cashout-cycle-forecast-table td > *,
+  .cashout-cycle-forecast-table td > strong {
+    grid-column: 2;
+  }
+}
+
+@media (max-width: 420px) {
+  .cashout-cycle-status-failure {
+    grid-template-columns: 1fr;
+  }
+
+  .cashout-cycle-status-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .cashout-cycle-status-review {
+    width: 100%;
+  }
+
+  .cashout-cycle-forecast-risk {
+    grid-template-columns: 1fr;
+  }
+
+  .cashout-cycle-forecast-risk p {
+    grid-column: auto;
+  }
+
+}
